@@ -1,0 +1,6 @@
+#ifndef SPACE_ENGINE_INPUT_DEVICES_HEADER
+#define SPACE_ENGINE_INPUT_DEVICES_HEADER
+
+#include "Engine/Input/Elements/Devices/Mouse.h"
+
+#endif // SPACE_ENGINE_INPUT_ELEMENTS_HEADER

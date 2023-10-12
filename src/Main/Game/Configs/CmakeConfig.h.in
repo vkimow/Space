@@ -1,0 +1,9 @@
+#ifndef SPACE_CMAKE_CONFIG
+#define SPACE_CMAKE_CONFIG
+
+namespace CmakeConfig
+{
+    static constexpr char* ShadersRelativePath = "@SPACE_CURRENT_SHADERS_RELATIVE_PATH@";
+}
+
+#endif
