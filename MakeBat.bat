@@ -1,3 +1,5 @@
+@echo off
+
 if exist bin (
     echo "Clear bin directory"
     del /f /s /q bin

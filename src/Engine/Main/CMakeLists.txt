@@ -45,6 +45,8 @@ add_vkimow_library(
     PUBLIC_LINK_LIBS    glfw
                         glew
                         glm
+                        gli
+                        assimp
                         space::engine::tools
                         space::engine::input
                         space::engine::graphics
