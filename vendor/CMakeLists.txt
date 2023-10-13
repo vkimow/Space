@@ -35,7 +35,10 @@ else()
     target_include_directories(glew PUBLIC ${glew_SOURCE_DIR}/include)
 endif()
 
-set_target_properties(glew glew_s glewinfo visualinfo PROPERTIES FOLDER Vendors/GLEW2)
+set(GLEW_LIBRARIES glew glew_s glewinfo visualinfo)
+set_target_properties(${GLEW_LIBRARIES} PROPERTIES FOLDER Vendors/GLEW2)
+set_vkimow_target_output_dir(   TARGET ${GLEW_LIBRARIES}
+                                OUTPUT_DIR ${SPACE_BIN_CONFIG_DIR})
 
 #GLM
 message("\n=====ADDING GLM=====")

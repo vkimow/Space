@@ -13,9 +13,7 @@ namespace Game
 
     public:
         virtual void Update() = 0;
-        virtual void UpdateVisuals() = 0;
-
-
+        virtual void Render() = 0;
 
     protected:
         size_t id;

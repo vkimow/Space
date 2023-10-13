@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Engine/Main/Modules/GraphicsModule.h"
 #include "Engine/Main/Modules/TimeModule.h"
 #include "Engine/Main/Modules/InputModule.h"
-#include "Engine/Main/Modules/GraphicsModule.h"
 
 
 namespace Engine

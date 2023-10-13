@@ -251,7 +251,7 @@ function(set_vkimow_target_properties)
 
     # output dir
     if(NOT "${THIS_OUTPUT_DIR}" STREQUAL "")
-        set_vkimow_target_output_dir(TARGET ${THIS_TARGET} TYPE ${INTERFACE_TYPE} OUTPUT_DIR ${THIS_OUTPUT_DIR})
+        set_vkimow_target_output_dir(TARGET ${THIS_TARGET} OUTPUT_DIR ${THIS_OUTPUT_DIR})
         message("Output Dir: ${THIS_OUTPUT_DIR}")
     endif()
 
@@ -278,13 +278,14 @@ endfunction()
 
 function(set_vkimow_target_output_dir)
     set(ARGUMENT_PREFIX THIS)
-    set(SINGLE_VALUES TARGET TYPE OUTPUT_DIR)
+    set(SINGLE_VALUES OUTPUT_DIR)
+    set(MULTI_VALUES TARGET)
 
     # parse
     cmake_parse_arguments(${ARGUMENT_PREFIX}
                         ""
                         "${SINGLE_VALUES}"
-                        ""
+                        "${MULTI_VALUES}"
                         ${ARGN})
 
     if (NOT "${THIS_UNPARSED_ARGUMENTS}" STREQUAL "")

@@ -39,7 +39,7 @@ find_vkimow_auto_files(
     ROOT_DIR ${SPACE_CURRENT_SOURCE_DIR}
     EXCLUDE_DIRS ${SPACE_CURRENT_SHADERS_DIR}
     VARIABLE Sources
-    EXTENSIONS .cpp .h
+    EXTENSIONS .cpp .h .in
 )
 
 find_vkimow_auto_files(

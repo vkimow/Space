@@ -8,11 +8,11 @@ namespace Game
     {
     public:
         Scene_1(const std::string &name, Engine::Modules *const modules);
-        ~Scene_1() = default;
+        ~Scene_1();
 
     public:
         virtual void Update() override;
-        virtual void UpdateVisuals() override;
+        virtual void Render() override;
 
     private:
         Engine::Input::PressableKey *f;
@@ -21,5 +21,8 @@ namespace Game
 
         Engine::Input::VectorPressable *vector;
         Engine::Input::Mouse *mouse;
+
+        Engine::Graphics::Shader shader;
+        GLuint VertexArrayObject;
     };
 }

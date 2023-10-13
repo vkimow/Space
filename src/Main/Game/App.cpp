@@ -25,8 +25,9 @@ namespace Game
 
             scene->Update();
 
+
             engine.GetModules().GetGraphics().StartUpdate();
-            scene->UpdateVisuals();
+            scene->Render();
             engine.GetModules().GetGraphics().EndUpdate();
         }
     }

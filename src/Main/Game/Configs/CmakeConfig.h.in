@@ -3,7 +3,7 @@
 
 namespace CmakeConfig
 {
-    static constexpr char* ShadersRelativePath = "@SPACE_CURRENT_SHADERS_RELATIVE_PATH@";
+    const std::string ShadersRelativePath = "@SPACE_CURRENT_SHADERS_RELATIVE_PATH@";
 }
 
 #endif
