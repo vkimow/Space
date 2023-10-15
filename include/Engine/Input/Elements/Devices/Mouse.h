@@ -22,25 +22,26 @@ namespace Engine::Input
 
     public:
         glm::vec2 GetPosition() const;
+        glm::vec2 GetDeltaPosition() const;
         glm::vec2 GetScroll() const;
         float GetHorizontalScroll() const;
         float GetVerticalScroll() const;
         bool IsCursorEnabled();
         void EnableCursor(bool value);
 
+        Vector* const GetPositionInput() const;
+        Vector *const GetDeltaPositionInput() const;
+        Vector* const GetScrollInput() const;
+
     private:
         void SetPosition(float x, float y);
         void SetScroll(float horizontal, float vertical);
-        void SetCallbacks();
-        void RemoveCallbacks();
-
-    public:
-        CREATE_ACTION(glm::vec2, OnPositionChange)
-        CREATE_ACTION(glm::vec2, OnScrollChange)
+        void UpdateDelta();
 
     private:
         GLFWwindow * const window;
         Vector *const position;
+        Vector *const deltaPosition;
         Vector *const scroll;
         bool isCursorEnabled;
     };

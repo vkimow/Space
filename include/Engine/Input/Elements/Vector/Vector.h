@@ -21,6 +21,7 @@ namespace Engine::Input
 
 	public:
         float IsZero() const { return isZero; }
+		float IsNotZero() const { return !isZero; }
 		glm::vec2 GetVector() const { return vector; }
 
 	protected:
@@ -30,7 +31,7 @@ namespace Engine::Input
 		void ChangeY(float value);
 
 	private:
-	    CREATE_ACTION(glm::vec2, OnVectorChange)
+		CREATE_ACTION(glm::vec2, OnVectorChange);
 
 	private:
         bool isZero;

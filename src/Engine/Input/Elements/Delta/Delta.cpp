@@ -23,6 +23,10 @@ namespace Engine::Input
 		{
 			value = 0.0f;
 		}
+
+		if (value == delta)
+			return;
+
 		isZero = value == 0.0f;
 		delta = value;
 		OnDeltaChange(value);

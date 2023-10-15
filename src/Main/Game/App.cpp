@@ -4,15 +4,17 @@ namespace Game
 {
     App::App()
         : isActive(false)
-        , window("Space", 1280, 720)
-        , engine(&window)
+        , window(new Engine::Window("Space", 1280, 720))
+        , engine(new Engine::Engine(window))
     {
-        scene = new Scene_1("First Scene", &engine.GetModules());
+        scene = new Scene_1("First Scene", window, engine->GetModules());
     }
 
     App::~App()
     {
         delete scene;
+        delete engine;
+        delete window;
     }
 
     void App::Start()
@@ -20,15 +22,14 @@ namespace Game
         isActive = true;
         while (!ShouldExit())
         {
-            engine.GetModules().GetInput().Update();
-            engine.GetModules().GetTime().Update();
+            engine->GetModules()->GetInput().Update();
+            engine->GetModules()->GetTime().Update();
 
             scene->Update();
 
-
-            engine.GetModules().GetGraphics().StartUpdate();
+            engine->GetModules()->GetGraphics().StartUpdate();
             scene->Render();
-            engine.GetModules().GetGraphics().EndUpdate();
+            engine->GetModules()->GetGraphics().EndUpdate();
         }
     }
 
@@ -39,6 +40,6 @@ namespace Game
 
     bool App::ShouldExit()
     {
-        return glfwWindowShouldClose(window.GetInnerWindow()) || !isActive || !window.IsActive();
+        return glfwWindowShouldClose(window->GetInnerWindow()) || !isActive;
     }
 }

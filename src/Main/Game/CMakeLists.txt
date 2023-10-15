@@ -62,7 +62,8 @@ add_vkimow_executable(
     NAME ${PROJECT_NAME}
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES}
-    PRIVATE_LINK_LIBS space::engine::main
+    PRIVATE_LINK_LIBS   space::engine::main
+                        space::main::controllers
 )
 
 # copy targets

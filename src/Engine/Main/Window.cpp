@@ -3,12 +3,17 @@
 
 namespace Engine
 {
+    int Window::width = 0;
+    int Window::height = 0;
+
     Window::Window(const char* title, unsigned int width, unsigned int height)
+        : glfwWindow(nullptr)
+        , isTerminated(false)
     {
         if (!glfwInit())
         {
             LOG_CRITICAL("GLFW initialisation failed!");
-            glfwTerminate();
+            TerminateGLFW();
             return;
         }
 
@@ -21,7 +26,7 @@ namespace Engine
         if (!glfwWindow)
         {
             LOG_CRITICAL("GLFW window creation failed!");
-            glfwTerminate();
+            TerminateGLFW();
             return;
         }
 
@@ -32,23 +37,19 @@ namespace Engine
         if (glewInit() != GLEW_OK)
         {
             LOG_CRITICAL("GLEW initialisation failed");
-            glfwDestroyWindow(glfwWindow);
-            glfwTerminate();
+            TerminateGLFW();
             return;
         }
 
         int framebufferWidth, framebufferHeight;
         glfwGetFramebufferSize(glfwWindow, &framebufferWidth, &framebufferHeight);
-        glViewport(0, 0, framebufferWidth, framebufferHeight);
-
+        FramebufferResizeCallback(glfwWindow, framebufferWidth, framebufferHeight);
         glfwSetFramebufferSizeCallback(glfwWindow, FramebufferResizeCallback);
-        isActive = true;
     }
 
     Window::~Window()
     {
-        glfwDestroyWindow(glfwWindow);
-        glfwTerminate();
+        TerminateGLFW();
     }
 
     void Window::Resize(unsigned int width, unsigned int height)
@@ -56,14 +57,36 @@ namespace Engine
         glfwSetWindowSize(glfwWindow, width, height);
     }
 
-    void Window::FramebufferResizeCallback(GLFWwindow *window, int width, int height)
+    glm::ivec2 Window::GetResolution() const
     {
-        glViewport(0, 0, width, height);
+        return glm::ivec2(width, height);
     }
 
-    bool Window::IsActive()
+    void Window::TerminateGLFW()
     {
-        return isActive;
+        if (glfwWindow)
+        {
+            glfwSetWindowUserPointer(glfwWindow, NULL);
+            glfwSetFramebufferSizeCallback(glfwWindow, NULL);
+            glfwDestroyWindow(glfwWindow);
+            glfwWindow = nullptr;
+        }
+
+        if (!isTerminated)
+        {
+            glfwTerminate();
+            isTerminated = true;
+        }
+    }
+
+
+    void Window::FramebufferResizeCallback(GLFWwindow *glfwWindow, int width, int height)
+    {
+        Window::width = width;
+        Window::height = height;
+        glViewport(0, 0, width, height);
+        auto window = static_cast<Window*>(glfwGetWindowUserPointer(glfwWindow));
+        window->OnFramebufferResize(glm::uvec2(width, height));
     }
 
     GLFWwindow *const Window::GetInnerWindow()

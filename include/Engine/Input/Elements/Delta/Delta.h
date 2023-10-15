@@ -25,7 +25,7 @@ namespace Engine::Input
         void ChangeDelta(float value);
 
     private:
-        CREATE_ACTION(float, OnDeltaChange)
+        CREATE_ACTION(float, OnDeltaChange);
 
     private:
         bool isZero;

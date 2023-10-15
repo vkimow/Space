@@ -27,12 +27,19 @@ namespace Engine::Graphics
         void Use();
         void Clear();
 
+        GLuint GetModelUniform() const { return uniformModel; }
+        GLuint GetViewUniform() const { return uniformView; }
+        GLuint GetProjectionUniform() const { return uniformProjection; }
 
     private:
         GLuint AddShader(GLuint theProgram, const std::string_view shaderCode, GLenum shaderType);
         void LinkProgram();
+        void GetUniforms();
 
     private:
         GLuint id;
+
+    private:
+        GLuint uniformModel, uniformView, uniformProjection;
     };
 }

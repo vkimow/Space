@@ -9,6 +9,9 @@ namespace Engine::Input
 {
     class Scheme final
     {
+
+        friend class InputModule;
+
     public:
         Scheme(GLFWwindow* window);
         Scheme(const Scheme &inputModule) = delete;
@@ -39,6 +42,10 @@ namespace Engine::Input
     public:
         bool HasMouse() const;
         Mouse *const GetMouse();
+
+    private:
+        void UpdateBeforePolling();
+        void UpdateAfterPolling();
 
     private:
         std::unordered_map<int, PressableKey *const> keys;

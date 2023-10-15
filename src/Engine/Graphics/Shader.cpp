@@ -36,6 +36,8 @@ namespace Engine::Graphics
 
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
+
+        GetUniforms();
     }
 
     void Shader::Validate()
@@ -104,6 +106,12 @@ namespace Engine::Graphics
             LOG_ERROR("Error linking program: {}", eLog);
             return;
         }
+    }
+    void Shader::GetUniforms()
+    {
+        uniformModel = glGetUniformLocation(id, "model");
+        uniformView = glGetUniformLocation(id, "view");
+        uniformProjection = glGetUniformLocation(id, "projection");
     }
 }
 

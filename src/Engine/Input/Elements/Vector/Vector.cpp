@@ -9,7 +9,7 @@ namespace Engine::Input
 
     Vector::Vector(float threshold)
         : isZero(true)
-        , vector(0, 0)
+        , vector(0.0f, 0.0f)
         , threshold(threshold)
     {}
 
@@ -33,6 +33,9 @@ namespace Engine::Input
             value.y = 0.0f;
         }
 
+        if (value == vector)
+            return;
+
         isZero = value.y == 0.0f && value.x == 0.0f;
         vector = value;
         OnVectorChange(value);
@@ -45,6 +48,9 @@ namespace Engine::Input
             value = 0.0f;
         }
 
+        if (value == vector.x)
+            return;
+
         isZero = value == 0 && vector.y == 0;
         vector.x = value;
         OnVectorChange(vector);
@@ -56,6 +62,9 @@ namespace Engine::Input
         {
             value = 0.0f;
         } 
+
+        if (value == vector.y)
+            return;
 
         isZero = vector.x == 0 && value == 0;
         vector.y = value;

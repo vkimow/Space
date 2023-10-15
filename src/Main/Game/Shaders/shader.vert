@@ -1,12 +1,15 @@
 #version 450
 
+layout (location = 0) in vec3 pos;
+layout (location = 1) in vec2 tex;
+layout (location = 2) in vec3 norm;
+
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
 void main()
 {
-    const vec4 vertices[3] = vec4[3] (
-        vec4(0.25, -0.25, 0.5, 1.0),
-        vec4(-0.25, -0.25, 0.5, 1.0),
-        vec4(0.25, 0.25, 0.5, 1.0)
-    );
-
-	gl_Position = vertices[gl_VertexID];
+    gl_Position = projection * view * model * vec4(pos, 1.0);
+    //gl_Position = model * vec4(pos, 1.0);
 }

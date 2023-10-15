@@ -5,5 +5,6 @@
 #include "Engine/Graphics/Mesh.h"
 #include "Engine/Graphics/Material.h"
 #include "Engine/Graphics/Camera.h"
+#include "Engine/Graphics/Projection.h"
 
 #endif

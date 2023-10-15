@@ -35,8 +35,15 @@ namespace Engine::Tools::Events
 			: Function<Type>(std::move(rhs))
 		{}
 
-		MemberFunction &operator=(const MemberFunction &rhs) {}
-		MemberFunction &operator=(MemberFunction &&rhs) noexcept {}
+		MemberFunction &operator=(const MemberFunction &rhs)
+		{
+			return Function<Type>::operator=(rhs);
+		}
+
+		MemberFunction &operator=(MemberFunction &&rhs) noexcept
+		{
+			return Function<Type>::operator=(std::move(rhs));
+		}
 
 	public:
 		template<typename T_ = T>

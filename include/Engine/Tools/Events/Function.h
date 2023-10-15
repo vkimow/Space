@@ -29,7 +29,9 @@ namespace Engine::Tools::Events
 		Function(Function &&rhs) noexcept
 			: function(std::move(rhs.function)),
 			id(rhs.id)
-		{}
+		{
+			rhs.id = 0;
+		}
 
 		Function &operator=(const Function &rhs)
 		{
@@ -42,6 +44,7 @@ namespace Engine::Tools::Events
 		{
 			this->function = std::move(rhs.function);
 			this->id = rhs.id;
+			rhs.id = 0;
 			return *this;
 		}
 

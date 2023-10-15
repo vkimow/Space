@@ -120,6 +120,14 @@ namespace Engine::Input
         return mouse;
     }
 
+    void Scheme::UpdateBeforePolling()
+    {
+        mouse->UpdateDelta();
+    }
+
+    void Scheme::UpdateAfterPolling()
+    {}
+
     PressableKey *const Scheme::AddPressableKey(int key)
     {
         PressableKey* newPressable = new PressableKey(key);

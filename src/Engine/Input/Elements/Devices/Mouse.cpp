@@ -7,16 +7,16 @@ namespace Engine::Input
     Mouse::Mouse(GLFWwindow* window)
         : window(window)
         , position(new Vector())
+        , deltaPosition(new Vector())
         , scroll(new Vector())
     {
-        SetCallbacks();
         EnableCursor(true);
     }
 
     Mouse::~Mouse()
     {
-        RemoveCallbacks();
         delete position;
+        delete deltaPosition;
         delete scroll;
     }
 
@@ -28,6 +28,11 @@ namespace Engine::Input
     glm::vec2 Mouse::GetScroll() const
     {
         return scroll->GetVector();
+    }
+
+    glm::vec2 Mouse::GetDeltaPosition() const
+    {
+        return deltaPosition->GetVector();
     }
 
     float Mouse::GetHorizontalScroll() const
@@ -47,6 +52,7 @@ namespace Engine::Input
 
     void Mouse::EnableCursor(bool value)
     {
+        isCursorEnabled = value;
         if (value)
         {
             glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -57,9 +63,27 @@ namespace Engine::Input
         }
     }
 
+    Vector *const Mouse::GetPositionInput() const
+    {
+        return position;
+    }
+
+    Vector *const Mouse::GetDeltaPositionInput() const
+    {
+        return deltaPosition;
+    }
+
+    Vector *const Mouse::GetScrollInput() const
+    {
+        return scroll;
+    }
+
     void Mouse::SetPosition(float x, float y)
     {
-        position->ChangeVector(x, y);
+        glm::vec2 newPos(x, y);
+        glm::vec2 previousPos = position->GetVector();
+        position->ChangeVector(newPos);
+        deltaPosition->ChangeVector(newPos - previousPos);
     }
 
     void Mouse::SetScroll(float horizontal, float vertical)
@@ -67,16 +91,12 @@ namespace Engine::Input
         scroll->ChangeVector(horizontal, vertical);
     }
 
-    void Mouse::SetCallbacks()
+    void Mouse::UpdateDelta()
     {
-        position->AddListenerOnVectorChange(&OnPositionChange);
-        scroll->AddListenerOnVectorChange(&OnScrollChange);
-    }
-
-    void Mouse::RemoveCallbacks()
-    {
-        position->RemoveListenerOnVectorChange(&OnPositionChange);
-        scroll->RemoveListenerOnVectorChange(&OnScrollChange);
+        if (!deltaPosition->IsZero())
+        {
+            deltaPosition->ChangeVector(0, 0);
+        }
     }
 }
 

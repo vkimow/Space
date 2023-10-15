@@ -3,10 +3,15 @@
 namespace Engine
 {
     Engine::Engine(Window* const window)
-        : modules(window->GetInnerWindow())
+        : modules(new Modules(window->GetInnerWindow()))
     {}
 
-    Modules &Engine::GetModules()
+    Engine::~Engine()
+    {
+        delete modules;
+    }
+
+    Modules * const Engine::GetModules()
     {
         return modules;
     }

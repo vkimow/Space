@@ -10,28 +10,28 @@ namespace Engine::Tools::Events
 #define CREATE_ACTION(type, name)\
 	public:\
 \
-		void AddListener##name(const Engine::Tools::Events::Function<type>& function)\
+		void AddListener##name(const ::Engine::Tools::Events::Function<type>& function)\
 		{\
 			##name += function;\
 		}\
 \
-		void RemoveListener##name(const Engine::Tools::Events::Function<type>& function)\
+		void RemoveListener##name(const ::Engine::Tools::Events::Function<type>& function)\
 		{\
 			##name -= function;\
 		}\
 \
-		void AddListener##name(Engine::Tools::Events::Action<type>* const function)\
+		void AddListener##name(::Engine::Tools::Events::Action<type>* const function)\
 		{\
 			##name += function;\
 		}\
 \
-		void RemoveListener##name(const Engine::Tools::Events::Action<type>* const function)\
+		void RemoveListener##name(const ::Engine::Tools::Events::Action<type>* const function)\
 		{\
 			##name -= function;\
 		}\
 \
 	private:\
-		Engine::Tools::Events::Action<type> ##name;
+		::Engine::Tools::Events::Action<type> ##name
 #pragma endregion
 
     template <typename ParamIn>
@@ -193,6 +193,13 @@ namespace Engine::Tools::Events
 
     public:
         size_t GetId() const { return id; };
+
+    public:
+        void Clear()
+        {
+            functionListeners.clear();
+            actionListeners.clear();
+        }
 
     private:
         std::unordered_map<size_t, FunctionType> functionListeners;

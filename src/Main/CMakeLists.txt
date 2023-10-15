@@ -1,2 +1,3 @@
 set_vkimow_subsolution(Main)
+add_subdirectory(Controllers)
 add_subdirectory(Game)

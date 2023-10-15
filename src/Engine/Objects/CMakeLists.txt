@@ -1,4 +1,4 @@
-project(Main CXX)
+project(Objects CXX)
 
 #directories
 set_vkimow_default_target_dirs(
@@ -6,12 +6,14 @@ set_vkimow_default_target_dirs(
     SOURCE_DIR ${SPACE_CURRENT_SUBSOLUTION_SOURCE_DIR}/${PROJECT_NAME}
     INCLUDE_DIR ${SPACE_CURRENT_SUBSOLUTION_INCLUDE_DIR}/${PROJECT_NAME}
     OUTPUT_DIR ${SPACE_BIN_CONFIG_DIR}
+    TESTS_DIR ${SPACE_CURRENT_SUBSOLUTION_SOURCE_DIR}/${PROJECT_NAME}/Tests
 )
 
 #files
 find_vkimow_auto_files(
     TARGET ${PROJECT_NAME}
     ROOT_DIR ${SPACE_CURRENT_SOURCE_DIR}
+    EXCLUDE_DIRS ${SPACE_CURRENT_TESTS_DIR}
     VARIABLE Sources
     EXTENSIONS .cpp .h
 )
@@ -42,14 +44,11 @@ add_vkimow_library(
     NAME ${PROJECT_NAME}
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
-    PUBLIC_LINK_LIBS    glfw
-                        glew
-                        glm
-                        gli
-                        assimp
+    PRIVATE_LINK_LIBS   glm
                         space::engine::tools
-                        space::engine::objects
-                        space::engine::input
-                        space::engine::graphics
-    PUBLIC_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
+    PRIVATE_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
 )
+
+if(SPACE_ENABLE_TESTS)
+    add_subdirectory(Tests)
+endif()

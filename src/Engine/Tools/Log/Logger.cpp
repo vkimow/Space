@@ -4,40 +4,53 @@
 
 namespace Engine::Tools
 {
-    std::mutex Logger::mtx;
-    std::atomic<Logger *> Logger::instance = nullptr;
+    Logger *Logger::instance = nullptr;
 
     Logger *Logger::GetInstance()
     {
         if (!instance)
         {
-            std::lock_guard<std::mutex> lock(mtx);
-            if (!instance)
-                instance = new Logger();
+            instance = new Logger();
         }
         return instance;
     }
 
     Logger::Logger()
     {
-        auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        auto rotating_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(Other::GetExecutableDirectory() + "/logs/log.txt", 1024 * 1024 * 5, 3);
-        std::vector<spdlog::sink_ptr> sinks{console_sink, rotating_sink};
-
-        logger = std::make_shared<spdlog::logger>("multi_sink", begin(sinks), end(sinks));
-        spdlog::register_logger(logger);
-
-        spdlog::set_pattern("%^[%Y-%m-%d %H:%M:%S.%e] [%l] [thread %t] %v%$");
-
+        auto main_file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(Other::GetExecutableDirectory() + "/logs/main.txt", true);
+        main_file_sink->set_pattern("%^[%D %H:%M:%S.%e] [%l] [thread %t] [%g::%!()::%#] %v%$");
+        main_file_sink->set_level(spdlog::level::trace);
+        auto error_file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(Other::GetExecutableDirectory() + "/logs/errors.txt", true);
+        error_file_sink->set_pattern("%^[%D %H:%M:%S.%e] [%l] [thread %t] [%g::%!()::%#] %v%$");
+        error_file_sink->set_level(spdlog::level::err);
 #ifdef NDEBUG
-        logger->set_level(spdlog::level::error);
+        std::vector<spdlog::sink_ptr> mainSinks{main_file_sink};
+        std::vector<spdlog::sink_ptr> errorSinks{error_file_sink};
 #else
-        logger->set_level(spdlog::level::debug);
+        auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+        console_sink->set_pattern("%^[%l] [%s::%!()::%#] %v%$");
+        console_sink->set_level(spdlog::level::trace);
+        std::vector<spdlog::sink_ptr> mainSinks{console_sink, main_file_sink};
+        std::vector<spdlog::sink_ptr> errorSinks{console_sink, error_file_sink};
 #endif
+
+        tpMain = std::make_shared<spdlog::details::thread_pool>(1028, 1);
+        mainLogger = std::make_shared<spdlog::async_logger>("main_logger", mainSinks.begin(), mainSinks.end(), tpMain, spdlog::async_overflow_policy::block);
+
+        tpError = std::make_shared<spdlog::details::thread_pool>(256, 1);
+        errorLogger = std::make_shared<spdlog::async_logger>("error_logger", errorSinks.begin(), errorSinks.end(), tpError, spdlog::async_overflow_policy::block);
+        spdlog::register_logger(mainLogger);
+        spdlog::register_logger(errorLogger);
+        spdlog::set_level(spdlog::level::trace);
     }
 
-    std::shared_ptr<spdlog::logger> Logger::GetLogger() const
+    std::shared_ptr<spdlog::async_logger> Logger::GetMainLogger() const
     {
-        return logger;
+        return mainLogger;
+    }
+
+    std::shared_ptr<spdlog::async_logger> Logger::GetErrorLogger() const
+    {
+        return errorLogger;
     }
 }

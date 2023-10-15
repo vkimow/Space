@@ -18,7 +18,9 @@ namespace Engine
 
     void InputModule::Update()
     {
+        scheme->UpdateBeforePolling();
         glfwPollEvents();
+        scheme->UpdateAfterPolling();
     }
 
     void InputModule::SetScheme(std::shared_ptr<Input::Scheme> scheme)
@@ -88,7 +90,7 @@ namespace Engine
         if (scheme->HasMouse())
         {
             auto mouse = scheme->GetMouse();
-            mouse->SetPosition(xPos, yPos);
+            mouse->SetPosition(xPos, -yPos);
         }
     }
 

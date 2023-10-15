@@ -20,11 +20,11 @@ namespace Engine
 
     public:
         void Update();
-        float GetTime();
-        float GetDeltaTime();
+        static float GetGlobalTime();
+        static float GetDeltaTime();
 
     private:
-        float deltaTime;
-        float globalTime;
+        static float deltaTime;
+        static float globalTime;
     };
 }

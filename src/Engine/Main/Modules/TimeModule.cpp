@@ -2,19 +2,22 @@
 
 namespace Engine
 {
+    float TimeModule::globalTime = glfwGetTime();
+    float TimeModule::deltaTime = 0;
+
     TimeModule::TimeModule()
-        : globalTime(glfwGetTime())
-        , deltaTime(0)
-    {}
+    {
+        Update();
+    }
 
     void TimeModule::Update()
     {
         float now = glfwGetTime();
         deltaTime = globalTime - now;
-        globalTime = globalTime;
+        globalTime = now;
     }
 
-    float TimeModule::GetTime()
+    float TimeModule::GetGlobalTime()
     {
         return globalTime;
     }

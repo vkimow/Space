@@ -1,8 +1,12 @@
 #pragma once
 
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/rotating_file_sink.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/async.h>
 #include <memory>
 #include <mutex>
 
@@ -10,6 +14,15 @@ namespace Engine::Tools
 {
     class Logger
     {
+        enum LogLevel
+        {
+            Debug,
+            Info,
+            Warn,
+            Error,
+            Critical
+        };
+
     public:
         static Logger *GetInstance();
 
@@ -22,20 +35,23 @@ namespace Engine::Tools
         Logger();
 
     private:
-        static std::mutex mtx;
-        static std::atomic<Logger *> instance;
+        static Logger* instance;
 
     public:
-        std::shared_ptr<spdlog::logger> GetLogger() const;
+        std::shared_ptr<spdlog::async_logger> GetMainLogger() const;
+        std::shared_ptr<spdlog::async_logger> GetErrorLogger() const;
 
     private:
-        std::shared_ptr<spdlog::logger> logger;
+        std::shared_ptr<spdlog::async_logger> mainLogger;
+        std::shared_ptr<spdlog::async_logger> errorLogger;
+        std::shared_ptr<spdlog::details::thread_pool> tpMain;
+        std::shared_ptr<spdlog::details::thread_pool> tpError;
     };
 }
 
-#define LOG_TRACE(...) Engine::Tools::Logger::GetInstance()->GetLogger()->trace(__VA_ARGS__)
-#define LOG_DEBUG(...) Engine::Tools::Logger::GetInstance()->GetLogger()->debug(__VA_ARGS__)
-#define LOG_INFO(...) Engine::Tools::Logger::GetInstance()->GetLogger()->info(__VA_ARGS__)
-#define LOG_WARN(...) Engine::Tools::Logger::GetInstance()->GetLogger()->warn(__VA_ARGS__)
-#define LOG_ERROR(...) Engine::Tools::Logger::GetInstance()->GetLogger()->error(__VA_ARGS__)
-#define LOG_CRITICAL(...) Engine::Tools::Logger::GetInstance()->GetLogger()->critical(__VA_ARGS__)
+#define LOG_TRACE(...)      SPDLOG_LOGGER_TRACE(        Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
+#define LOG_DEBUG(...)      SPDLOG_LOGGER_DEBUG(        Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
+#define LOG_INFO(...)       SPDLOG_LOGGER_INFO(         Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
+#define LOG_WARN(...)       SPDLOG_LOGGER_WARN(         Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
+#define LOG_ERROR(...)      SPDLOG_LOGGER_ERROR(        Engine::Tools::Logger::GetInstance()->GetErrorLogger().get(), __VA_ARGS__)
+#define LOG_CRITICAL(...)   SPDLOG_LOGGER_CRITICAL(     Engine::Tools::Logger::GetInstance()->GetErrorLogger().get(), __VA_ARGS__)

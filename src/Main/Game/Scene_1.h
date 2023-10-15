@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Scene.h"
+#include "Engine/Main/EngineHeader.h"
 
 namespace Game
 {
-    class Scene_1 final: public Scene
+    class Scene_1 final: public Engine::Objects::Scene
     {
     public:
-        Scene_1(const std::string &name, Engine::Modules *const modules);
+        Scene_1(const std::string &name, Engine::Window *const window, Engine::Modules *const modules);
         ~Scene_1();
 
     public:
@@ -15,14 +15,18 @@ namespace Game
         virtual void Render() override;
 
     private:
-        Engine::Input::PressableKey *f;
-        Engine::Input::PressableMouse *leftButton;
-        Engine::Input::DeltaPressable *delta;
-
-        Engine::Input::VectorPressable *vector;
-        Engine::Input::Mouse *mouse;
+        Engine::Input::VectorPressable *movementInput;
+        Engine::Input::Mouse *mouseInput;
 
         Engine::Graphics::Shader shader;
-        GLuint VertexArrayObject;
+
+        Engine::Graphics::Mesh mesh_1;
+        Engine::Graphics::Mesh mesh_2;
+        Engine::Graphics::Mesh mesh_3;
+        Engine::Graphics::Mesh mesh_4;
+        Engine::Graphics::Mesh mesh_5;
+
+        Engine::Graphics::Camera camera;
+        Engine::Graphics::Projection projection;
     };
 }

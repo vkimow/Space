@@ -25,8 +25,8 @@ namespace Game
 
 	private:
 		bool isActive;
-		Scene* scene;
-		Engine::Window window;
-		Engine::Engine engine;
+		Engine::Objects::Scene* scene;
+		Engine::Window* window;
+		Engine::Engine* engine;
 	};
 }

@@ -15,12 +15,12 @@ namespace Engine
 
         Engine(Window *const window);
         Engine() = delete;
-        ~Engine() = default;
+        ~Engine();
 
     public:
-        Modules &GetModules();
+        Modules * const GetModules();
 
     private:
-        Modules modules;
+        Modules * const modules;
     };
 }
