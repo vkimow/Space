@@ -23,7 +23,7 @@ namespace Engine::Tools::Other
             in.seekg(0, std::ios::beg);
             in.read(&contents[0], contents.size());
             in.close();
-            return contents;
+            return std::move(contents);
         }
         throw(errno);
     }

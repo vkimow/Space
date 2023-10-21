@@ -34,22 +34,28 @@ namespace Engine::Tools
         std::vector<spdlog::sink_ptr> errorSinks{console_sink, error_file_sink};
 #endif
 
+#ifdef NDEBUG
         tpMain = std::make_shared<spdlog::details::thread_pool>(1028, 1);
         mainLogger = std::make_shared<spdlog::async_logger>("main_logger", mainSinks.begin(), mainSinks.end(), tpMain, spdlog::async_overflow_policy::block);
 
         tpError = std::make_shared<spdlog::details::thread_pool>(256, 1);
         errorLogger = std::make_shared<spdlog::async_logger>("error_logger", errorSinks.begin(), errorSinks.end(), tpError, spdlog::async_overflow_policy::block);
+#else
+        mainLogger = std::make_shared<spdlog::logger>("main_logger", mainSinks.begin(), mainSinks.end());
+        errorLogger = std::make_shared<spdlog::logger>("error_logger", errorSinks.begin(), errorSinks.end());
+#endif
+
         spdlog::register_logger(mainLogger);
         spdlog::register_logger(errorLogger);
         spdlog::set_level(spdlog::level::trace);
     }
 
-    std::shared_ptr<spdlog::async_logger> Logger::GetMainLogger() const
+    std::shared_ptr<spdlog::logger> Logger::GetMainLogger() const
     {
         return mainLogger;
     }
 
-    std::shared_ptr<spdlog::async_logger> Logger::GetErrorLogger() const
+    std::shared_ptr<spdlog::logger> Logger::GetErrorLogger() const
     {
         return errorLogger;
     }

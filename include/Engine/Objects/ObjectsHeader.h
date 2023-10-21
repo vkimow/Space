@@ -4,6 +4,7 @@
 #include "Engine/Objects/Transform.h"
 #include "Engine/Objects/Script.h"
 #include "Engine/Objects/GameObject.h"
+#include "Engine/Objects/GameObjectTools.h"
 #include "Engine/Objects/Scene.h"
 
 #endif

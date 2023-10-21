@@ -33,8 +33,14 @@ namespace Engine::Tools::Events
 			: Function<Type>(std::move(rhs))
 		{}
 
-		GlobalFunction &operator=(const GlobalFunction &rhs) {}
-		GlobalFunction &operator=(GlobalFunction &&rhs) noexcept {}
+		GlobalFunction &operator=(const GlobalFunction &rhs) 
+		{
+			return Function<Type>::operator=(rhs);
+		}
+		GlobalFunction &operator=(GlobalFunction &&rhs) noexcept 
+		{
+			return Function<Type>::operator=(std::move(rhs));
+		}
 
 	public:
 		GlobalFunction(FunctionPointer function)

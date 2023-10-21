@@ -1,5 +1,6 @@
 #include "Engine/Input/Elements/Devices/Mouse.h"
 #include "Engine/Input/Elements/Vector/Vector.h"
+#include "Engine/Tools/Log/Logger.h"
 #include "GLFW/glfw3.h"
 
 namespace Engine::Input
@@ -90,12 +91,11 @@ namespace Engine::Input
     {
         scroll->ChangeVector(horizontal, vertical);
     }
-
-    void Mouse::UpdateDelta()
+    void Mouse::ClearDelta()
     {
-        if (!deltaPosition->IsZero())
+        if (deltaPosition->IsNotZero())
         {
-            deltaPosition->ChangeVector(0, 0);
+            deltaPosition->ChangeVector(0.0f, 0.0f);
         }
     }
 }

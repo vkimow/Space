@@ -3,39 +3,82 @@
 
 namespace Engine::Input
 {
-	DeltaPressable::DeltaPressable(Pressable *const positive, Pressable *const negative, float threshold)
-		: Delta(threshold)
-		, positive(positive)
-		, negative(negative)
-		, updateFunction(this, &Engine::Input::DeltaPressable::Update)
-	{
-		SetCallbacks();
-	}
+    DeltaPressable::DeltaPressable(Pressable *const positive, Pressable *const negative, float threshold)
+        : Delta(threshold)
+        , positive(positive)
+        , negative(negative)
+        , updateFunction(this, &Engine::Input::DeltaPressable::Update)
+    {
+        SetCallbacks();
+    }
 
-	DeltaPressable::~DeltaPressable()
-	{
-		RemoveCallbacks();
-	}
+    DeltaPressable::DeltaPressable(DeltaPressable &&rhs) noexcept
+        : Delta(std::move(rhs))
+        , positive(rhs.positive)
+        , negative(rhs.negative)
+        , updateFunction(this, &Engine::Input::DeltaPressable::Update)
+    {
+        SetCallbacks();
+        rhs.RemoveCallbacks();
+        rhs.positive = nullptr;
+        rhs.negative = nullptr;
+    }
 
-	void DeltaPressable::SetCallbacks()
-	{
-		positive->AddListenerOnPress(updateFunction);
-		positive->AddListenerOnRelease(updateFunction);
-		negative->AddListenerOnPress(updateFunction);
-		negative->AddListenerOnRelease(updateFunction);
-	}
+    DeltaPressable &DeltaPressable::operator=(DeltaPressable &&rhs) noexcept
+    {
+        Delta::operator=(std::move(rhs));
+        positive = rhs.positive;
+        negative = rhs.negative;
+        SetCallbacks();
+        rhs.ClearCallbacks();
+        return *this;
+    }
 
-	void DeltaPressable::RemoveCallbacks()
-	{
-		positive->RemoveListenerOnPress(updateFunction);
-		positive->RemoveListenerOnRelease(updateFunction);
-		negative->RemoveListenerOnPress(updateFunction);
-		negative->RemoveListenerOnRelease(updateFunction);
-	}
+    DeltaPressable::~DeltaPressable()
+    {
+        ClearCallbacks();
+    }
 
-	void DeltaPressable::Update()
-	{
-		int value = positive->IsPressed() - negative->IsPressed();
-		ChangeDelta(static_cast<float>(value));
-	}
+    void DeltaPressable::SetCallbacks()
+    {
+        if (positive)
+        {
+            positive->AddListenerOnPress(updateFunction);
+            positive->AddListenerOnRelease(updateFunction);
+        }
+
+        if (negative)
+        {
+            negative->AddListenerOnPress(updateFunction);
+            negative->AddListenerOnRelease(updateFunction);
+        }
+    }
+
+    void DeltaPressable::RemoveCallbacks()
+    {
+        if (positive)
+        {
+            positive->RemoveListenerOnPress(updateFunction);
+            positive->RemoveListenerOnRelease(updateFunction);
+        }
+
+        if (negative)
+        {
+            negative->RemoveListenerOnPress(updateFunction);
+            negative->RemoveListenerOnRelease(updateFunction);
+        }
+    }
+
+    void DeltaPressable::ClearCallbacks()
+    {
+        RemoveCallbacks();
+        positive = nullptr;
+        negative = nullptr;
+    }
+
+    void DeltaPressable::Update()
+    {
+        int value = positive->IsPressed() - negative->IsPressed();
+        ChangeDelta(static_cast<float>(value));
+    }
 }

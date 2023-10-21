@@ -6,21 +6,23 @@ namespace Engine::Graphics
 {
     class Mesh
     {
-    public:
-        Mesh();
-        Mesh(const Mesh &rhs) = default;
-        Mesh(Mesh &&rhs) = default;
-        Mesh &operator=(const Mesh &rhs) = default;
-        Mesh &operator=(Mesh &&rhs) = default;
+        friend class Container;
+
+    private:
+        Mesh() = delete;
+        Mesh(GLfloat *vertices, unsigned int *indices, size_t verticesCount, size_t indecesCount);
+        Mesh(const Mesh &rhs) = delete;
+        Mesh(Mesh &&rhs) = delete;
+        Mesh &operator=(const Mesh &rhs) = delete;
+        Mesh &operator=(Mesh &&rhs) = delete;
         ~Mesh();
 
     public:
-        void CreateMesh(GLfloat *vertices, unsigned int *indices, unsigned int numOfVertices, unsigned int numOfIndices);
-        void RenderMesh();
-        void ClearMesh();
+        void Render();
+        void Clear();
 
     private:
         GLuint VAO, VBO, IBO;
-        GLsizei indexCount;
+        GLsizei indecesCount;
     };
 }

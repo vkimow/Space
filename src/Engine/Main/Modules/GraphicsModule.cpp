@@ -4,6 +4,12 @@ namespace Engine
 {
     GraphicsModule::GraphicsModule(GLFWwindow *const window)
         : window(window)
+        , cameraManager()
+        , renderPool()
+        , container()
+    {}
+
+    GraphicsModule::~GraphicsModule()
     {}
 
     void GraphicsModule::StartUpdate()
@@ -16,5 +22,19 @@ namespace Engine
     {
         glUseProgram(0);
         glfwSwapBuffers(window);
+    }
+
+    Graphics::CameraManager& GraphicsModule::GetCameraManager()
+    {
+        return cameraManager;
+    }
+
+    Graphics::RenderPool& GraphicsModule::GetRenderPool()
+    {
+        return renderPool;
+    }
+    Graphics::Container &GraphicsModule::GetContainer()
+    {
+        return container;
     }
 }

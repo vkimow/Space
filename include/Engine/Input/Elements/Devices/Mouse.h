@@ -36,7 +36,7 @@ namespace Engine::Input
     private:
         void SetPosition(float x, float y);
         void SetScroll(float horizontal, float vertical);
-        void UpdateDelta();
+        void ClearDelta();
 
     private:
         GLFWwindow * const window;

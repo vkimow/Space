@@ -23,6 +23,11 @@ namespace Engine
         scheme->UpdateAfterPolling();
     }
 
+    void InputModule::LateUpdate()
+    {
+        scheme->LateUpdate();
+    }
+
     void InputModule::SetScheme(std::shared_ptr<Input::Scheme> scheme)
     {
         this->scheme = scheme;

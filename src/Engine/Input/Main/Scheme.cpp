@@ -100,11 +100,6 @@ namespace Engine::Input
         return AddVectorPressable(xPositivePressable, xNegativePressable, yPositivePressable, yNegativePressable);
     }
 
-    VectorDelta *const Scheme::CreateVectorDelta(Delta *const x, Delta *const y)
-    {
-        return AddVectorDelta(x, y);
-    }
-
     bool Scheme::HasMouse() const
     {
         return mouse != nullptr;
@@ -121,12 +116,15 @@ namespace Engine::Input
     }
 
     void Scheme::UpdateBeforePolling()
-    {
-        mouse->UpdateDelta();
-    }
+    {}
 
     void Scheme::UpdateAfterPolling()
     {}
+
+    void Scheme::LateUpdate()
+    {
+        mouse->ClearDelta();
+    }
 
     PressableKey *const Scheme::AddPressableKey(int key)
     {
@@ -152,13 +150,6 @@ namespace Engine::Input
     VectorPressable *const Scheme::AddVectorPressable(Pressable *const xPositive, Pressable *const xNegative, Pressable *const yPositive, Pressable *const yNegative)
     {
         VectorPressable *vector = new VectorPressable(xPositive, xNegative, yPositive, yNegative);
-        vectors.push_back(vector);
-        return vector;
-    }
-
-    VectorDelta *const Scheme::AddVectorDelta(Delta *x, Delta *y)
-    {
-        VectorDelta *vector = new VectorDelta(x, y);
         vectors.push_back(vector);
         return vector;
     }

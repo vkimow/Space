@@ -1,4 +1,4 @@
-project(Controllers CXX)
+project(Scripts CXX)
 
 #directories
 set_vkimow_default_target_dirs(
@@ -30,4 +30,5 @@ add_vkimow_library(
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES}
     PRIVATE_LINK_LIBS space::engine::main
+    PRIVATE_INCLUDE_DIRS ${SPACE_SOURCE_DIR}
 )

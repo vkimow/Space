@@ -12,9 +12,14 @@ namespace Engine::Input
 
     protected:
         Pressable();
-        virtual ~Pressable() override;
 
     public:
+        Pressable(const Pressable &rhs) = delete;
+        Pressable(Pressable &&rhs) = delete;
+        Pressable &operator=(const Pressable &rhs) = delete;
+        Pressable &operator=(Pressable &&rhs) = delete;
+
+        ~Pressable();
 
     public:
         bool IsPressed() const { return isPressed; }

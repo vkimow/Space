@@ -4,143 +4,162 @@
 
 namespace Engine::Graphics
 {
-    Camera::Camera()
-        : position(0.0f)
-        , up(0.0f)
-        , yaw(0.0f)
-        , pitch(0.0f)
-        , front(0.0f)
-        , worldUp(0.0f)
-        , right(0.0f)
-        , movementSpeed(0.0f)
-        , turnSpeed(0.0f)
-        , movementInput(nullptr)
-        , rotationInput(nullptr)
+    Camera::Camera(const std::string &name, glm::vec3 position)
+        : Camera(name, position, Projection())
     {}
+
+    Camera::Camera(const std::string &name, const Projection &projection)
+        : Camera(name, glm::vec3(0.0f), projection)
+    {}
+
+    Camera::Camera(const std::string &name, glm::vec3 position, const Projection &projection)
+        : name(name)
+        , position(position)
+        , up(glm::vec3(0.0f, 1.0f, 0.0f))
+        , front(glm::vec3(0.0f, 0.0f, -1.0f))
+        , projection(projection)
+        , viewMatrix()
+        , projectionMatrix()
+        , viewProjectionMatrix()
+        , isViewUpdated(false)
+        , isProjectionUpdated(false)
+        , isViewProjectionUpdated(false)
+        , updateProjectionMatrix(this, &Camera::UpdateProjectionMatrix)
+    {
+        SetCallbacks();
+    }
+
+    Camera::Camera(const Camera &rhs)
+        : name(rhs.name)
+        , position(rhs.position)
+        , up(rhs.up)
+        , front(rhs.front)
+        , projection(rhs.projection)
+        , viewMatrix(rhs.viewMatrix)
+        , projectionMatrix(rhs.projectionMatrix)
+        , viewProjectionMatrix(rhs.viewProjectionMatrix)
+        , isViewUpdated(rhs.isViewUpdated)
+        , isProjectionUpdated(rhs.isProjectionUpdated)
+        , isViewProjectionUpdated(rhs.isViewProjectionUpdated)
+        , updateProjectionMatrix(this, &Camera::UpdateProjectionMatrix)
+    {
+        SetCallbacks();
+    }
 
     Camera::Camera(Camera &&rhs) noexcept
-        : position(std::move(rhs.position))
+        : name(rhs.name)
+        , position(std::move(rhs.position))
         , up(std::move(rhs.up))
-        , yaw(std::move(rhs.yaw))
-        , pitch(std::move(rhs.pitch))
         , front(std::move(rhs.front))
-        , worldUp(std::move(rhs.worldUp))
-        , right(std::move(rhs.right))
-        , movementSpeed(rhs.movementSpeed)
-        , turnSpeed(rhs.turnSpeed)
-        , movementInput(rhs.movementInput)
-        , rotationInput(rhs.rotationInput)
+        , projection(std::move(rhs.projection))
+        , viewMatrix(std::move(rhs.viewMatrix))
+        , projectionMatrix(std::move(rhs.projectionMatrix))
+        , viewProjectionMatrix(std::move(rhs.viewProjectionMatrix))
+        , isViewUpdated(rhs.isViewUpdated)
+        , isProjectionUpdated(rhs.isProjectionUpdated)
+        , isViewProjectionUpdated(rhs.isViewProjectionUpdated)
+        , updateProjectionMatrix(this, &Camera::UpdateProjectionMatrix)
     {
-        rhs.movementInput = nullptr;
-        rhs.rotationInput = nullptr;
+        rhs.ClearCallbacks();
+        SetCallbacks();
     }
 
-    Camera &Camera::operator=(Camera && rhs) noexcept
-    {
-        position = std::move(rhs.position);
-        up = std::move(rhs.up);
-        yaw = std::move(rhs.yaw);
-        pitch = std::move(rhs.pitch);
-        front = std::move(rhs.front);
-        worldUp = std::move(rhs.worldUp);
-        right = std::move(rhs.right);
-        movementSpeed = rhs.movementSpeed;
-        turnSpeed = rhs.turnSpeed;
-
-        Input::Vector *previousMovementInput = movementInput;
-        Input::Vector *previousRotationInput = rotationInput;
-
-        movementInput = rhs.movementInput;
-        rotationInput = rhs.rotationInput;
-
-        rhs.movementInput = nullptr;
-        rhs.rotationInput = nullptr;
-
-        return *this;
-    }
-
-    Camera::Camera(glm::vec3 position, glm::vec3 up, GLfloat yaw, GLfloat pitch, GLfloat moveSpeed, GLfloat turnSpeed,
-                    Input::Vector *movementInput, Input::Vector *rotationInput)
-        : position(position)
-        , up(up)
-        , yaw(yaw)
-        , pitch(pitch)
-        , front(glm::vec3(0.0f, 0.0f, -1.0f))
-        , worldUp(glm::vec3(0.0f, 1.0f, 0.0f))
-        , right(glm::vec3(1.0f, 0.0f, 0.0f))
-        , movementSpeed(moveSpeed)
-        , turnSpeed(turnSpeed)
-        , movementInput(movementInput)
-        , rotationInput(rotationInput)
-    {}
-    
     Camera::~Camera()
-    {}
-
-    void Camera::Update()
     {
-        if (movementInput && movementInput->IsNotZero())
-        {
-            UpdatePosition(movementInput->GetVector());
-        }
-        if (rotationInput && rotationInput->IsNotZero())
-        {
-            UpdateRotation(rotationInput->GetVector());
-        }
+        ClearCallbacks();
     }
 
-    glm::vec3 Camera::GetCameraPosition()
+    glm::vec3 Camera::GetPosition()
     {
         return position;
     }
 
-    glm::vec3 Camera::GetCameraDirection()
+    glm::vec3 Camera::GetDirection()
     {
         return front;
     }
 
+    Projection &Camera::GetProjection()
+    {
+        return projection;
+    }
+
+    const std::string &Camera::GetName() const
+    {
+        return name;
+    }
+
     glm::mat4 Camera::GetViewMatrix()
     {
+        if (!isViewUpdated)
+        {
+            viewMatrix = glm::lookAt(position, position + front, up);
+            isViewUpdated = true;
+        }
         return glm::lookAt(position, position + front, up);
     }
 
-    void Camera::UpdatePosition(glm::vec2 movement)
+    glm::mat4 Camera::GetProjectionMatrix()
     {
-        glm::vec2 delta = movement * movementSpeed * TimeModule::GetDeltaTime();
-        position += front * movement.y;
-        position += right * movement.x;
-        LOG_DEBUG("New position = {}.{}.{}", position.x, position.y, position.z);
+        if (!isProjectionUpdated)
+        {
+            projectionMatrix = projection.GetProjectionMatrix();
+            isProjectionUpdated = true;
+        }
+        return projectionMatrix;
     }
 
-    void Camera::UpdateRotation(glm::vec2 rotation)
+    glm::mat4 Camera::GetViewProjectionMatrix()
     {
-        rotation *= turnSpeed;
-        yaw += rotation.x;
-        pitch += rotation.y;
-
-        if (pitch > 89.0f)
+        if (!isViewProjectionUpdated)
         {
-            pitch = 89.0f;
+            viewProjectionMatrix = GetProjectionMatrix() * GetViewMatrix();
+            isProjectionUpdated = true;
         }
-
-        if (pitch < -89.f)
-        {
-            pitch = -89.0f;
-        }
-
-        LOG_DEBUG("New Yaw={} and Pitch={}", yaw, pitch);
-        UpdateView();
+        return viewProjectionMatrix;
     }
 
-    void Camera::UpdateView()
+    void Camera::SetPosition(const glm::vec3& value)
     {
-        front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
-        front.y = sin(glm::radians(pitch));
-        front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
-        front = glm::normalize(front);
+        position = value;
+        isViewUpdated = false;
+        isViewProjectionUpdated = false;
+    }
 
-        right = glm::normalize(glm::cross(front, worldUp));
-        up = glm::normalize(glm::cross(right, front));
-        LOG_DEBUG("Update View");
+    void Camera::SetFront(const glm::vec3& value)
+    {
+        front = glm::normalize(value);
+        isViewUpdated = false;
+        isViewProjectionUpdated = false;
+    }
+
+    void Camera::SetUp(const glm::vec3 &value)
+    {
+        up = glm::normalize(value);
+        isViewUpdated = false;
+        isViewProjectionUpdated = false;
+    }
+
+    void Camera::SetProjection(const Projection &value)
+    {
+        projection = value;
+        isProjectionUpdated = false;
+        isViewProjectionUpdated = false;
+    }
+
+    void Camera::UpdateProjectionMatrix()
+    {
+        isProjectionUpdated = false;
+        isViewProjectionUpdated = false;
+    }
+
+    void Camera::SetCallbacks()
+    {
+        projection.AddListenerOnProjectionUpdated(updateProjectionMatrix);
+    }
+
+    void Camera::ClearCallbacks()
+    {
+        projection.RemoveListenerOnProjectionUpdated(updateProjectionMatrix);
     }
 }

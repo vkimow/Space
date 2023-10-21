@@ -6,8 +6,8 @@
 namespace Engine::Input
 {
 
-    VectorPressable::VectorPressable(Pressable *const xPositive, Pressable *const xNegative, Pressable *const yPositive, Pressable *const yNegative, float threshold)
-        : Vector(threshold)
+    VectorPressable::VectorPressable(Pressable *const xPositive, Pressable *const xNegative, Pressable *const yPositive, Pressable *const yNegative)
+        : Vector()
         , xPositive(xPositive)
         , xNegative(xNegative)
         , yPositive(yPositive)
@@ -18,39 +18,102 @@ namespace Engine::Input
         SetCallbacks();
     }
 
-    VectorPressable::VectorPressable(DeltaPressable *const x, DeltaPressable *const y, float threshold)
-        : VectorPressable(x->positive, x->negative, y->positive, y->negative, threshold)
+    VectorPressable::VectorPressable(DeltaPressable *const x, DeltaPressable *const y)
+        : VectorPressable(x->positive, x->negative, y->positive, y->negative)
     {}
+
+    VectorPressable::VectorPressable(VectorPressable &&rhs) noexcept
+        : Vector(std::move(rhs))
+        , xPositive(rhs.xPositive)
+        , xNegative(rhs.xNegative)
+        , yPositive(rhs.yPositive)
+        , yNegative(rhs.yNegative)
+        , updateXFunction(this, &VectorPressable::UpdateX)
+        , updateYFunction(this, &VectorPressable::UpdateY)
+    {
+        SetCallbacks();
+        rhs.ClearCallbacks();
+    }
+
+    VectorPressable &VectorPressable::operator=(VectorPressable &&rhs) noexcept
+    {
+        Vector::operator=(std::move(rhs));
+        xPositive = rhs.xPositive;
+        xNegative = rhs.xNegative;
+        yPositive = rhs.yPositive;
+        yNegative = rhs.yNegative;
+        SetCallbacks();
+        rhs.ClearCallbacks();
+        return *this;
+    }
 
     VectorPressable::~VectorPressable()
     {
-        RemoveCallbacks();
+        ClearCallbacks();
     };
 
     void VectorPressable::SetCallbacks()
     {
-        xPositive->AddListenerOnPress(updateXFunction);
-        xNegative->AddListenerOnPress(updateXFunction);
-        xPositive->AddListenerOnRelease(updateXFunction);
-        xNegative->AddListenerOnRelease(updateXFunction);
+        if (xPositive)
+        {
+            xPositive->AddListenerOnPress(updateXFunction);
+            xPositive->AddListenerOnRelease(updateXFunction);
+        }
 
-        yPositive->AddListenerOnPress(updateYFunction);
-        yNegative->AddListenerOnPress(updateYFunction);
-        yPositive->AddListenerOnRelease(updateYFunction);
-        yNegative->AddListenerOnRelease(updateYFunction);
+        if (xNegative)
+        {
+            xNegative->AddListenerOnPress(updateXFunction);
+            xNegative->AddListenerOnRelease(updateXFunction);
+        }
+
+        if (yPositive)
+        {
+            yPositive->AddListenerOnPress(updateYFunction);
+            yPositive->AddListenerOnRelease(updateYFunction);
+
+        }
+
+        if (yNegative)
+        {
+            yNegative->AddListenerOnPress(updateYFunction);
+            yNegative->AddListenerOnRelease(updateYFunction);
+        }
     }
 
     void VectorPressable::RemoveCallbacks()
     {
-        xPositive->RemoveListenerOnPress(updateXFunction);
-        xNegative->RemoveListenerOnPress(updateXFunction);
-        xPositive->RemoveListenerOnRelease(updateXFunction);
-        xNegative->RemoveListenerOnRelease(updateXFunction);
+        if (xPositive)
+        {
+            xPositive->RemoveListenerOnPress(updateXFunction);
+            xPositive->RemoveListenerOnRelease(updateXFunction);
+        }
 
-        yPositive->RemoveListenerOnPress(updateYFunction);
-        yNegative->RemoveListenerOnPress(updateYFunction);
-        yPositive->RemoveListenerOnRelease(updateYFunction);
-        yNegative->RemoveListenerOnRelease(updateYFunction);
+        if (xNegative)
+        {
+            xNegative->RemoveListenerOnPress(updateXFunction);
+            xNegative->RemoveListenerOnRelease(updateXFunction);
+        }
+
+        if (yPositive)
+        {
+            yPositive->RemoveListenerOnPress(updateYFunction);
+            yPositive->RemoveListenerOnRelease(updateYFunction);
+        }
+
+        if (yNegative)
+        {
+            yNegative->RemoveListenerOnPress(updateYFunction);
+            yNegative->RemoveListenerOnRelease(updateYFunction);
+        }
+    }
+
+    void VectorPressable::ClearCallbacks()
+    {
+        RemoveCallbacks();
+        xPositive = nullptr;
+        xNegative = nullptr;
+        yPositive = nullptr;
+        yNegative = nullptr;
     }
 
     void VectorPressable::UpdateX()

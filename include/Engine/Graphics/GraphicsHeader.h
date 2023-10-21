@@ -6,5 +6,8 @@
 #include "Engine/Graphics/Material.h"
 #include "Engine/Graphics/Camera.h"
 #include "Engine/Graphics/Projection.h"
+#include "Engine/Graphics/CameraManager.h"
+#include "Engine/Graphics/Container.h"
+#include "Engine/Graphics/RenderPool.h"
 
 #endif

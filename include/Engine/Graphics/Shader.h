@@ -11,18 +11,31 @@ namespace Engine::Graphics
 {
     class Shader
     {
-    public:
-        Shader();
-        Shader(const Shader &rhs) = default;
-        Shader(Shader &&rhs) = default;
-        Shader& operator=(const Shader &rhs) = default;
-        Shader &operator=(Shader &&rhs) = default;
+        friend class Container;
+
+    private:
+        Shader() = delete;
+        Shader(const std::string &vertexLocation, const std::string &fragmentLocation);
+        Shader(const std::string &vertexLocation, const std::string &geometryLocation, const std::string &fragmentLocation);
+        Shader(const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &fragmentLocation);
+        Shader(const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &geometryLocation, const std::string &fragmentLocation);
+        Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> fragmentLocation);
+        Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> geometryLocation, std::shared_ptr<std::string> fragmentLocation);
+        Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string> tesselationEvaluationLocation, std::shared_ptr<std::string> fragmentLocation);
+        Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string>  tesselationEvaluationLocation, std::shared_ptr<std::string>  geometryLocation, std::shared_ptr<std::string> fragmentLocation);
+        Shader(const Shader &rhs) = delete;
+        Shader(Shader &&rhs) = delete;
+        Shader &operator=(const Shader &rhs) = delete;
+        Shader &operator=(Shader &&rhs) = delete;
         ~Shader();
 
+    private:
+        void Create(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string> tesselationEvaluationLocation, std::shared_ptr<std::string> geometryLocation, std::shared_ptr<std::string> fragmentLocation);
+        GLuint AddShader(GLuint theProgram, std::shared_ptr<std::string> shaderCode, GLenum shaderType);
+        void LinkProgram();
+        void GetUniforms();
 
     public:
-        void CreateFromFiles(const std::string_view vertexLocation, const std::string_view fragmentLocation);
-        void Create(const std::string_view vertexCode, const std::string_view fragmentCode);
         void Validate();
         void Use();
         void Clear();
@@ -30,11 +43,6 @@ namespace Engine::Graphics
         GLuint GetModelUniform() const { return uniformModel; }
         GLuint GetViewUniform() const { return uniformView; }
         GLuint GetProjectionUniform() const { return uniformProjection; }
-
-    private:
-        GLuint AddShader(GLuint theProgram, const std::string_view shaderCode, GLenum shaderType);
-        void LinkProgram();
-        void GetUniforms();
 
     private:
         GLuint id;

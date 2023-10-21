@@ -3,7 +3,8 @@
 namespace Engine::Input
 {
 	PressableKey::PressableKey(int key)
-		: key(key)
+		: Pressable()
+		, key(key)
 	{}
 
 	int PressableKey::GetKeyCode() const

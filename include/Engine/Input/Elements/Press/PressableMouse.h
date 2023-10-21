@@ -10,17 +10,17 @@ namespace Engine::Input
         friend class InputModule;
         friend class Scheme;
 
-    public:
+    private:
         PressableMouse() = delete;
-        PressableMouse(PressableMouse &&inputKeyElement) = delete;
-        PressableMouse(const PressableMouse &inputKeyElement) = delete;
+        PressableMouse(const PressableMouse &rhs) = delete;
+        PressableMouse(PressableMouse &&rhs) = delete;
+        PressableMouse &operator=(const PressableMouse &rhs) = delete;
+        PressableMouse &operator=(PressableMouse &&rhs) = delete;
+
+        PressableMouse(int button);
         ~PressableMouse();
 
-    private:
-        PressableMouse(int button);
-
     public:
-
         int GetButtonCode() const;
 
     private:

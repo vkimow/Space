@@ -5,6 +5,11 @@
 #include <memory>
 
 
+namespace Game
+{
+    class App;
+}
+
 namespace Engine
 {
     namespace Input
@@ -15,20 +20,23 @@ namespace Engine
 
     class  InputModule final
     {
+        friend class Game::App;
         friend class Input::Element;
-
-    public:
-        InputModule(GLFWwindow *const window);
+        friend class Modules;
 
     private:
+        InputModule(GLFWwindow *const window);
         InputModule() = delete;
         InputModule(const InputModule &inputModule) = delete;
         InputModule(InputModule &&inputModule) = delete;
         InputModule &operator=(const InputModule &rhs) = delete;
         InputModule &operator=(InputModule &&rhs) = delete;
 
-    public:
+    private:
         void Update();
+        void LateUpdate();
+
+    public:
         void SetScheme(std::shared_ptr<Input::Scheme> scheme);
         std::shared_ptr<Input::Scheme> GetScheme();
 

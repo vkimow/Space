@@ -13,20 +13,5 @@ namespace Game
     public:
         virtual void Update() override;
         virtual void Render() override;
-
-    private:
-        Engine::Input::VectorPressable *movementInput;
-        Engine::Input::Mouse *mouseInput;
-
-        Engine::Graphics::Shader shader;
-
-        Engine::Graphics::Mesh mesh_1;
-        Engine::Graphics::Mesh mesh_2;
-        Engine::Graphics::Mesh mesh_3;
-        Engine::Graphics::Mesh mesh_4;
-        Engine::Graphics::Mesh mesh_5;
-
-        Engine::Graphics::Camera camera;
-        Engine::Graphics::Projection projection;
     };
 }

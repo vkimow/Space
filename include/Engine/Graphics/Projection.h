@@ -5,14 +5,8 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
-#include "Engine/Input/InputHeader.h"
 #include <type_traits>
-
-namespace Engine
-{
-    class Window;
-}
+#include "Engine/Tools/Events/Action.h"
 
 namespace Engine::Graphics
 {
@@ -21,19 +15,18 @@ namespace Engine::Graphics
 
     public:
         Projection();
-        Projection(const Projection &rhs) = delete;
+        Projection(const Projection &rhs);
         Projection(Projection &&rhs) noexcept;
-        Projection &operator=(const Projection &rhs) = delete;
+        Projection &operator=(const Projection &rhs);
         Projection &operator=(Projection &&rhs) noexcept;
 
-        Projection(Window *const window, float fovDegrees, float aspectRatio, float near, float far);
-        Projection(Window *const window, float fovDegrees, float width, float height, float near, float far);
-        Projection(Window *const window, float fovDegrees, float near = 0.01f, float far = 100.0f);
-        Projection(Window *const window, float fovDegrees, glm::vec2 framebuffer, float near = 0.01f, float far = 100.0f);
-        Projection(Window *const window, float fovDegrees, glm::ivec2 framebuffer, float near = 0.01f, float far = 100.0f);
+        Projection(float fovDegrees, float aspectRatio, float near, float far);
+        Projection(float fovDegrees, float width, float height, float near, float far);
+        Projection(float fovDegrees, float near = 0.01f, float far = 100.0f);
+        Projection(float fovDegrees, glm::vec2 framebuffer, float near = 0.01f, float far = 100.0f);
+        Projection(float fovDegrees, glm::ivec2 framebuffer, float near = 0.01f, float far = 100.0f);
 
         ~Projection();
-
 
     public:
         glm::mat4 GetProjectionMatrix() const;
@@ -42,32 +35,27 @@ namespace Engine::Graphics
         float GetNear() const;
         float GetFar() const;
 
-
     public:
         template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-        void UpdateFov(T fovDegrees) { this->fovDegrees = static_cast<float>(fovDegrees); UpdateProjection(); }
-
+        void UpdateFov(T fovDegrees) { this->fovDegrees = static_cast<float>(fovDegrees); OnProjectionUpdated(); }
         template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-        void UpdateAspectByFramebuffer(glm::vec<2,T> framebuffer) { UpdateAspect(static_cast<float>(framebuffer.x) / static_cast<float>(framebuffer.y)); UpdateProjection(); }
+        void UpdateAspectByFramebuffer(glm::vec<2,T> framebuffer) { UpdateAspect(static_cast<float>(framebuffer.x) / static_cast<float>(framebuffer.y));}
         template<typename T_1, typename T_2, typename = std::enable_if_t<std::is_arithmetic_v<T_1>>, typename = std::enable_if_t<std::is_arithmetic_v<T_2>>>
-        void UpdateAspect(T_1 width, T_2 height) { UpdateAspect(static_cast<float>(width) / static_cast<float>(height)); UpdateProjection(); }
+        void UpdateAspect(T_1 width, T_2 height) { UpdateAspect(static_cast<float>(width) / static_cast<float>(height));}
         template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-        void UpdateAspect(T aspectRatio) { this->aspectRatio = static_cast<float>(aspectRatio); UpdateProjection(); }
+        void UpdateAspect(T aspectRatio) { this->aspectRatio = static_cast<float>(aspectRatio); OnProjectionUpdated(); }
+        template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
+        void UpdateNear(T near) { this->near = static_cast<float>(near); OnProjectionUpdated(); }
+        template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
+        void UpdateFar(T far) { this->far = static_cast<float>(far); OnProjectionUpdated(); }
 
     private:
-        void UpdateProjection();
-
-    private:
-        Window * window;
-        Engine::Tools::Events::MemberFunction<Projection, glm::ivec2> updateAspectByFramebuffer;
+        CREATE_ACTION(void, OnProjectionUpdated);
 
     private:
         float fovDegrees;
         float aspectRatio;
         float near;
         float far;
-
-    private:
-        glm::mat4 projection;
     };
 }

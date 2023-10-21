@@ -30,6 +30,8 @@ namespace Game
             engine->GetModules()->GetGraphics().StartUpdate();
             scene->Render();
             engine->GetModules()->GetGraphics().EndUpdate();
+
+            engine->GetModules()->GetInput().LateUpdate();
         }
     }
 

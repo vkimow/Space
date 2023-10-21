@@ -12,8 +12,11 @@ namespace Engine::Input
 
     private:
         PressableKey() = delete;
-        PressableKey(PressableKey &&inputPressableKey) = delete;
-        PressableKey(const PressableKey &inputPressableKey) = delete;
+        PressableKey(const PressableKey &rhs) = delete;
+        PressableKey(PressableKey &&rhs) = delete;
+        PressableKey &operator=(const PressableKey &rhs) = delete;
+        PressableKey &operator=(PressableKey &&rhs) = delete;
+
         PressableKey(int key);
         ~PressableKey();
 

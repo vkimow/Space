@@ -53,17 +53,21 @@ namespace Engine::Tools::Events
         Action(const Action &rhs)
             : functionListeners(rhs.functionListeners)
             , actionListeners(rhs.actionListeners)
-            , id(rhs.id)
+            , id(FunctionIdGetter<Action>::GetNextId())
         {}
 
         Action(Action &&rhs) noexcept
             : functionListeners(std::move(rhs.functionListeners))
             , actionListeners(std::move(rhs.actionListeners))
-            , id(std::move(rhs.id))
-        {}
+            , id(rhs.id)
+        {
+            rhs.functionListeners.clear();
+            rhs.actionListeners.clear();
+            rhs.id = 0;
+        }
 
         Action(const FunctionType &listener)
-            : Action()
+            : Action() 
         {
             AddListener(listener);
         };
@@ -77,23 +81,32 @@ namespace Engine::Tools::Events
         Action &operator=(const Action &rhs)
         {
             functionListeners = rhs.functionListeners;
+            actionListeners = rhs.actionListeners;
+            return *this;
         };
 
         Action &operator=(Action &&rhs) noexcept
         {
             functionListeners = std::move(rhs.functionListeners);
+            actionListeners = std::move(rhs.actionListeners);
+            rhs.functionListeners.clear();
+            rhs.actionListeners.clear();
+            rhs.id = 0;
+            return *this;
         };
 
         Action &operator=(const FunctionType &rhs)
         {
             functionListeners.clear();
             AddListener(rhs);
+            return *this;
         };
 
         Action &operator=(FunctionType &&rhs)
         {
             functionListeners.clear();
             AddListener(std::move(rhs));
+            return *this;
         };
 
     public:

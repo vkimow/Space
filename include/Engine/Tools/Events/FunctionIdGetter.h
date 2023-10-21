@@ -16,5 +16,5 @@ namespace Engine::Tools::Events
     };
 
     template<typename Type>
-    size_t FunctionIdGetter<Type>::instanceCounter = 0;
+    size_t FunctionIdGetter<Type>::instanceCounter = 1; // counter starts with 1. 0 is index for disposed functions
 }

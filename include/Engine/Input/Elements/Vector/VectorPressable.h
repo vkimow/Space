@@ -18,26 +18,31 @@ namespace Engine::Input
         VectorPressable(Pressable *const xPositive,
             Pressable *const xNegative,
             Pressable *const yPositive,
-            Pressable *const yNegative,
-            float threshold = 0.05f);
+            Pressable *const yNegative);
 
         VectorPressable(DeltaPressable *const x,
-            DeltaPressable *const y,
-            float threshold = 0.05f);
+            DeltaPressable *const y);
+
+        VectorPressable(const VectorPressable &rhs) = delete;
+        VectorPressable(VectorPressable &&rhs) noexcept;
+
+        VectorPressable &operator=(const VectorPressable &rhs) = delete;
+        VectorPressable &operator=(VectorPressable &&rhs) noexcept;
 
         ~VectorPressable();
 
     private:
         void SetCallbacks();
         void RemoveCallbacks();
+        void ClearCallbacks();
         void UpdateX();
         void UpdateY();
 
     private:
-        Pressable *const xPositive;
-        Pressable *const xNegative;
-        Pressable *const yPositive;
-        Pressable *const yNegative;
+        Pressable *xPositive;
+        Pressable *xNegative;
+        Pressable *yPositive;
+        Pressable *yNegative;
         Engine::Tools::Events::MemberFunction<VectorPressable, void> updateXFunction;
         Engine::Tools::Events::MemberFunction<VectorPressable, void> updateYFunction;
     };

@@ -27,7 +27,8 @@ add_vkimow_executable(
     NAME ${PROJECT_NAME}
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_TESTS_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES}
-    PRIVATE_LINK_LIBS   space::engine::graphics
+    PRIVATE_LINK_LIBS   space::engine::objects
+                        space::engine::tools
                         Catch2::Catch2WithMain
                         glew
                         glfw

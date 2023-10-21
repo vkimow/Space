@@ -1,4 +1,5 @@
 #include "Engine/Main/Modules/TimeModule.h"
+#include <GLFW/glfw3.h>
 
 namespace Engine
 {

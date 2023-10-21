@@ -38,12 +38,12 @@ namespace Engine::Tools
         static Logger* instance;
 
     public:
-        std::shared_ptr<spdlog::async_logger> GetMainLogger() const;
-        std::shared_ptr<spdlog::async_logger> GetErrorLogger() const;
+        std::shared_ptr<spdlog::logger> GetMainLogger() const;
+        std::shared_ptr<spdlog::logger> GetErrorLogger() const;
 
     private:
-        std::shared_ptr<spdlog::async_logger> mainLogger;
-        std::shared_ptr<spdlog::async_logger> errorLogger;
+        std::shared_ptr<spdlog::logger> mainLogger;
+        std::shared_ptr<spdlog::logger> errorLogger;
         std::shared_ptr<spdlog::details::thread_pool> tpMain;
         std::shared_ptr<spdlog::details::thread_pool> tpError;
     };

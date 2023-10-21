@@ -3,22 +3,24 @@
 namespace Engine::Input
 {
 
-	Pressable::Pressable()
-		: isPressed(false)
-	{}
+    Pressable::Pressable()
+        : isPressed(false)
+        , OnPress()
+        , OnRelease()
+    {}
 
-	Pressable::~Pressable()
-	{}
+    Pressable::~Pressable()
+    {}
 
-	void Pressable::Press()
-	{
-		isPressed = true;
-		OnPress();
-	}
+    void Pressable::Press()
+    {
+        isPressed = true;
+        OnPress();
+    }
 
-	void Pressable::Release()
-	{
-		isPressed = false;
-		OnRelease();
-	}
+    void Pressable::Release()
+    {
+        isPressed = false;
+        OnRelease();
+    }
 }

@@ -23,7 +23,7 @@ namespace Engine::Tools::Events
 
 		Function(const Function &rhs)
 			: function(rhs.function),
-			id(rhs.id)
+			id(FunctionIdGetter<T>::GetNextId())
 		{}
 
 		Function(Function &&rhs) noexcept
@@ -35,15 +35,13 @@ namespace Engine::Tools::Events
 
 		Function &operator=(const Function &rhs)
 		{
-			this->function = rhs.function;
-			this->id = rhs.id;
+			function = rhs.function;
 			return *this;
 		}
 
 		Function &operator=(Function &&rhs) noexcept
 		{
-			this->function = std::move(rhs.function);
-			this->id = rhs.id;
+			function = std::move(rhs.function);
 			rhs.id = 0;
 			return *this;
 		}

@@ -37,7 +37,6 @@ namespace Engine::Input
         VectorPressable *const CreateVectorPressable(Pressable *const xPositive, Pressable *const xNegative, Pressable *const yPositive, Pressable *const yNegative);
         VectorPressable *const CreateVectorPressable(DeltaPressable *const x, DeltaPressable *const y);
         VectorPressable *const CreateVectorPressable(int xPositiveKey, int xNegativeKey, int yPositiveKey, int yNegativeKey);
-        VectorDelta     *const CreateVectorDelta(Delta *x, Delta *y);
 
     public:
         bool HasMouse() const;
@@ -46,6 +45,7 @@ namespace Engine::Input
     private:
         void UpdateBeforePolling();
         void UpdateAfterPolling();
+        void LateUpdate();
 
     private:
         std::unordered_map<int, PressableKey *const> keys;
@@ -61,8 +61,6 @@ namespace Engine::Input
         PressableMouse *const AddPressableMouse(int key);
         DeltaPressable *const AddDeltaPressable(Pressable *const positive, Pressable *const negative);
         VectorPressable *const AddVectorPressable(Pressable *const xPositive, Pressable *const xNegative, Pressable *const yPositive, Pressable *const yNegative);
-        VectorDelta *const AddVectorDelta(Delta *const x, Delta *const y);
-
 
         void RemovePressableKey(int key);
         void RemovePressableMouse(int mouseButton);
