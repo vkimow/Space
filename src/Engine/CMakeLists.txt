@@ -2,6 +2,7 @@ set_vkimow_subsolution(Engine)
 add_subdirectory(Tools)
 add_subdirectory(Objects)
 add_subdirectory(Input)
+add_subdirectory(Audio)
 add_subdirectory(Graphics)
 add_subdirectory(Main)
 
@@ -12,4 +13,5 @@ add_vkimow_custom_build_target(
                     Objects_Tests
                     Input_Tests
                     Graphics_Tests
+                    Audio_Tests
 )

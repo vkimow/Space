@@ -7,10 +7,12 @@ namespace Engine::Objects
 {
     size_t Scene::idCounter = 0;
 
-    Scene::Scene(const std::string &name, Engine::Window *const window, Engine::Modules *const modules)
+    Scene::Scene(const std::string &name, Engine::Window *const window, Engine::TimeModule *const time, Engine::InputModule *const input, Engine::GraphicsModule *const graphics)
         : name(name)
         , window(window)
-        , modules(modules)
+        , time(time)
+        , input(input)
+        , graphics(graphics)
         , id(idCounter++)
     {}
 
@@ -29,15 +31,26 @@ namespace Engine::Objects
         return name;
     }
 
-    ::Engine::Modules *const Scene::GetModules() const
-    {
-        return modules;
-    }
-
-    ::Engine::Window *const Scene::GetWindow() const
+    Engine::Window *const Scene::GetWindow() const
     {
         return window;
     }
+
+    Engine::TimeModule *const Scene::GetTime() const
+    {
+        return time;
+    }
+
+    Engine::InputModule *const Scene::GetInput() const
+    {
+        return input;
+    }
+
+    Engine::GraphicsModule *const Scene::GetGraphics() const
+    {
+        return graphics;
+    }
+
 
     void Scene::UpdateGameObject(const std::string &name)
     {

@@ -2,9 +2,9 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
-#include "Engine/Graphics/CameraManager.h"
-#include "Engine/Graphics/RenderPool.h"
-#include "Engine/Graphics/Container.h"
+#include "Engine/Graphics/Camera/CameraManager.h"
+#include "Engine/Graphics/Render/RenderManager.h"
+#include "Engine/Graphics/Elements/Container.h"
 
 namespace Game
 {
@@ -16,7 +16,7 @@ namespace Engine
     class GraphicsModule
     {
         friend class Game::App;
-        friend class Modules;
+        friend class Engine;
 
     private:
         GraphicsModule(GLFWwindow *const window);
@@ -24,7 +24,7 @@ namespace Engine
         GraphicsModule() = delete;
         GraphicsModule(const GraphicsModule &rhs) = delete;
         GraphicsModule(GLFWwindow &&rhs) = delete;
-        GraphicsModule& operator=(const GraphicsModule &rhs) = delete;
+        GraphicsModule &operator=(const GraphicsModule &rhs) = delete;
         GraphicsModule &operator=(GraphicsModule &&rhs) = delete;
 
         ~GraphicsModule();
@@ -34,14 +34,14 @@ namespace Engine
         void EndUpdate();
 
     public:
-        Graphics::CameraManager& GetCameraManager();
-        Graphics::RenderPool& GetRenderPool();
-        Graphics::Container &GetContainer();
+        Graphics::RenderManager *const GetRenderManager();
+        Graphics::CameraManager *const GetCameraManager();
+        Graphics::Container *const GetContainer();
 
     private:
         GLFWwindow *const window;
-        Graphics::CameraManager cameraManager;
-        Graphics::RenderPool renderPool;
-        Graphics::Container container;
+        Graphics::Container *const container;
+        Graphics::CameraManager *const cameraManager;
+        Graphics::RenderManager *const renderManager;
     };
 }

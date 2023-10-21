@@ -41,20 +41,23 @@ namespace Engine::Objects
     public:
         const std::string &GetName() const;
         Transform &GetTransform();
+        Transform *GetTransformPtr();
 
     public:
         template<typename S, typename... Args, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
-        void EmplaceScript(Args&&... args)
+        S *const EmplaceScript(Args&&... args)
         {
             S *script = new S(this, std::forward<Args>(args)...);
             AddScriptInner<S>(script);
+            return script;
         }
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
-        void EmplaceScript()
+        S *const EmplaceScript()
         {
             S *script = new S(this);
             AddScriptInner<S>(script);
+            return script;
         }
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
@@ -72,8 +75,7 @@ namespace Engine::Objects
                 LOG_ERROR("Script already has an owner");
                 return;
             }
-            basePointer->object = this;
-
+            basePointer->SetGameObject(this);
             AddScriptInner<S>(script);
         }
 

@@ -43,11 +43,12 @@ namespace Engine::Graphics
         GLuint GetModelUniform() const { return uniformModel; }
         GLuint GetViewUniform() const { return uniformView; }
         GLuint GetProjectionUniform() const { return uniformProjection; }
+        GLuint GetViewProjectionUniform() const { return uniformViewProjection; }
 
     private:
         GLuint id;
 
     private:
-        GLuint uniformModel, uniformView, uniformProjection;
+        GLuint uniformModel, uniformView, uniformProjection, uniformViewProjection;
     };
 }

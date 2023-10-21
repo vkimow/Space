@@ -49,6 +49,7 @@ add_vkimow_library(
                         glm
                         space::engine::tools
                         space::engine::input
+                        space::engine::objects
     PRIVATE_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
 )
 

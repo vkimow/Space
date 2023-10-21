@@ -1,4 +1,4 @@
-#include "Engine/Graphics/CameraManager.h"
+#include "Engine/Graphics/Camera/CameraManager.h"
 
 namespace Engine::Graphics
 {

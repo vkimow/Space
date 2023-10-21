@@ -6,7 +6,6 @@
 namespace Engine
 {
     class Window;
-    class Modules;
     class GraphicsModule;
     class TimeModule;
     class InputModule;
@@ -18,8 +17,7 @@ namespace Engine::Objects
     class Scene
     {
     public:
-        Scene(const std::string &name, ::Engine::Window *const window, ::Engine::Modules *const modules);
-
+        Scene(const std::string &name, Engine::Window *const window, Engine::TimeModule *const time, Engine::InputModule *const input, Engine::GraphicsModule *const graphics);
         Scene(const Scene &rhs) = delete;
         Scene(Scene &&rhs) noexcept = delete;
         Scene &operator=(const Scene &rhs) = delete;
@@ -34,17 +32,20 @@ namespace Engine::Objects
     private:
         const size_t id;
         const std::string name;
-        ::Engine::Window *const window;
-        ::Engine::Modules *const modules;
+        Engine::Window *const window;
+        Engine::TimeModule *const time;
+        Engine::InputModule *const input;
+        Engine::GraphicsModule *const graphics;
 
     public:
         size_t GetId() const;
         const std::string &GetName() const;
 
     protected:
-        ::Engine::Modules *const GetModules() const;
-        ::Engine::Window *const GetWindow() const;
-
+        Engine::Window *const GetWindow() const;
+        Engine::TimeModule *const GetTime() const;
+        Engine::InputModule *const GetInput() const;
+        Engine::GraphicsModule *const GetGraphics() const;
 
     protected:
         template<typename Object = GameObject, typename... Args, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
@@ -61,6 +62,41 @@ namespace Engine::Objects
             Object *object = new Object(name);
             objects.insert(std::make_pair(name, object));
             return object;
+        }
+
+        template<typename Object = GameObject, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
+        Object *CopyGameObject(const std::string &name, Object &&object)
+        {
+            Object *copyObject = new Object(std::forward<Object>(object));
+            static_cast<GameObject *>(copyObject)->name = name;
+            objects.insert(std::make_pair(name, copyObject));
+            return copyObject;
+        }
+
+        template<typename Object = GameObject, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
+        Object *CopyGameObject(Object &&object)
+        {
+            Object *copyObject = new Object(std::forward<Object>(object));
+            objects.insert(std::make_pair(name, copyObject));
+            return copyObject;
+        }
+
+        template<typename Object = GameObject, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
+        Object *CopyGameObject(const std::string &name, const Object &object)
+        {
+            Object *copyObject = new Object(object);
+            static_cast<GameObject*>(copyObject)->name = name;
+            objects.insert(std::make_pair(name, copyObject));
+            return copyObject;
+        }
+
+        template<typename Object = GameObject, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
+        Object *CopyGameObject(const Object &object)
+        {
+            Object *copyObject = new Object(object);
+            static_cast<GameObject *>(copyObject)->name += "_Copy";
+            objects.insert(std::make_pair(name, copyObject));
+            return copyObject;
         }
 
         void UpdateGameObject(const std::string &name);

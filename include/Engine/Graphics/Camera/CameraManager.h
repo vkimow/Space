@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 #include <string>
-#include "Engine/Graphics/Camera.h"
+#include "Engine/Graphics/Camera/Camera.h"
 
 namespace Engine::Graphics
 {

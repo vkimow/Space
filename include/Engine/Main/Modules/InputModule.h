@@ -22,13 +22,13 @@ namespace Engine
     {
         friend class Game::App;
         friend class Input::Element;
-        friend class Modules;
+        friend class Engine;
 
     private:
         InputModule(GLFWwindow *const window);
         InputModule() = delete;
-        InputModule(const InputModule &inputModule) = delete;
-        InputModule(InputModule &&inputModule) = delete;
+        InputModule(const InputModule &rhs) = delete;
+        InputModule(InputModule &&rhs) = delete;
         InputModule &operator=(const InputModule &rhs) = delete;
         InputModule &operator=(InputModule &&rhs) = delete;
 

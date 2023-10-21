@@ -4,13 +4,17 @@ namespace Engine
 {
     GraphicsModule::GraphicsModule(GLFWwindow *const window)
         : window(window)
-        , cameraManager()
-        , renderPool()
-        , container()
+        , container(new Graphics::Container())
+        , cameraManager(new Graphics::CameraManager())
+        , renderManager(new Graphics::RenderManager(container))
     {}
 
     GraphicsModule::~GraphicsModule()
-    {}
+    {
+        delete renderManager;
+        delete cameraManager;
+        delete container;
+    }
 
     void GraphicsModule::StartUpdate()
     {
@@ -24,16 +28,17 @@ namespace Engine
         glfwSwapBuffers(window);
     }
 
-    Graphics::CameraManager& GraphicsModule::GetCameraManager()
+    Graphics::RenderManager *const GraphicsModule::GetRenderManager()
+    {
+        return renderManager;
+    }
+
+    Graphics::CameraManager *const  GraphicsModule::GetCameraManager()
     {
         return cameraManager;
     }
 
-    Graphics::RenderPool& GraphicsModule::GetRenderPool()
-    {
-        return renderPool;
-    }
-    Graphics::Container &GraphicsModule::GetContainer()
+    Graphics::Container *const GraphicsModule::GetContainer()
     {
         return container;
     }

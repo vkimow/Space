@@ -13,12 +13,12 @@ namespace Engine
     class TimeModule final
     {
         friend class Game::App;
-        friend class Modules;
+        friend class Engine;
 
     private:
         TimeModule();
-        TimeModule(const TimeModule &timeModule) = delete;
-        TimeModule(TimeModule &&timeModule) = delete;
+        TimeModule(const TimeModule &rhs) = delete;
+        TimeModule(TimeModule &&rhs) = delete;
         TimeModule &operator=(const TimeModule &rhs) = delete;
         TimeModule &operator=(TimeModule &&rhs) = delete;
 

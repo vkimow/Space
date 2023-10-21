@@ -36,7 +36,7 @@ namespace Engine::Input
 	private:
 		Pressable* positive;
 		Pressable* negative;
-		Engine::Tools::Events::MemberFunction<DeltaPressable, void> updateFunction;
+		::Engine::Tools::Events::MemberFunction<DeltaPressable, void> updateFunction;
 	};
 
 }

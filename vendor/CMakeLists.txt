@@ -60,6 +60,18 @@ else()
     CPMAddPackage("gh:g-truc/gli#0.8.2.0")
 endif()
 
+#SNDFILE
+message("\n=====ADDING SNDFILE=====")
+if(EXISTS ${SPACE_VENDOR_DIR}/sndfile)
+    message("Found 'sndfile' localy in the vendor directory")
+    add_subdirectory(${SPACE_VENDOR_DIR}/sndfile)
+else()
+    message("Adding 'sndfile' throgh CPM")
+    CPMAddPackage("gh:libsndfile/libsndfile#1.2.2")
+endif()
+
+set_target_properties(sndfile PROPERTIES FOLDER Vendors/SNDFILE)
+
 #ASSIMP
 message("\n=====ADDING ASSIMP=====")
 if(EXISTS ${SPACE_VENDOR_DIR}/assimp)
@@ -71,6 +83,23 @@ else()
 endif()
 
 set_target_properties(assimp unit zlibstatic UpdateAssimpLibsDebugSymbolsAndDLLs PROPERTIES FOLDER Vendors/ASSIMP)
+
+#SOLOUD
+message("\n=====ADDING SOLOUD=====")
+if(EXISTS ${SPACE_VENDOR_DIR}/soloud)
+    message("Found 'soloud' localy in the vendor directory")
+    set(SOLOUD_BACKEND_WASAPI ON)
+    set(SOLOUD_BACKEND_SDL2 OFF)
+    add_subdirectory(${SPACE_VENDOR_DIR}/soloud/contrib)
+else()
+    message("Adding 'soloud' throgh CPM")
+    CPMAddPackage("gh:jarikomppa/soloud#RELEASE_20200207")
+    set(SOLOUD_BACKEND_WASAPI ON)
+    set(SOLOUD_BACKEND_SDL2 OFF)
+    add_subdirectory(${soloud_SOURCE_DIR}/contrib)
+endif()
+
+set_target_properties(soloud PROPERTIES FOLDER Vendors/SOLOUD)
 
 #CATCH2
 message("\n=====ADDING CATCH2=====")

@@ -91,7 +91,7 @@ namespace Game::Scripts
         {
             glm::vec3 moveDelta(xInput->GetDelta(), -yInput->GetDelta(), -zInput->GetDelta());
             moveDelta *= movementSpeed * Engine::TimeModule::GetDeltaTime();
-            Engine::Objects::MoveInOrientation(object, moveDelta);
+            Engine::Objects::MoveInOrientation(GetGameObject(), moveDelta);
         }
 
         if (!(pitchInput->IsZero() && yawInput->IsZero() && rollInput->IsZero()))
@@ -99,7 +99,7 @@ namespace Game::Scripts
             glm::vec3 rotationDelta(pitchInput->GetDelta(), yawInput->GetDelta(), rollInput->GetDelta());
             rotationDelta *= rotationSpeed * Engine::TimeModule::GetDeltaTime();
             rotationDelta = glm::radians(rotationDelta);
-            Engine::Objects::RotateInOrientation(object, rotationDelta);
+            Engine::Objects::RotateInOrientation(GetGameObject(), rotationDelta);
         }
     }
 

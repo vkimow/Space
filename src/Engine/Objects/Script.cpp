@@ -49,4 +49,9 @@ namespace Engine::Objects
     {
         return object;
     }
+
+    void Script::SetGameObject(GameObject *value)
+    {
+        object = value;
+    }
 }

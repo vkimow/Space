@@ -155,9 +155,9 @@ TEST_CASE("", "[Transform Rotation and Rotate Functions Return Right Values]")
     glm::vec3 startAnglesInRadians = glm::radians(startAnglesInDegrees);
     glm::quat startQuaternion(startAnglesInRadians);
 
-    LOG_DEBUG("Start Quat ({},{},{},{})", startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
-    LOG_DEBUG("Start Degrees ({},{},{})", startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
-    LOG_DEBUG("Start Radians ({},{},{})", startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+    //LOG_DEBUG("Start Quat ({},{},{},{})", startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+    //LOG_DEBUG("Start Degrees ({},{},{})", startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+    //LOG_DEBUG("Start Radians ({},{},{})", startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
 
     glm::vec3 anglesInDegrees(60.0f, 30.0f, 75.0f);
     glm::vec3 anglesInRadians = glm::radians(anglesInDegrees);
@@ -165,307 +165,185 @@ TEST_CASE("", "[Transform Rotation and Rotate Functions Return Right Values]")
     anglesInRadians = glm::eulerAngles(quaternion);
     anglesInDegrees = glm::degrees(anglesInRadians);
 
-    LOG_DEBUG("Delta Quat ({},{},{},{})", quaternion.w, quaternion.x, quaternion.y, quaternion.z);
-    LOG_DEBUG("Delta Degrees ({},{},{})", anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
-    LOG_DEBUG("Delta Radians ({},{},{})", anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
+    //LOG_DEBUG("Delta Quat ({},{},{},{})", quaternion.w, quaternion.x, quaternion.y, quaternion.z);
+    //LOG_DEBUG("Delta Degrees ({},{},{})", anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
+    //LOG_DEBUG("Delta Radians ({},{},{})", anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
 
     glm::quat resultQuaternion = glm::normalize(quaternion) * glm::normalize(startQuaternion);
     glm::vec3 resultAngleInRadians = glm::eulerAngles(resultQuaternion);
     glm::vec3 resultAngleInDegrees = glm::degrees(resultAngleInRadians);
 
-    LOG_DEBUG("Result Quat ({},{},{},{})", resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
-    LOG_DEBUG("Result Degrees ({},{},{})", resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-    LOG_DEBUG("Result Radians ({},{},{})", resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
+    //LOG_DEBUG("Result Quat ({},{},{},{})", resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
+    //LOG_DEBUG("Result Degrees ({},{},{})", resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
+    //LOG_DEBUG("Result Radians ({},{},{})", resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.SetRotation(quaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
         CHECK(glm::length(transform.GetRotation() - quaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - anglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - anglesInRadians) < Epsilon * Epsilon * Epsilon);
     }
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.SetRotation(anglesInRadians);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
         CHECK(glm::length(transform.GetRotation() - quaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - anglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - anglesInRadians) < Epsilon * Epsilon * Epsilon);
     }
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.SetRotation(anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
         CHECK(glm::length(transform.GetRotation() - quaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - anglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - anglesInRadians) < Epsilon * Epsilon * Epsilon);
     }
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.SetRotationInDegrees(anglesInDegrees);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
         CHECK(glm::length(transform.GetRotation() - quaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - anglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - anglesInRadians) < Epsilon * Epsilon * Epsilon);
     }
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.SetRotationInDegrees(anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, quaternion.w, quaternion.x, quaternion.y, quaternion.z);
         CHECK(glm::length(transform.GetRotation() - quaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - anglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - anglesInRadians) < Epsilon * Epsilon * Epsilon);
     }
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.Rotate(quaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - resultQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - resultAngleInRadians) < Epsilon * Epsilon * Epsilon);
     }
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.Rotate(anglesInRadians);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - resultQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - resultAngleInRadians) < Epsilon * Epsilon * Epsilon);
     }
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.Rotate(anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - resultQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - resultAngleInRadians) < Epsilon * Epsilon * Epsilon);
     }
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.RotateInDegrees(anglesInDegrees);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - resultQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - resultAngleInRadians) < Epsilon * Epsilon * Epsilon);
     }
 
     {
         Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
         transform.RotateInDegrees(anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
+        //LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
         CHECK(glm::length(transform.GetRotation() - resultQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
+        //LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
         CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
+        //LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
         CHECK(glm::length(transform.GetRotationInRadians() - resultAngleInRadians) < Epsilon * Epsilon * Epsilon);
     }
-}
-
-
-/*
-TEST_CASE("", "[Transform RotationInRotation and Rotate Functions Return Right Values]")
-{
-    glm::vec3 startAnglesInDegrees(30.0f, 0.0f, 0.0f);
-    glm::vec3 startAnglesInRadians = glm::radians(startAnglesInDegrees);
-    glm::quat startQuaternion(startAnglesInRadians);
-
-    LOG_DEBUG("Start Quat ({},{},{},{})", startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
-    LOG_DEBUG("Start Degrees ({},{},{})", startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
-    LOG_DEBUG("Start Radians ({},{},{})", startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
-
-    glm::vec3 anglesInDegrees(0.0f, -180.0f, 0.0f);
-    glm::vec3 anglesInRadians = glm::radians(anglesInDegrees);
-    glm::quat quaternion(anglesInRadians);
-    anglesInRadians = glm::eulerAngles(quaternion);
-    anglesInDegrees = glm::degrees(anglesInRadians);
-
-    LOG_DEBUG("Delta Quat ({},{},{},{})", quaternion.w, quaternion.x, quaternion.y, quaternion.z);
-    LOG_DEBUG("Delta Degrees ({},{},{})", anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
-    LOG_DEBUG("Delta Radians ({},{},{})", anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
-
-    glm::quat resultQuaternion = glm::normalize(quaternion) * glm::normalize(startQuaternion);
-    glm::vec3 resultAngleInRadians = glm::eulerAngles(resultQuaternion);
-    glm::vec3 resultAngleInDegrees = glm::degrees(resultAngleInRadians);
-
-    LOG_DEBUG("Result Quat ({},{},{},{})", resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
-    LOG_DEBUG("Result Degrees ({},{},{})", resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-    LOG_DEBUG("Result Radians ({},{},{})", resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
-
-    {
-        Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
-        CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
-        CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
-        CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
-        transform.RotateInOrientation(anglesInRadians);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
-        CHECK(glm::length(transform.GetRotation() - resultQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-        CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
-        CHECK(glm::length(transform.GetRotationInRadians() - resultAngleInRadians) < Epsilon * Epsilon * Epsilon);
-    }
-
-    {
-        Transform transform(glm::vec3(), startQuaternion);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
-        CHECK(glm::length(transform.GetRotation() - startQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
-        CHECK(glm::length(transform.GetRotationInDegrees() - startAnglesInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
-        CHECK(glm::length(transform.GetRotationInRadians() - startAnglesInRadians) < Epsilon * Epsilon * Epsilon);
-        transform.RotateInOrientation(anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
-        LOG_DEBUG("Rotation Quat ({},{},{},{}) == ({},{},{},{})", transform.GetRotation().w, transform.GetRotation().x, transform.GetRotation().y, transform.GetRotation().z, resultQuaternion.w, resultQuaternion.x, resultQuaternion.y, resultQuaternion.z);
-        CHECK(glm::length(transform.GetRotation() - resultQuaternion) < Epsilon * Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-        CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-        LOG_DEBUG("Rotation Radians ({},{},{}) == ({},{},{})", transform.GetRotationInRadians().x, transform.GetRotationInRadians().y, transform.GetRotationInRadians().z, resultAngleInRadians.x, resultAngleInRadians.y, resultAngleInRadians.z);
-        CHECK(glm::length(transform.GetRotationInRadians() - resultAngleInRadians) < Epsilon * Epsilon * Epsilon);
-    }
-}
-*/
-
-TEST_CASE("", "[Transform Rotation Loop Returns Right Values]")
-{
-    glm::quat startQuaternion(glm::vec3(glm::radians(30.0f), 0.0f, 0.0f));
-    glm::vec3 startAnglesInRadians = glm::eulerAngles(startQuaternion);
-    glm::vec3 startAnglesInDegrees = glm::degrees(startAnglesInRadians);
-
-    LOG_DEBUG("Start Quat ({},{},{},{})", startQuaternion.w, startQuaternion.x, startQuaternion.y, startQuaternion.z);
-    LOG_DEBUG("Start Degrees ({},{},{})", startAnglesInDegrees.x, startAnglesInDegrees.y, startAnglesInDegrees.z);
-    LOG_DEBUG("Start Radians ({},{},{})", startAnglesInRadians.x, startAnglesInRadians.y, startAnglesInRadians.z);
-
-    glm::quat quaternion(glm::vec3(0.0f, glm::radians(1.0f), 0.0f));
-    glm::vec3 anglesInRadians = glm::eulerAngles(quaternion);
-    glm::vec3 anglesInDegrees = glm::degrees(anglesInRadians);
-
-    LOG_DEBUG("Delta Quat ({},{},{},{})", quaternion.w, quaternion.x, quaternion.y, quaternion.z);
-    LOG_DEBUG("Delta Degrees ({},{},{})", anglesInDegrees.x, anglesInDegrees.y, anglesInDegrees.z);
-    LOG_DEBUG("Delta Radians ({},{},{})", anglesInRadians.x, anglesInRadians.y, anglesInRadians.z);
-
-    glm::vec3 resultAngleInDegrees(-150.0f, 0.0f, 0.0f);
-
-
-    {
-        Transform transform(glm::vec3(), startQuaternion);
-        for (size_t i = 0; i < 180; ++i)
-        {
-            transform.Rotate(anglesInRadians);
-            LOG_DEBUG("Rotation ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-        }
-        LOG_INFO("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-        CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-    }
-
-    {
-        Transform transform(glm::vec3(), startQuaternion);
-        for (size_t i = 0; i < 180; ++i)
-        {
-            transform.RotateInDegrees(anglesInDegrees);
-            LOG_DEBUG("Rotation ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-        }
-        LOG_INFO("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-        CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-    }
-
-    {
-        Transform transform(glm::vec3(), startQuaternion);
-        for (size_t i = 0; i < 180; ++i)
-        {
-            transform.RotateInOrientation(anglesInRadians);
-            LOG_DEBUG("Rotation ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-        }
-        LOG_INFO("Rotation Degrees ({},{},{}) == ({},{},{})", transform.GetRotationInDegrees().x, transform.GetRotationInDegrees().y, transform.GetRotationInDegrees().z, resultAngleInDegrees.x, resultAngleInDegrees.y, resultAngleInDegrees.z);
-        CHECK(glm::length(transform.GetRotationInDegrees() - resultAngleInDegrees) < Epsilon * Epsilon * Epsilon);
-    }
-
 }

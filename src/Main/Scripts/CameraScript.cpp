@@ -43,9 +43,9 @@ namespace Game::Scripts
 
     void CameraScript::UpdateInner()
     {
-        camera->SetPosition(object->GetTransform().GetPosition());
-        camera->SetFront(object->GetTransform().GetForwardDirection());
-        camera->SetUp(object->GetTransform().GetUpDirection());
+        camera->SetPosition(GetGameObject()->GetTransform().GetPosition());
+        camera->SetFront(GetGameObject()->GetTransform().GetForwardDirection());
+        camera->SetUp(GetGameObject()->GetTransform().GetUpDirection());
     }
 
     size_t CameraScript::GetDefaultPriority() const

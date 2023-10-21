@@ -7,7 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Engine/Input/InputHeader.h"
-#include "Engine/Graphics/Projection.h"
+#include "Engine/Graphics/Camera/Projection.h"
 
 namespace Engine::Graphics
 {
@@ -49,7 +49,7 @@ namespace Engine::Graphics
 
     private:
         void UpdateProjectionMatrix();
-        Engine::Tools::Events::MemberFunction<Camera, void> updateProjectionMatrix;
+        ::Engine::Tools::Events::MemberFunction<Camera, void> updateProjectionMatrix;
 
     private:
         void SetCallbacks();

@@ -43,7 +43,7 @@ namespace Engine::Input
         Pressable *xNegative;
         Pressable *yPositive;
         Pressable *yNegative;
-        Engine::Tools::Events::MemberFunction<VectorPressable, void> updateXFunction;
-        Engine::Tools::Events::MemberFunction<VectorPressable, void> updateYFunction;
+        ::Engine::Tools::Events::MemberFunction<VectorPressable, void> updateXFunction;
+        ::Engine::Tools::Events::MemberFunction<VectorPressable, void> updateYFunction;
     };
 }

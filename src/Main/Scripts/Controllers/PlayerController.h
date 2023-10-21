@@ -22,11 +22,11 @@ namespace Game::Scripts
         ~PlayerController();
 
     protected:
-        Engine::Objects::Script *Clone() noexcept override;
+        Engine::Objects::Script *Clone() noexcept override final;
 
     protected:
-        void UpdateInner() override;
-        size_t GetDefaultPriority() const override;
+        void UpdateInner() override final;
+        size_t GetDefaultPriority() const override final;
 
     private:
         Engine::Input::Delta *xInput;

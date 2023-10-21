@@ -29,17 +29,17 @@ namespace Engine::Objects
     {}
 
     GameObject::GameObject(const GameObject & rhs) noexcept
-        : name(rhs.name)
+        : name()
         , tranform(rhs.tranform)
         , scripts(rhs.scripts)
         , typeToIndex(rhs.typeToIndex)
     {
         auto it = scripts.begin();
         auto rhsIt = rhs.scripts.begin();
-        for (;it != rhs.scripts.end(); ++it, ++rhsIt)
+        for (;rhsIt != rhs.scripts.end(); ++it, ++rhsIt)
         {
             Script *clonedScript = rhsIt->script->Clone();
-            clonedScript->object = this;
+            clonedScript->SetGameObject(this);
             it->script = clonedScript;
         }
     }
@@ -50,13 +50,17 @@ namespace Engine::Objects
         , scripts(std::move(rhs.scripts))
         , typeToIndex(std::move(rhs.typeToIndex))
     {
+        for (auto it = scripts.begin(); it != scripts.end(); ++it)
+        {
+            it->script->SetGameObject(this);
+        }
+
         rhs.scripts.clear();
         rhs.typeToIndex.clear();
     }
 
     GameObject &GameObject::operator=(const GameObject & rhs)
     {
-        name = rhs.name;
         tranform = rhs.tranform;
         DeleteScripts();
         scripts = rhs.scripts;
@@ -67,7 +71,7 @@ namespace Engine::Objects
         for (; it != rhs.scripts.end(); ++it, ++rhsIt)
         {
             Script *clonedScript = rhsIt->script->Clone();
-            clonedScript->object = this;
+            clonedScript->SetGameObject(this);
             it->script = clonedScript;
         }
         return *this;
@@ -80,12 +84,15 @@ namespace Engine::Objects
         DeleteScripts();
         scripts = std::move(rhs.scripts);
         typeToIndex = std::move(rhs.typeToIndex);
+        for (auto it = scripts.begin(); it != scripts.end(); ++it)
+        {
+            it->script->SetGameObject(this);
+        }
 
         rhs.scripts.clear();
         rhs.typeToIndex.clear();
         return *this;
     }
-
 
     GameObject::~GameObject()
     {
@@ -100,6 +107,11 @@ namespace Engine::Objects
     Transform &GameObject::GetTransform()
     {
         return tranform;
+    }
+
+    Transform *GameObject::GetTransformPtr()
+    {
+        return &tranform;
     }
 
     void GameObject::UpdateTypeToIndexByScripts(size_t start)

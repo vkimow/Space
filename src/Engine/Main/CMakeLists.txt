@@ -50,6 +50,7 @@ add_vkimow_library(
                         space::engine::tools
                         space::engine::objects
                         space::engine::input
+                        space::engine::audio
                         space::engine::graphics
     PUBLIC_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
 )

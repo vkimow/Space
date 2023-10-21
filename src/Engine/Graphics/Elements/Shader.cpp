@@ -1,4 +1,4 @@
-#include "Engine/Graphics/Shader.h"
+#include "Engine/Graphics/Elements/Shader.h"
 #include "Engine/Tools/Log/Logger.h"
 #include "Engine/Tools/Other/Files.h"
 
@@ -121,11 +121,26 @@ namespace Engine::Graphics
 
         LinkProgram();
 
-        glDeleteShader(vertexShader);
-        glDeleteShader(tesselationControlShader);
-        glDeleteShader(tesselationEvaluationShader);
-        glDeleteShader(geometryShader);
-        glDeleteShader(fragmentShader);
+        if (vertexShader)
+        {
+            glDeleteShader(vertexShader);
+        }
+        if (tesselationControlShader)
+        {
+            glDeleteShader(tesselationControlShader);
+        }
+        if (tesselationEvaluationShader)
+        {
+            glDeleteShader(tesselationEvaluationShader);
+        }
+        if (geometryShader)
+        {
+            glDeleteShader(geometryShader);
+        }
+        if (fragmentShader)
+        {
+            glDeleteShader(fragmentShader);
+        }
 
         GetUniforms();
     }

@@ -18,7 +18,11 @@ namespace Engine::Graphics
         ~Mesh();
 
     public:
+        void StartRender();
         void Render();
+        void EndRender();
+
+        void FullRender();
         void Clear();
 
     private:

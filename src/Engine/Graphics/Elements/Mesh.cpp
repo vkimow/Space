@@ -1,4 +1,5 @@
-#include "Engine/Graphics/Mesh.h"
+#include "Engine/Graphics/Elements/Mesh.h"
+#include "Engine/Tools/Log/Logger.h"
 
 namespace Engine::Graphics
 {
@@ -19,6 +20,8 @@ namespace Engine::Graphics
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * verticesCount, vertices, GL_STATIC_DRAW);
 
+        LOG_DEBUG(verticesCount);
+        LOG_DEBUG(indecesCount);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, 0);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void *)(sizeof(vertices[0]) * 3));
@@ -36,13 +39,28 @@ namespace Engine::Graphics
         Clear();
     }
 
-    void Mesh::Render()
+    void Mesh::StartRender()
     {
         glBindVertexArray(VAO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    }
+
+    void Mesh::Render()
+    {
         glDrawElements(GL_TRIANGLES, indecesCount, GL_UNSIGNED_INT, 0);
+    }
+
+    void Mesh::EndRender()
+    {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
+    }
+
+    void Mesh::FullRender()
+    {
+        StartRender();
+        Render();
+        EndRender();
     }
 
     void Mesh::Clear()

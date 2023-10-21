@@ -20,11 +20,12 @@ namespace Engine::Objects
 
         virtual ~Script() = default;
 
-    protected:
-        virtual Script *Clone() noexcept = 0;
-
     private:
         void Update();
+
+    protected:
+        virtual Script *Clone() noexcept = 0;
+        virtual void SetGameObject(GameObject *value);
 
     protected:
         virtual void UpdateInner() = 0;
@@ -33,7 +34,7 @@ namespace Engine::Objects
     public:
         GameObject *const GetGameObject() const;
 
-    protected:
+    private:
         GameObject *object;
     };
 }

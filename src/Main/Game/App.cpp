@@ -7,7 +7,7 @@ namespace Game
         , window(new Engine::Window("Space", 1280, 720))
         , engine(new Engine::Engine(window))
     {
-        scene = new Scene_1("First Scene", window, engine->GetModules());
+        scene = new Scene_1("First Scene", window, engine);
     }
 
     App::~App()
@@ -22,16 +22,17 @@ namespace Game
         isActive = true;
         while (!ShouldExit())
         {
-            engine->GetModules()->GetInput().Update();
-            engine->GetModules()->GetTime().Update();
+            engine->GetInput()->Update();
+            engine->GetTime()->Update();
 
             scene->Update();
 
-            engine->GetModules()->GetGraphics().StartUpdate();
+            engine->GetGraphics()->StartUpdate();
+            engine->GetGraphics()->GetRenderManager()->GetPool().RenderAll();
             scene->Render();
-            engine->GetModules()->GetGraphics().EndUpdate();
+            engine->GetGraphics()->EndUpdate();
 
-            engine->GetModules()->GetInput().LateUpdate();
+            engine->GetInput()->LateUpdate();
         }
     }
 

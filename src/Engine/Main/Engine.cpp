@@ -3,16 +3,31 @@
 namespace Engine
 {
     Engine::Engine(Window* const window)
-        : modules(new Modules(window->GetInnerWindow()))
+        : time(new TimeModule())
+        , input(new InputModule(window->GetInnerWindow()))
+        , graphics(new GraphicsModule(window->GetInnerWindow()))
     {}
 
     Engine::~Engine()
     {
-        delete modules;
+
+        delete graphics;
+        delete input;
+        delete time;
     }
 
-    Modules * const Engine::GetModules()
+    GraphicsModule *const Engine::GetGraphics()
     {
-        return modules;
+        return graphics;
+    }
+
+    TimeModule *const Engine::GetTime()
+    {
+        return time;
+    }
+
+    InputModule *const Engine::GetInput()
+    {
+        return input;
     }
 }
