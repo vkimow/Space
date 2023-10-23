@@ -48,7 +48,6 @@ add_vkimow_library(
                         soloud
     PRIVATE_LINK_LIBS   space::engine::tools
                         glfw
-                        glew
                         glm
     PRIVATE_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
 )

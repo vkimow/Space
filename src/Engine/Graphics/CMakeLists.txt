@@ -44,8 +44,12 @@ add_vkimow_library(
     NAME ${PROJECT_NAME}
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
+    PUBLIC_LINK_LIBS    assimp
+                        glew_s
+                        SDL2_image
+                        SDL2-static
+                        SDL2main
     PRIVATE_LINK_LIBS   glfw
-                        glew
                         glm
                         space::engine::tools
                         space::engine::input

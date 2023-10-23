@@ -123,7 +123,10 @@ namespace Engine::Input
 
     void Scheme::LateUpdate()
     {
-        mouse->ClearDelta();
+        if (HasMouse())
+        {
+            mouse->ClearDelta();
+        }
     }
 
     PressableKey *const Scheme::AddPressableKey(int key)

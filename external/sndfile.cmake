@@ -1,0 +1,26 @@
+message("\n=====ADDING SNDFILE=====")
+string(TIMESTAMP BEFORE "%s")
+
+set(BUILD_PROGRAMS OFF)
+set(BUILD_EXAMPLES OFF)
+set(ENABLE_CPACK OFF)
+set(ENABLE_BOW_DOCS OFF)
+set(ENABLE_PACKAGE_CONFIG OFF)
+set(INSTALL_PKGCONFIG_MODULE OFF)
+set(BUILD_TESTING OFF)
+set(BUILD_REGTEST OFF)
+set(INSTALL_MANPAGES OFF)
+
+if(EXISTS ${SPACE_EXTERNAL_DIR}/sndfile)
+    message(STATUS "Found 'sndfile' localy in the external directory")
+    add_subdirectory(${SPACE_EXTERNAL_DIR}/sndfile)
+else()
+    message(STATUS "Adding 'sndfile' throgh CPM")
+    CPMAddPackage("gh:libsndfile/libsndfile#1.2.2")
+endif()
+
+set_target_properties(sndfile PROPERTIES FOLDER Externals/SNDFILE)
+
+string(TIMESTAMP AFTER "%s")
+math(EXPR DELTA "${AFTER} - ${BEFORE}")
+message(STATUS "TIME: ${DELTA}s")

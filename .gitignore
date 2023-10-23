@@ -1,4 +1,9 @@
 /project
 /vendor/*/
+/external/*/
 /bin
+/lib
+/libs
 .*/
+/*.ps1
+/*.bat

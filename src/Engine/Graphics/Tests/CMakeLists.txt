@@ -29,9 +29,6 @@ add_vkimow_executable(
     SOURCES ${SPACE_CURRENT_SOURCES}
     PRIVATE_LINK_LIBS   space::engine::graphics
                         Catch2::Catch2WithMain
-                        glew
-                        glfw
-                        glm
     PRIVATE_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
 )
 

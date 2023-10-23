@@ -2,6 +2,9 @@ param (
     [switch] $Clear
 )
 
+$ScriptPath = split-path -parent $MyInvocation.MyCommand.Definition
+$CurrentPath = Get-Location
+
 function ClearDirectories{
     Write-Host "Clear directories"
     if (Test-Path -Path .\bin) {
@@ -14,7 +17,6 @@ function ClearDirectories{
         Remove-Item -Path .\project\* -Recurse -Force
     }
 }
-
 function BuildSolution {
     if (!(Test-Path -Path project)) {
         Write-Host "Create project directory"
@@ -23,9 +25,13 @@ function BuildSolution {
 
     Write-Host "Build solution"
     & cmake . -B project
+    Write-Host "Solution has been built"
 }
 
+Set-Location $ScriptPath
+Set-Location -Path .. -PassThru
 if($Clear) {
     ClearDirectories
 }
 BuildSolution
+Set-Location $CurrentPath

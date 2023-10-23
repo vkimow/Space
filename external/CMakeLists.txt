@@ -1,0 +1,18 @@
+include("CPM")
+set(FETCHCONTENT_BASE_DIR ${SPACE_EXTERNAL_DIR}/CPM)
+list(APPEND CMAKE_MODULE_PATH ${SPACE_EXTERNAL_DIR})
+list(APPEND CMAKE_PREFIX_PATH ${SPACE_EXTERNAL_DIR})
+
+include(glew)
+include(glfw)
+include(glm)
+include(assimp)
+include(sdl2)
+include(sdl_image)
+include(sndfile)
+include(soloud)
+include(imgui)
+include(catch2)
+include(spdlog)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} PARENT_SCOPE)

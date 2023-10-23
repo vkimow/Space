@@ -251,7 +251,7 @@ function(set_vkimow_target_properties)
 
     # output dir
     if(NOT "${THIS_OUTPUT_DIR}" STREQUAL "")
-        set_vkimow_target_output_dir(TARGET ${THIS_TARGET} OUTPUT_DIR ${THIS_OUTPUT_DIR})
+        set_vkimow_target_output_dir(TARGET ${THIS_TARGET} RUNTIME_DIR ${THIS_OUTPUT_DIR} ARCHIVE_DIR ${THIS_OUTPUT_DIR} LIBRARY_DIR ${THIS_OUTPUT_DIR})
         message("Output Dir: ${THIS_OUTPUT_DIR}")
     endif()
 
@@ -278,7 +278,7 @@ endfunction()
 
 function(set_vkimow_target_output_dir)
     set(ARGUMENT_PREFIX THIS)
-    set(SINGLE_VALUES OUTPUT_DIR)
+    set(SINGLE_VALUES RUNTIME_DIR ARCHIVE_DIR LIBRARY_DIR)
     set(MULTI_VALUES TARGET)
 
     # parse
@@ -292,9 +292,21 @@ function(set_vkimow_target_output_dir)
         message(FATAL_ERROR "Extra unparsed arguments: ${THIS_UNPARSED_ARGUMENTS}")
     endif()
 
-    set_target_properties(${THIS_TARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${THIS_OUTPUT_DIR})
-    set_target_properties(${THIS_TARGET} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${THIS_OUTPUT_DIR})
-    set_target_properties(${THIS_TARGET} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${THIS_OUTPUT_DIR})
+    if (N"${THIS_RUNTIME_DIR}" STREQUAL "")
+        message(FATAL_ERROR "RUNTIME_DIR can't be empty")
+    endif()
+
+    if ("${THIS_ARCHIVE_DIR}" STREQUAL "")
+        message(FATAL_ERROR "ARCHIVE_DIR can't be empty")
+    endif()
+
+    if ("${THIS_LIBRARY_DIR}" STREQUAL "")
+        message(FATAL_ERROR "LIBRARY_DIR can't be empty")
+    endif()
+
+    set_target_properties(${THIS_TARGET} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${THIS_RUNTIME_DIR})
+    set_target_properties(${THIS_TARGET} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${THIS_ARCHIVE_DIR})
+    set_target_properties(${THIS_TARGET} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${THIS_LIBRARY_DIR})
 endfunction()
 
 function(set_vkimow_target_compile_defs)

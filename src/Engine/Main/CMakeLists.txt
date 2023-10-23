@@ -43,10 +43,8 @@ add_vkimow_library(
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
     PUBLIC_LINK_LIBS    glfw
-                        glew
                         glm
-                        gli
-                        assimp
+                        imgui
                         space::engine::tools
                         space::engine::objects
                         space::engine::input

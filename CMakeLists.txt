@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 project(Space CXX)
 
 # options
-option(SPACE_ENABLE_TESTS "Enabling tests targets" ON)
+option(SPACE_ENABLE_TESTS "Enabling tests targets" OFF)
 
 # include
 set(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
@@ -19,20 +19,24 @@ setup_vkimow_global_directories()
 setup_vkimow_global_properties()
 setup_vkimow_cmake_output_directories(
    RUNTIME_DIR ${SPACE_BIN_CONFIG_DIR}
-   ARCHIVE_DIR ${SPACE_BIN_CONFIG_DIR}
-   LIBRARY_DIR ${SPACE_BIN_CONFIG_DIR}
+   ARCHIVE_DIR ${SPACE_LIB_CONFIG_DIR}
+   LIBRARY_DIR ${SPACE_LIB_CONFIG_DIR}
 )
 
-# setup vendor libs
-add_subdirectory(vendor)
+
+# setup external libs
+add_subdirectory(external)
 
 # enable CTest & Catch
 if(SPACE_ENABLE_TESTS)
+   message("Tests are enabled")
    include(CTest)
+   enable_testing()
    include(Catch)
 endif()
 
 # add main project
+add_compile_definitions(GLEW_STATIC)
 add_subdirectory(src/Engine Engine)
 add_subdirectory(src/Main Main)
 
