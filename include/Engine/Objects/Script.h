@@ -1,10 +1,12 @@
 #pragma once
 
+#include "Engine/Tools/Interfaces/IClonable.h"
+
 namespace Engine::Objects
 {
     class GameObject;
 
-    class Script
+    class Script : public Tools::Interfaces::IClonable
     {
         friend class GameObject;
 
@@ -18,13 +20,13 @@ namespace Engine::Objects
         Script &operator=(const Script &rhs);
         Script &operator=(Script &&rhs) noexcept;
 
+    public:
         virtual ~Script() = default;
 
     private:
         void Update();
 
     protected:
-        virtual Script *Clone() noexcept = 0;
         virtual void SetGameObject(GameObject *value);
 
     protected:

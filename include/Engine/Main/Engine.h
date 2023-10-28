@@ -1,14 +1,12 @@
 #pragma once
 
 #include <memory>
-#include <mutex>
-#include "GL/glew.h"
-#include "GlFW/glfw3.h"
-#include "Engine/Main/Window.h"
 #include "Engine/Main/Modules/ModulesHeader.h"
 
 namespace Engine
 {
+    class Window;
+
     class Engine
     {
     public:
@@ -24,11 +22,21 @@ namespace Engine
     public:
         GraphicsModule *const GetGraphics();
         TimeModule *const GetTime();
+        UIModule *const GetUI();
         InputModule *const GetInput();
+
+    public:
+        void StartTick();
+        void EndTick();
+        void Render();
+        void StartRender();
+        void EndRender();
+        void FullRender();
 
     private:
         TimeModule *const  time;
         InputModule *const  input;
+        UIModule *const ui;
         GraphicsModule *const graphics;
     };
 }

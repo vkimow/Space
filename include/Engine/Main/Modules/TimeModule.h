@@ -3,16 +3,10 @@
 #include <vector>
 #include <memory>
 
-namespace Game
-{
-    class App;
-}
-
 namespace Engine
 {
     class TimeModule final
     {
-        friend class Game::App;
         friend class Engine;
 
     private:

@@ -7,10 +7,11 @@ namespace Engine::Objects
 {
     size_t Scene::idCounter = 0;
 
-    Scene::Scene(const std::string &name, Engine::Window *const window, Engine::TimeModule *const time, Engine::InputModule *const input, Engine::GraphicsModule *const graphics)
+    Scene::Scene(const std::string &name, ::Engine::Window *const window, ::Engine::TimeModule *const time, ::Engine::UIModule *const ui, ::Engine::InputModule *const input, ::Engine::GraphicsModule *const graphics)
         : name(name)
         , window(window)
         , time(time)
+        , ui(ui)
         , input(input)
         , graphics(graphics)
         , id(idCounter++)
@@ -41,6 +42,11 @@ namespace Engine::Objects
         return time;
     }
 
+    ::Engine::UIModule *const Scene::GetUI() const
+    {
+        return ui;
+    }
+
     Engine::InputModule *const Scene::GetInput() const
     {
         return input;
@@ -57,9 +63,19 @@ namespace Engine::Objects
         objects[name]->Update();
     }
 
-    GameObject *Scene::GetGameObject(const std::string &name)
+    GameObject *const Scene::GetGameObject(const std::string &name)
     {
         return objects[name];
+    }
+
+    const GameObject *const Scene::GetGameObject(const std::string &name) const
+    {
+        return objects.at(name);
+    }
+
+    const std::unordered_map<std::string, GameObject *> &Scene::GetGameObjects() const
+    {
+        return objects;
     }
 
     bool Scene::ContainsGameObjects(GameObject *object)

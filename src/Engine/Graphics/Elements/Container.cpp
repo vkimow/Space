@@ -37,41 +37,6 @@ namespace Engine::Graphics
         return ContainsInner<Shader>(shaders, shader);
     }
 
-    Mesh *const Container::GetMesh(size_t index) const
-    {
-        return meshes[index];
-    }
-
-    Mesh *const Container::GetMesh(const std::string &name) const
-    {
-        return nameToMeshes.at(name).value;
-    }
-
-    size_t Container::GetMeshIndex(Mesh *const mesh) const
-    {
-        return GetIndexInner<Mesh>(meshes, mesh);
-    }
-
-    size_t Container::GetMeshIndex(const std::string &name) const
-    {
-        return nameToMeshes.at(name).index;
-    }
-
-    bool Container::ContainsMesh(size_t index) const
-    {
-        return meshes.size() > index;
-    }
-
-    bool Container::ContainsMesh(const std::string &name) const
-    {
-        return nameToMeshes.contains(name);
-    }
-
-    bool Container::ContainsMesh(Mesh *const mesh) const
-    {
-        return ContainsInner<Mesh>(meshes, mesh);
-    }
-
     Texture *const Container::GetTexture(size_t index) const
     {
         return textures[index];
@@ -117,7 +82,7 @@ namespace Engine::Graphics
         return nameToMaterials.at(name).value;
     }
 
-    size_t Container::GetMaterialIndex(Material *const material) const
+    size_t Container::GetMaterialIndex(Material * const material) const
     {
         return GetIndexInner<Material>(materials, material);
     }
@@ -140,5 +105,100 @@ namespace Engine::Graphics
     bool Container::ContainsMaterial(Material *const material) const
     {
         return ContainsInner<Material>(materials, material);
+    }
+
+    Line *const Container::GetLine(size_t index) const
+    {
+        return GetRendable<Line>(index);
+    }
+
+    Line *const Container::GetLine(const std::string &name) const
+    {
+        return GetRendable<Line>(name);
+    }
+
+    size_t Container::GetLineIndex(Line *const line) const
+    {
+        return GetRendableIndex(line);
+    }
+
+    size_t Container::GetLineIndex(const std::string &name) const
+    {
+        return GetRendableIndex(name);
+    }
+
+    bool Container::ContainsLine(size_t index) const
+    {
+        return ContainsRendable(index);
+    }
+
+    bool Container::ContainsLine(const std::string &name) const
+    {
+        return ContainsRendable(name);
+    }
+
+    bool Container::ContainsLine(Line *const line) const
+    {
+        return ContainsRendable(line);
+    }
+
+    Mesh *const Container::GetMesh(size_t index) const
+    {
+        return GetRendable<Mesh>(index);
+    }
+
+    Mesh *const Container::GetMesh(const std::string &name) const
+    {
+        return GetRendable<Mesh>(name);
+    }
+
+    size_t Container::GetMeshIndex(Mesh *const mesh) const
+    {
+        return GetRendableIndex(mesh);
+    }
+
+    size_t Container::GetMeshIndex(const std::string &name) const
+    {
+        return GetRendableIndex(name);
+    }
+
+    bool Container::ContainsMesh(size_t index) const
+    {
+        return ContainsRendable(index);
+    }
+
+    bool Container::ContainsMesh(const std::string &name) const
+    {
+        return ContainsRendable(name);
+    }
+
+    bool Container::ContainsMesh(Mesh *const mesh) const
+    {
+        return ContainsRendable(mesh);
+    }
+
+    size_t Container::GetRendableIndex(IRendable *const rendable) const
+    {
+        return GetIndexInner<IRendable>(rendables, rendable);
+    }
+
+    size_t Container::GetRendableIndex(const std::string &name) const
+    {
+        return nameToRendables.at(name).index;
+    }
+
+    bool Container::ContainsRendable(size_t index) const
+    {
+        return rendables.size() > index;
+    }
+
+    bool Container::ContainsRendable(const std::string &name) const
+    {
+        return nameToRendables.contains(name);
+    }
+
+    bool Container::ContainsRendable(IRendable *const rendable) const
+    {
+        return ContainsInner<IRendable>(rendables, rendable);
     }
 }

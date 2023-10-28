@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include "Engine/Graphics/Camera/CameraManager.h"
 
 namespace Engine::Graphics

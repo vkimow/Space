@@ -4,12 +4,6 @@
 #include <vector>
 #include <memory>
 
-
-namespace Game
-{
-    class App;
-}
-
 namespace Engine
 {
     namespace Input
@@ -20,7 +14,6 @@ namespace Engine
 
     class  InputModule final
     {
-        friend class Game::App;
         friend class Input::Element;
         friend class Engine;
 
@@ -31,27 +24,30 @@ namespace Engine
         InputModule(InputModule &&rhs) = delete;
         InputModule &operator=(const InputModule &rhs) = delete;
         InputModule &operator=(InputModule &&rhs) = delete;
+        ~InputModule();
 
     private:
-        void Update();
-        void LateUpdate();
+        void PollEvents();
+
+    private:
+        void SetActive(bool value);
 
     public:
-        void SetScheme(std::shared_ptr<Input::Scheme> scheme);
-        std::shared_ptr<Input::Scheme> GetScheme();
+        Input::Scheme *const GetScheme() const;
+        bool IsActive() const;
 
     private:
-        void HandleInput();
-        void HandleKeyboard();
-        void HandleMouse();
+        void HandleInput(GLFWwindow *const window);
+        void HandleKeyboard(GLFWwindow *const window);
+        void HandleMouse(GLFWwindow *const window);
 
-        static void KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
-        static void MouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
-        static void CursorPosCallback(GLFWwindow *window, double xPos, double yPos);
-        static void ScrollCallback(GLFWwindow *window, double xOffset, double yOffset);
+        static void KeyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods);
+        static void MouseButtonCallback(GLFWwindow *glfwWindow, int button, int action, int mods);
+        static void CursorPosCallback(GLFWwindow *glfwWindow, double xPos, double yPos);
+        static void ScrollCallback(GLFWwindow *glfwWindow, double xOffset, double yOffset);
 
     private:
-        GLFWwindow * const window;
-        static std::shared_ptr<Input::Scheme> scheme;
+        Input::Scheme* const scheme;
+        bool isActive;
     };
 }

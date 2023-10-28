@@ -41,5 +41,5 @@ add_subdirectory(src/Engine Engine)
 add_subdirectory(src/Main Main)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-   set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Game)
+   set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT App)
 endif()

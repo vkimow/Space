@@ -1,3 +1,5 @@
 set_vkimow_subsolution(Main)
-add_subdirectory(Scripts)
+add_subdirectory(Shaders)
+add_subdirectory(Space)
 add_subdirectory(Game)
+add_subdirectory(App)

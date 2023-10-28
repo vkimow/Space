@@ -1,6 +1,6 @@
 function(add_vkimow_executable)
     set(ARGUMENT_PREFIX THIS)
-    set(SINGLE_VALUES   NAME SOLUTION_FOLDER OUTPUT_DIR)
+    set(SINGLE_VALUES   NAME SOLUTION_FOLDER RUNTIME_DIR ARCHIVE_DIR LIBRARY_DIR)
     set(MULTI_VALUES    SOURCES
                         PUBLIC_INCLUDE_DIRS
                         PRIVATE_INCLUDE_DIRS
@@ -35,7 +35,9 @@ function(add_vkimow_executable)
     set_vkimow_target_properties(
         TARGET                          ${THIS_NAME}
         SOLUTION_FOLDER                 ${THIS_SOLUTION_FOLDER}
-        OUTPUT_DIR                      ${THIS_OUTPUT_DIR}
+        RUNTIME_DIR                     ${THIS_RUNTIME_DIR}
+        ARCHIVE_DIR                     ${THIS_ARCHIVE_DIR}
+        LIBRARY_DIR                     ${THIS_LIBRARY_DIR}
         PUBLIC_INCLUDE_DIRS             ${THIS_PUBLIC_INCLUDE_DIRS}
         PRIVATE_INCLUDE_DIRS            ${THIS_PRIVATE_INCLUDE_DIRS}
         PUBLIC_LINK_LIBS                ${THIS_PUBLIC_LINK_LIBS}
@@ -53,7 +55,7 @@ endfunction()
 
 function(add_vkimow_library)
     set(ARGUMENT_PREFIX THIS)
-    set(SINGLE_VALUES   NAME TYPE SOLUTION_FOLDER OUTPUT_DIR)
+    set(SINGLE_VALUES   NAME TYPE SOLUTION_FOLDER RUNTIME_DIR ARCHIVE_DIR LIBRARY_DIR)
     set(MULTI_VALUES    SOURCES
                         PUBLIC_INCLUDE_DIRS
                         PRIVATE_INCLUDE_DIRS
@@ -108,7 +110,9 @@ function(add_vkimow_library)
         TARGET                          ${THIS_NAME}
         LIBRARY_TYPE                    ${THIS_TYPE}
         SOLUTION_FOLDER                 ${THIS_SOLUTION_FOLDER}
-        OUTPUT_DIR                      ${THIS_OUTPUT_DIR}
+        RUNTIME_DIR                     ${THIS_RUNTIME_DIR}
+        ARCHIVE_DIR                     ${THIS_ARCHIVE_DIR}
+        LIBRARY_DIR                     ${THIS_LIBRARY_DIR}
         PUBLIC_INCLUDE_DIRS             ${THIS_PUBLIC_INCLUDE_DIRS}
         PRIVATE_INCLUDE_DIRS            ${THIS_PRIVATE_INCLUDE_DIRS}
         PUBLIC_LINK_LIBS                ${THIS_PUBLIC_LINK_LIBS}
@@ -197,7 +201,7 @@ endfunction()
 
 function(set_vkimow_target_properties)
     set(ARGUMENT_PREFIX THIS)
-    set(SINGLE_VALUES TARGET SOLUTION_FOLDER OUTPUT_DIR LIBRARY_TYPE)
+    set(SINGLE_VALUES TARGET SOLUTION_FOLDER RUNTIME_DIR ARCHIVE_DIR LIBRARY_DIR LIBRARY_TYPE)
     set(MULTI_VALUES    PUBLIC_INCLUDE_DIRS
                         PRIVATE_INCLUDE_DIRS
                         PUBLIC_LINK_LIBS
@@ -250,9 +254,11 @@ function(set_vkimow_target_properties)
     set_vkimow_target_compile_defs(TARGET ${THIS_TARGET} TYPE ${PRIVATE_TYPE} CONFIG "Release" COMPILE_DEFS ${THIS_PRIVATE_RELEASE_COMPILE_DEFS})
 
     # output dir
-    if(NOT "${THIS_OUTPUT_DIR}" STREQUAL "")
-        set_vkimow_target_output_dir(TARGET ${THIS_TARGET} RUNTIME_DIR ${THIS_OUTPUT_DIR} ARCHIVE_DIR ${THIS_OUTPUT_DIR} LIBRARY_DIR ${THIS_OUTPUT_DIR})
-        message("Output Dir: ${THIS_OUTPUT_DIR}")
+    if((NOT "${THIS_RUNTIME_DIR}" STREQUAL "") AND (NOT "${THIS_ARCHIVE_DIR}" STREQUAL "") AND (NOT "${THIS_LIBRARY_DIR}" STREQUAL ""))
+        set_vkimow_target_output_dir(TARGET ${THIS_TARGET} RUNTIME_DIR ${THIS_RUNTIME_DIR} ARCHIVE_DIR ${THIS_ARCHIVE_DIR} LIBRARY_DIR ${THIS_LIBRARY_DIR})
+        message("Runtime Dir: ${THIS_RUNTIME_DIR}")
+        message("Archive Dir: ${THIS_ARCHIVE_DIR}")
+        message("Library Dir: ${THIS_LIBRARY_DIR}")
     endif()
 
     # folder

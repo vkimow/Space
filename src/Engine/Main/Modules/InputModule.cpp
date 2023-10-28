@@ -1,63 +1,77 @@
+#include <GL/glew.h>
 #include "Engine/Main/Modules/InputModule.h"
+
+#include <vector>
 #include "Engine/Input/Main/Scheme.h"
 #include "Engine/Input/Main/Element.h"
 #include "Engine/Input/Elements/Press/PressableKey.h"
-#include <vector>
-
+#include "Engine/Window/Window.h"
+#include "Engine/Main/Engine.h"
 
 namespace Engine
 {
-    std::shared_ptr<Input::Scheme> InputModule::scheme = nullptr;
-
     InputModule::InputModule(GLFWwindow *const window)
-        : window(window) 
+        : scheme( new Input::Scheme(window))
     {
-        scheme = std::make_shared<Input::Scheme>(window);
-        HandleInput();
+        HandleInput(window);
     };
 
-    void InputModule::Update()
+    InputModule::~InputModule()
+    {
+        delete scheme;
+    }
+
+    void InputModule::PollEvents()
     {
         scheme->UpdateBeforePolling();
         glfwPollEvents();
         scheme->UpdateAfterPolling();
     }
 
-    void InputModule::LateUpdate()
+    void InputModule::SetActive(bool value)
     {
-        scheme->LateUpdate();
+        isActive = value;
     }
 
-    void InputModule::SetScheme(std::shared_ptr<Input::Scheme> scheme)
-    {
-        this->scheme = scheme;
-    }
-
-    std::shared_ptr<Input::Scheme> InputModule::GetScheme()
+    Input::Scheme *const InputModule::GetScheme() const
     {
         return scheme;
     }
 
-    void InputModule::HandleInput()
+    bool InputModule::IsActive() const
     {
-        HandleKeyboard();
-        HandleMouse();
+        return isActive;
     }
 
-    void InputModule::HandleKeyboard()
+    void InputModule::HandleInput(GLFWwindow *const window)
+    {
+        HandleKeyboard(window);
+        HandleMouse(window);
+    }
+
+    void InputModule::HandleKeyboard(GLFWwindow *const window)
     {
         glfwSetKeyCallback(window, KeyCallback);
     }
 
-    void InputModule::HandleMouse()
+    void InputModule::HandleMouse(GLFWwindow *const window)
     {
         glfwSetMouseButtonCallback(window, MouseButtonCallback);
         glfwSetCursorPosCallback(window, CursorPosCallback);
         glfwSetScrollCallback(window, ScrollCallback);
     }
 
-    void InputModule::KeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
+    void InputModule::KeyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods)
     {
+        Window *const window = static_cast<Window *>(glfwGetWindowUserPointer(glfwWindow));
+        InputModule *const inputModule = window->GetEngine()->GetInput();
+        UIModule *const uiModule = window->GetEngine()->GetUI();
+        if (!inputModule->isActive || uiModule->WantCaptureKeyboard())
+        {
+            return;
+        }
+
+        Input::Scheme *const scheme = inputModule->scheme;
         if (scheme->ContainsPressableKey(key))
         {
             auto pressableKey = scheme->GetPressableKey(key);
@@ -73,8 +87,17 @@ namespace Engine
         }
     }
 
-    void InputModule::MouseButtonCallback(GLFWwindow * window, int button, int action, int mods)
+    void InputModule::MouseButtonCallback(GLFWwindow *glfwWindow, int button, int action, int mods)
     {
+        Window *const window = static_cast<Window *>(glfwGetWindowUserPointer(glfwWindow));
+        InputModule *const inputModule = window->GetEngine()->GetInput();
+        UIModule *const uiModule = window->GetEngine()->GetUI();
+        if (!inputModule->isActive || uiModule->WantCaptureMouse())
+        {
+            return;
+        }
+
+        Input::Scheme *const scheme = inputModule->scheme;
         if (scheme->ContainsPressableMouse(button))
         {
             auto pressableMouse = scheme->GetPressableMouse(button);
@@ -90,8 +113,17 @@ namespace Engine
         }
     }
 
-    void InputModule::CursorPosCallback(GLFWwindow * window, double xPos, double yPos)
+    void InputModule::CursorPosCallback(GLFWwindow *glfwWindow, double xPos, double yPos)
     {
+        Window *const window = static_cast<Window *>(glfwGetWindowUserPointer(glfwWindow));
+        InputModule *const inputModule = window->GetEngine()->GetInput();
+        UIModule *const uiModule = window->GetEngine()->GetUI();
+        if (!inputModule->isActive || uiModule->WantCaptureMouse())
+        {
+            return;
+        }
+
+        Input::Scheme *const scheme = inputModule->scheme;
         if (scheme->HasMouse())
         {
             auto mouse = scheme->GetMouse();
@@ -99,8 +131,17 @@ namespace Engine
         }
     }
 
-    void InputModule::ScrollCallback(GLFWwindow * window, double xOffset, double yOffset)
+    void InputModule::ScrollCallback(GLFWwindow *glfwWindow, double xOffset, double yOffset)
     {
+        Window *const window = static_cast<Window *>(glfwGetWindowUserPointer(glfwWindow));
+        InputModule *const inputModule = window->GetEngine()->GetInput();
+        UIModule *const uiModule = window->GetEngine()->GetUI();
+        if (!inputModule->isActive || uiModule->WantCaptureMouse())
+        {
+            return;
+        }
+
+        Input::Scheme *const scheme = inputModule->scheme;
         if (scheme->HasMouse())
         {
             auto mouse = scheme->GetMouse();

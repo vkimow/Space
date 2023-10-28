@@ -20,19 +20,19 @@ namespace Engine::Graphics
         ~RenderUnitBuilder();
 
     public: 
-        RenderUnit Create(size_t shader, size_t mesh);
-        RenderUnit Create(size_t shader, size_t mesh, size_t material);
-        RenderUnit Create(size_t shader, size_t mesh, size_t texture, size_t material);
-        RenderUnit Create(size_t shader, size_t mesh, Objects::Transform *const transform);
-        RenderUnit Create(size_t shader, size_t mesh, size_t material, Objects::Transform *const transform);
-        RenderUnit Create(size_t shader, size_t mesh, size_t texture, size_t material, Objects::Transform *const transform);
+        RenderUnit Create(size_t shader, size_t rendable);
+        RenderUnit Create(size_t shader, size_t rendable, size_t material);
+        RenderUnit Create(size_t shader, size_t rendable, size_t texture, size_t material);
+        RenderUnit Create(size_t shader, size_t rendable, Objects::Transform *const transform);
+        RenderUnit Create(size_t shader, size_t rendable, size_t material, Objects::Transform *const transform);
+        RenderUnit Create(size_t shader, size_t rendable, size_t texture, size_t material, Objects::Transform *const transform);
 
-        RenderUnit Create(const std::string& shader, const std::string& mesh);
-        RenderUnit Create(const std::string& shader, const std::string& mesh, const std::string& material);
-        RenderUnit Create(const std::string& shader, const std::string& mesh, const std::string& texture, const std::string& material);
-        RenderUnit Create(const std::string& shader, const std::string& mesh, Objects::Transform *const transform);
-        RenderUnit Create(const std::string& shader, const std::string& mesh, const std::string& material, Objects::Transform *const transform);
-        RenderUnit Create(const std::string& shader, const std::string& mesh, const std::string& texture, const std::string& material, Objects::Transform *const transform);
+        RenderUnit Create(const std::string& shader, const std::string& rendable);
+        RenderUnit Create(const std::string& shader, const std::string& rendable, const std::string& material);
+        RenderUnit Create(const std::string& shader, const std::string& rendable, const std::string& texture, const std::string& material);
+        RenderUnit Create(const std::string& shader, const std::string& rendable, Objects::Transform *const transform);
+        RenderUnit Create(const std::string& shader, const std::string& rendable, const std::string& material, Objects::Transform *const transform);
+        RenderUnit Create(const std::string& shader, const std::string& rendable, const std::string& texture, const std::string& material, Objects::Transform *const transform);
 
     private:
         const Container * const container;

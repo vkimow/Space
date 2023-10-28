@@ -5,7 +5,9 @@ set_vkimow_default_target_dirs(
     TARGET ${PROJECT_NAME}
     SOURCE_DIR ${SPACE_CURRENT_SUBSOLUTION_SOURCE_DIR}/${PROJECT_NAME}
     INCLUDE_DIR ${SPACE_CURRENT_SUBSOLUTION_INCLUDE_DIR}/${PROJECT_NAME}
-    OUTPUT_DIR ${SPACE_BIN_CONFIG_DIR}
+    RUNTIME_DIR ${SPACE_BIN_CONFIG_DIR}
+    ARCHIVE_DIR ${SPACE_LIB_CONFIG_DIR}
+    LIBRARY_DIR ${SPACE_LIB_CONFIG_DIR}
     TESTS_DIR ${SPACE_CURRENT_SUBSOLUTION_SOURCE_DIR}/${PROJECT_NAME}/Tests
 )
 
@@ -45,11 +47,11 @@ add_vkimow_library(
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
     PUBLIC_LINK_LIBS    assimp
-                        glew_s
                         SDL2_image
                         SDL2-static
                         SDL2main
     PRIVATE_LINK_LIBS   glfw
+                        glew_s
                         glm
                         space::engine::tools
                         space::engine::input

@@ -40,6 +40,7 @@ namespace Engine::Graphics
         void Use();
         void Clear();
 
+        GLuint GetColorUniform() const { return uniformColor; }
         GLuint GetModelUniform() const { return uniformModel; }
         GLuint GetViewUniform() const { return uniformView; }
         GLuint GetProjectionUniform() const { return uniformProjection; }
@@ -50,5 +51,6 @@ namespace Engine::Graphics
 
     private:
         GLuint uniformModel, uniformView, uniformProjection, uniformViewProjection;
+        GLuint uniformColor;
     };
 }

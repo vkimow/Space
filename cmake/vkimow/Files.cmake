@@ -24,6 +24,10 @@ function(find_vkimow_auto_files)
         set(THIS_INCLUDE_DIRS ${THIS_ROOT_DIR})
     endif()
 
+    message("Root Dir: ${THIS_ROOT_DIR}")
+    message("Include Dirs: ${THIS_INCLUDE_DIRS}")
+    message("Exclude Dirs: ${THIS_EXCLUDE_DIRS}")
+
     # find auto files
     private_find_vkimow_auto_files(
         TYPE ${THIS_TYPE}
@@ -84,8 +88,6 @@ macro(private_find_vkimow_auto_files)
         message(FATAL_ERROR "TYPE should be rather GLOB or GLOB_RECURSE")
     endif()
 
-    message("Root Dir: ${PRIVATE_FIND_AUTO_ROOT_DIR}")
-
     # dirs check
     set(INCLUDE_DIRS_FOR_OUTPUT "")
     foreach(DIR IN ITEMS ${PRIVATE_FIND_AUTO_INCLUDE_DIRS})
@@ -102,7 +104,6 @@ macro(private_find_vkimow_auto_files)
         endif()
     endforeach()
     string(SUBSTRING ${INCLUDE_DIRS_FOR_OUTPUT} 1 -1 INCLUDE_DIRS_FOR_OUTPUT)
-    message("Include Dirs: ${INCLUDE_DIRS_FOR_OUTPUT}")
 
     if (NOT "${PRIVATE_FIND_AUTO_EXCLUDE_DIRS}" STREQUAL "")
         set(EXCLUDE_DIRS_FOR_OUTPUT "")
@@ -120,7 +121,6 @@ macro(private_find_vkimow_auto_files)
         endif()
         endforeach()
         string(SUBSTRING ${EXCLUDE_DIRS_FOR_OUTPUT} 1 -1 EXCLUDE_DIRS_FOR_OUTPUT)
-        message("Exclude Dirs: ${EXCLUDE_DIRS_FOR_OUTPUT}")
     endif()
 
     # process extensions
@@ -351,7 +351,8 @@ function(process_vkimow_configure_files)
         string(REGEX REPLACE "\\.[^.]*$" ""  FILE_NAME_WITHOUT_LAST_EXTENSION ${FILE_NAME})
         configure_file(
             ${FILE}
-            "${THIS_OUTPUT_DIR}/${FILE_NAME_WITHOUT_LAST_EXTENSION}" ESCAPE_QUOTES
+            "${THIS_OUTPUT_DIR}/${FILE_NAME_WITHOUT_LAST_EXTENSION}"
+            @ONLY
         )
         set(OUTPUT_FILES "${OUTPUT_FILES}, ${FILE_NAME} -> ${FILE_NAME_WITHOUT_LAST_EXTENSION}")
         string(SUBSTRING ${OUTPUT_FILES} 2 -1 OUTPUT_FILES)

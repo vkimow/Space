@@ -9,6 +9,7 @@
 #include <typeinfo>
 #include <typeindex>
 #include "Engine/Tools/Log/Logger.h"
+#include "Engine/Tools/Structs/IndividualTypeContainerWithPriority.h"
 
 namespace Engine::Objects
 {
@@ -23,6 +24,8 @@ namespace Engine::Objects
         };
 
         friend class Scene;
+
+    using ScriptsContainer = Tools::Structs::IndividualTypeContainerWithPriority<Script>;
 
     protected:
         GameObject();
@@ -41,14 +44,21 @@ namespace Engine::Objects
     public:
         const std::string &GetName() const;
         Transform &GetTransform();
-        Transform *GetTransformPtr();
+        Transform *const GetTransformPtr();
+        const Transform &GetTransform() const;
+        const Transform *const GetTransformPtr() const;
+        const ScriptsContainer &GetScripts() const;
+        bool IsActive() const;
+
+    public:
+        void SetActive(bool value);
 
     public:
         template<typename S, typename... Args, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         S *const EmplaceScript(Args&&... args)
         {
             S *script = new S(this, std::forward<Args>(args)...);
-            AddScriptInner<S>(script);
+            scripts.Add(script, static_cast<Script*>(script)->GetDefaultPriority());
             return script;
         }
 
@@ -56,7 +66,7 @@ namespace Engine::Objects
         S *const EmplaceScript()
         {
             S *script = new S(this);
-            AddScriptInner<S>(script);
+            scripts.Add(script, static_cast<Script *>(script)->GetDefaultPriority());
             return script;
         }
 
@@ -76,124 +86,55 @@ namespace Engine::Objects
                 return;
             }
             basePointer->SetGameObject(this);
-            AddScriptInner<S>(script);
+            scripts.Add(script, static_cast<Script *>(script)->GetDefaultPriority());
         }
 
-    private:
-        template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
-        void AddScriptInner(S *script)
-        {
-            AddScriptInner<S>(script, static_cast<Script *>(script)->GetDefaultPriority());
-        }
-
-        template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
-        void AddScriptInner(S *script, size_t priority)
-        {
-            std::type_index type = std::type_index(typeid(S));
-            ScriptInner scriptInner(type, script, priority);
-
-            auto pos = std::find_if(scripts.begin(), scripts.end(),
-                [priority](const ScriptInner &scriptInner) { return scriptInner.priority > priority; }
-            );
-
-            size_t index = 0;
-            if (pos == scripts.end())
-            {
-                scripts.push_back(std::move(scriptInner));
-                index = scripts.size() - 1;
-            }
-            else
-            {
-                pos = scripts.insert(pos, std::move(scriptInner));
-                index = pos - scripts.begin();
-            }
-
-            typeToIndex.insert(std::make_pair(std::move(type), index));
-        }
-
-        template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
-        ScriptInner &GetScriptInner()
-        {
-            size_t index = GetScriptIndex<S>();
-            return scripts[index];
-        }
-
-        template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
-        size_t const GetScriptIndex()
-        {
-            std::type_index type = std::type_index(typeid(S));
-            return typeToIndex[std::move(type)];
-        }
-
-    public:
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         void ConstainsScript()
         {
-            std::type_index type = std::type_index(typeid(S));
-            return typeToIndex.contains(std::move(type));
+            return scripts.Contains<S>();
         }
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         void RemoveScript()
         {
-            std::type_index type = std::type_index(typeid(S));
-            size_t index = typeToIndex[type];
-            ScriptInner &scriptInner = scripts[index];
-
-            delete scriptInner.script;
-            scripts.erase(&scriptInner);
-            typeToIndex.erase(std::move(type));
-            UpdateTypeToIndexByScripts(index);
+            scripts.Remove<S>();
         }
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         size_t const GetScriptPriority()
         {
-            ScriptInner &scriptInner = GetScriptInner<S>();
-            return scriptInner.priority;
+            return scripts.GetPriority<S>();
         }
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         size_t const GetScriptCallOrder()
         {
-            return GetScriptIndex<S>();
+            return scripts.GetCallOrder<S>();
         }
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         S *const GetScript()
         {
-            ScriptInner &scriptInner = GetScriptInner<S>();
-            return static_cast<S *const>(scriptInner.script);
+            return scripts.Get<S>();
         }
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         void SetScriptPriority(size_t priority)
         {
-            size_t index = GetScriptIndex<S>();
-            ScriptInner &scriptInner = scripts[index];
-            scriptInner.priority = priority;
-            SortScriptsAfterPriorityChangeOfOneElement(index);
+            scripts.SetPriority<S>(priority);
         }
-
-    private:
-        void UpdateTypeToIndexByScripts(size_t start);
-        void SortScriptsAfterPriorityChangeOfOneElement(size_t start);
-
-    public:
-        void ClearScripts();
-
-    private:
-        void DeleteScripts();
 
     public:
         virtual void Update();
 
     private:
+        bool isActive;
         Transform tranform;
         std::string name;
 
     private:
-        std::vector<ScriptInner> scripts;
-        std::unordered_map<std::type_index, size_t> typeToIndex;
+        ScriptsContainer scripts;
+
     };
 }

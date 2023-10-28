@@ -5,7 +5,9 @@ set_vkimow_default_target_dirs(
     TARGET ${PROJECT_NAME}
     SOURCE_DIR ${SPACE_CURRENT_SUBSOLUTION_SOURCE_DIR}/${PROJECT_NAME}
     INCLUDE_DIR ${SPACE_CURRENT_SUBSOLUTION_INCLUDE_DIR}/${PROJECT_NAME}
-    OUTPUT_DIR ${SPACE_BIN_CONFIG_DIR}
+    RUNTIME_DIR ${SPACE_BIN_CONFIG_DIR}
+    ARCHIVE_DIR ${SPACE_LIB_CONFIG_DIR}
+    LIBRARY_DIR ${SPACE_LIB_CONFIG_DIR}
 )
 
 #files
@@ -42,13 +44,17 @@ add_vkimow_library(
     NAME ${PROJECT_NAME}
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
-    PUBLIC_LINK_LIBS    glfw
+    PUBLIC_LINK_LIBS    glew_s
+                        glfw
                         glm
-                        imgui
                         space::engine::tools
+                        space::engine::window
                         space::engine::objects
+                        space::engine::ui
                         space::engine::input
                         space::engine::audio
                         space::engine::graphics
+                        space::engine::essentials
+
     PUBLIC_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
 )

@@ -116,18 +116,15 @@ namespace Engine::Input
     }
 
     void Scheme::UpdateBeforePolling()
-    {}
-
-    void Scheme::UpdateAfterPolling()
-    {}
-
-    void Scheme::LateUpdate()
     {
         if (HasMouse())
         {
             mouse->ClearDelta();
         }
     }
+
+    void Scheme::UpdateAfterPolling()
+    {}
 
     PressableKey *const Scheme::AddPressableKey(int key)
     {

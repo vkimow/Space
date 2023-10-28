@@ -1,10 +1,11 @@
 #pragma once
 
+#include "IRendable.h"
 #include <GL/glew.h>
 
 namespace Engine::Graphics
 {
-    class Mesh
+    class Mesh final : public IRendable
     {
         friend class Container;
 
@@ -18,11 +19,11 @@ namespace Engine::Graphics
         ~Mesh();
 
     public:
-        void StartRender();
-        void Render();
-        void EndRender();
+        void StartRender() override final;
+        void Render() override final;
+        void EndRender() override final;
 
-        void FullRender();
+    private:
         void Clear();
 
     private:

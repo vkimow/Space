@@ -6,16 +6,10 @@
 #include "Engine/Graphics/Render/RenderManager.h"
 #include "Engine/Graphics/Elements/Container.h"
 
-namespace Game
-{
-    class App;
-}
-
 namespace Engine
 {
     class GraphicsModule
     {
-        friend class Game::App;
         friend class Engine;
 
     private:

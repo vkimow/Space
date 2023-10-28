@@ -4,30 +4,30 @@
 
 namespace Engine::Graphics
 {
-    RenderUnit::RenderUnit(size_t shader, size_t mesh)
+    RenderUnit::RenderUnit(size_t shader, size_t rendable)
         : shader(shader)
-        , mesh(mesh)
+        , rendable(rendable)
         , texture()
         , material()
         , transform(nullptr)
     {}
-    RenderUnit::RenderUnit(size_t shader, size_t mesh, size_t material)
+    RenderUnit::RenderUnit(size_t shader, size_t rendable, size_t material)
         : shader(shader)
-        , mesh(mesh)
+        , rendable(rendable)
         , texture()
         , material(material)
         , transform(nullptr)
     {}
-    RenderUnit::RenderUnit(size_t shader, size_t mesh, size_t texture, size_t material)
+    RenderUnit::RenderUnit(size_t shader, size_t rendable, size_t texture, size_t material)
         : shader(shader)
-        , mesh(mesh)
+        , rendable(rendable)
         , texture(texture)
         , material(material)
         , transform(nullptr)
     {}
-    RenderUnit::RenderUnit(size_t shader, size_t mesh, Objects::Transform *const transform)
+    RenderUnit::RenderUnit(size_t shader, size_t rendable, Objects::Transform *const transform)
         : shader(shader)
-        , mesh(mesh)
+        , rendable(rendable)
         , texture()
         , material()
         , transform(transform)
@@ -38,9 +38,9 @@ namespace Engine::Graphics
         }
     }
 
-    RenderUnit::RenderUnit(size_t shader, size_t mesh, size_t material, Objects::Transform *const transform)
+    RenderUnit::RenderUnit(size_t shader, size_t rendable, size_t material, Objects::Transform *const transform)
         : shader(shader)
-        , mesh(mesh)
+        , rendable(rendable)
         , texture()
         , material(material)
         , transform(transform)
@@ -51,9 +51,9 @@ namespace Engine::Graphics
         }
     }
 
-    RenderUnit::RenderUnit(size_t shader, size_t mesh, size_t texture, size_t material, Objects::Transform *const transform)
+    RenderUnit::RenderUnit(size_t shader, size_t rendable, size_t texture, size_t material, Objects::Transform *const transform)
         : shader(shader)
-        , mesh(mesh)
+        , rendable(rendable)
         , texture(texture)
         , material(material)
         , transform(transform)
@@ -66,7 +66,7 @@ namespace Engine::Graphics
 
     RenderUnit::RenderUnit(const RenderUnit &rhs)
         : shader(rhs.shader)
-        , mesh(rhs.mesh)
+        , rendable(rhs.rendable)
         , texture(rhs.texture)
         , material(rhs.material)
         , transform(rhs.transform)
@@ -79,7 +79,7 @@ namespace Engine::Graphics
 
     RenderUnit::RenderUnit(RenderUnit &&rhs) noexcept
         : shader(std::move(rhs.shader))
-        , mesh(std::move(rhs.mesh))
+        , rendable(std::move(rhs.rendable))
         , texture(std::move(rhs.texture))
         , material(std::move(rhs.material))
         , transform(rhs.transform)
@@ -94,7 +94,7 @@ namespace Engine::Graphics
     RenderUnit &RenderUnit::operator=(const RenderUnit &rhs)
     {
         shader = rhs.shader;
-        mesh = rhs.mesh;
+        rendable = rhs.rendable;
         texture = rhs.texture;
         material = rhs.material;
         transform = rhs.transform;
@@ -108,7 +108,7 @@ namespace Engine::Graphics
     RenderUnit &RenderUnit::operator=(RenderUnit &&rhs) noexcept
     {
         shader = std::move(rhs.shader);
-        mesh = std::move(rhs.mesh);
+        rendable = std::move(rhs.rendable);
         texture = std::move(rhs.texture);
         material = std::move(rhs.material);
         transform = rhs.transform;
@@ -128,9 +128,9 @@ namespace Engine::Graphics
         shader = RenderElement(index);
     }
 
-    void RenderUnit::SetMesh(size_t index)
+    void RenderUnit::SetRendable(size_t index)
     {
-        mesh = RenderElement(index);
+        rendable = RenderElement(index);
     }
 
     void RenderUnit::SetTexture(size_t index)
@@ -157,13 +157,13 @@ namespace Engine::Graphics
         return shader.GetIndex();
     }
 
-    size_t RenderUnit::GetMeshIndex() const
+    size_t RenderUnit::GetRendableIndex() const
     {
-        if (!mesh)
+        if (!rendable)
         {
             LOG_ERROR("RenderUnit doesn't contain shader");
         }
-        return mesh.GetIndex();
+        return rendable.GetIndex();
     }
 
     size_t RenderUnit::GetTextureIndex() const
@@ -189,9 +189,9 @@ namespace Engine::Graphics
         return shader;
     }
 
-    RenderElement RenderUnit::GetMesh() const
+    RenderElement RenderUnit::GetRendable() const
     {
-        return mesh;
+        return rendable;
     }
 
     RenderElement RenderUnit::GetTexture() const
@@ -214,9 +214,9 @@ namespace Engine::Graphics
         return shader.IsExist();
     }
 
-    bool RenderUnit::ContainsMesh() const
+    bool RenderUnit::ContainsRendable() const
     {
-        return mesh.IsExist();
+        return rendable.IsExist();
     }
 
     bool RenderUnit::ContainsTexture() const

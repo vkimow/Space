@@ -1,6 +1,7 @@
+#include <GL/glew.h>
 #include "Engine/Graphics/Camera/Camera.h"
-#include "Engine/Main/Modules/TimeModule.h"
 #include "Engine/Tools/Log/Logger.h"
+#include "Engine/Main/Modules/TimeModule.h"
 
 namespace Engine::Graphics
 {
@@ -114,7 +115,7 @@ namespace Engine::Graphics
         if (!isViewProjectionUpdated)
         {
             viewProjectionMatrix = GetProjectionMatrix() * GetViewMatrix();
-            isProjectionUpdated = true;
+            isViewProjectionUpdated = true;
         }
         return viewProjectionMatrix;
     }

@@ -1,6 +1,6 @@
 function(set_vkimow_default_target_dirs)
     set(ARGUMENTS_PREFIX THIS)
-    set(SINGLE_VALUES TARGET SOURCE_DIR INCLUDE_DIR OUTPUT_DIR TESTS_DIR)
+    set(SINGLE_VALUES TARGET SOURCE_DIR INCLUDE_DIR RUNTIME_DIR ARCHIVE_DIR LIBRARY_DIR TESTS_DIR)
 
     # parse
     cmake_parse_arguments(${ARGUMENTS_PREFIX}
@@ -30,11 +30,23 @@ function(set_vkimow_default_target_dirs)
         DIR ${THIS_INCLUDE_DIR}
     )
 
-    # output dir
+    # output dirs
     private_set_vkimow_custom_target_dir(
         TARGET ${THIS_TARGET}
-        VARIABLE Output
-        DIR ${THIS_OUTPUT_DIR}
+        VARIABLE Runtime
+        DIR ${THIS_RUNTIME_DIR}
+    )
+
+    private_set_vkimow_custom_target_dir(
+        TARGET ${THIS_TARGET}
+        VARIABLE Archive
+        DIR ${THIS_ARCHIVE_DIR}
+    )
+
+    private_set_vkimow_custom_target_dir(
+        TARGET ${THIS_TARGET}
+        VARIABLE Library
+        DIR ${THIS_LIBRARY_DIR}
     )
 
     # tests dir

@@ -6,8 +6,9 @@ namespace Engine::Graphics
     RenderPool::RenderPool(Container *const container)
         : container(container)
         , queue()
+        , camera(nullptr)
         , shadersLock()
-        , meshesLock()
+        , rendablesLock()
         , elementsLock()
     {}
 
@@ -19,45 +20,51 @@ namespace Engine::Graphics
         for (auto it = queue.begin(); it != queue.end(); ++it)
         {
             Shader *shader = container->GetShader(it->first);
-            MeshToElements &meshToElement = it->second;
+            IRendable *rendable = nullptr;
+
+            RendableToElements &rendableToElements = it->second;
             shader->Use();
 
             glm::mat4 projectionMatrix = camera->GetProjectionMatrix();
             glm::mat4 viewMatrix = camera->GetViewMatrix();
+            glm::mat4 viewProjectionMatrix = camera->GetViewProjectionMatrix();
+            glm::vec4 color(0.0f, 1.0f, 1.0f, 1.0f);
 
             glUniformMatrix4fv(shader->GetProjectionUniform(), 1, GL_FALSE, glm::value_ptr(projectionMatrix));
             glUniformMatrix4fv(shader->GetViewUniform(), 1, GL_FALSE, glm::value_ptr(viewMatrix));
+            glUniformMatrix4fv(shader->GetViewProjectionUniform(), 1, GL_FALSE, glm::value_ptr(viewProjectionMatrix));
+            glUniform4fv(shader->GetColorUniform(), 1, glm::value_ptr(color));
 
-            for (auto it2 = meshToElement.begin(); it2 != meshToElement.end(); ++it2)
+            for (auto it2 = rendableToElements.begin(); it2 != rendableToElements.end(); ++it2)
             {
-                Mesh *mesh = container->GetMesh(it2->first);
+                rendable = container->GetRendable<IRendable>(it2->first);
                 Elements &elements = it2->second;
 
-                mesh->StartRender();
+                rendable->StartRender();
 
                 for (auto it3 = elements.begin(); it3 != elements.end(); ++it3)
                 {
-                    Material *material;
-                    Texture *texture;
                     if (it3->material)
                     {
-                        material = container->GetMaterial(it3->material.GetIndex());
+                        Material *material = container->GetMaterial(it3->material.GetIndex());
                     }
                     if (it3->texture)
                     {
-                        texture = container->GetTexture(it3->texture.GetIndex());
+                        Texture *texture = container->GetTexture(it3->texture.GetIndex());
                     }
 
                     glm::mat4 transformMatrix = it3->transform->GetTransformMatrix();
                     glUniformMatrix4fv(shader->GetModelUniform(), 1, GL_FALSE, glm::value_ptr(transformMatrix));
-                    mesh->Render();
+                    rendable->Render();
                 }
 
-                mesh->EndRender();
+                rendable->EndRender();
             }
 
             shader->Validate();
         }
+
+        queue.clear();
     }
 
     void RenderPool::SetCamera(Camera *const value)
@@ -67,7 +74,7 @@ namespace Engine::Graphics
 
     void RenderPool::AddRenderUnit(const RenderUnit &element)
     {
-        if (!element.ContainsShader() || !element.ContainsMesh() || !element.ContainsTransform())
+        if (!element.ContainsShader() || !element.ContainsRendable() || !element.ContainsTransform())
         {
             return;
         }
@@ -76,20 +83,20 @@ namespace Engine::Graphics
             std::lock_guard<std::mutex> guard(shadersLock);
             if (!queue.contains(element.GetShaderIndex()))
             {
-                queue.emplace(element.GetShaderIndex(), MeshToElements());
+                queue.emplace(element.GetShaderIndex(), RendableToElements());
             }
         }
 
-        MeshToElements &meshes = queue[element.GetShaderIndex()];
+        RendableToElements &rendables = queue[element.GetShaderIndex()];
         {
-            std::lock_guard<std::mutex> guard(meshesLock);
-            if (!meshes.contains(element.GetMeshIndex()))
+            std::lock_guard<std::mutex> guard(rendablesLock);
+            if (!rendables.contains(element.GetRendableIndex()))
             {
-                meshes.emplace(element.GetMeshIndex(), Elements());
+                rendables.emplace(element.GetRendableIndex(), Elements());
             }
         }
 
-        Elements &elements = meshes[element.GetMeshIndex()];
+        Elements &elements = rendables[element.GetRendableIndex()];
         {
             std::lock_guard<std::mutex> guard(elementsLock);
             elements.emplace_back(element.GetTexture(), element.GetMaterial(), element.GetTransform());

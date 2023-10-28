@@ -21,12 +21,12 @@ namespace Engine::Graphics
             Objects::Transform *transform;
         };
 
-        using MeshIndex = size_t;
+        using RendableIndex = size_t;
         using ShaderIndex = size_t;
 
         using Elements = std::vector<PoolElement>;
-        using MeshToElements = std::unordered_map<MeshIndex, Elements>;
-        using ShaderToMeshes = std::unordered_map<ShaderIndex, MeshToElements>;
+        using RendableToElements = std::unordered_map<RendableIndex, Elements>;
+        using ShaderToMeshes = std::unordered_map<ShaderIndex, RendableToElements>;
         using RenderQueue = ShaderToMeshes;
 
     private:
@@ -59,7 +59,7 @@ namespace Engine::Graphics
 
     private:
         std::mutex shadersLock;
-        std::mutex meshesLock;
+        std::mutex rendablesLock;
         std::mutex elementsLock;
     };
 }

@@ -7,72 +7,53 @@ namespace Engine::Objects
         : name()
         , tranform()
         , scripts()
-        , typeToIndex()
     {}
 
-    GameObject::GameObject(const std::string& name)
+    GameObject::GameObject(const std::string &name)
         : GameObject(name, Transform())
     {}
 
-    GameObject::GameObject(const std::string& name, const Transform & transform)
+    GameObject::GameObject(const std::string &name, const Transform &transform)
         : name(name)
         , tranform(transform)
         , scripts()
-        , typeToIndex()
     {}
 
-    GameObject::GameObject(const std::string& name, Transform && transform)
+    GameObject::GameObject(const std::string &name, Transform &&transform)
         : name(name)
         , tranform(transform)
         , scripts()
-        , typeToIndex()
     {}
 
-    GameObject::GameObject(const GameObject & rhs) noexcept
+    GameObject::GameObject(const GameObject &rhs) noexcept
         : name()
         , tranform(rhs.tranform)
         , scripts(rhs.scripts)
-        , typeToIndex(rhs.typeToIndex)
-    {
-        auto it = scripts.begin();
-        auto rhsIt = rhs.scripts.begin();
-        for (;rhsIt != rhs.scripts.end(); ++it, ++rhsIt)
-        {
-            Script *clonedScript = rhsIt->script->Clone();
-            clonedScript->SetGameObject(this);
-            it->script = clonedScript;
-        }
-    }
-
-    GameObject::GameObject(GameObject && rhs) noexcept
-        : name(std::move(rhs.name))
-        , tranform(std::move(rhs.tranform))
-        , scripts(std::move(rhs.scripts))
-        , typeToIndex(std::move(rhs.typeToIndex))
     {
         for (auto it = scripts.begin(); it != scripts.end(); ++it)
         {
-            it->script->SetGameObject(this);
+            it->element->SetGameObject(this);
         }
-
-        rhs.scripts.clear();
-        rhs.typeToIndex.clear();
     }
 
-    GameObject &GameObject::operator=(const GameObject & rhs)
+    GameObject::GameObject(GameObject &&rhs) noexcept
+        : name(std::move(rhs.name))
+        , tranform(std::move(rhs.tranform))
+        , scripts(std::move(rhs.scripts))
+    {
+        for (auto it = scripts.begin(); it != scripts.end(); ++it)
+        {
+            it->element->SetGameObject(this);
+        }
+    }
+
+    GameObject &GameObject::operator=(const GameObject &rhs)
     {
         tranform = rhs.tranform;
-        DeleteScripts();
         scripts = rhs.scripts;
-        typeToIndex = rhs.typeToIndex;
-
-        auto it = scripts.begin();
-        auto rhsIt = rhs.scripts.begin();
-        for (; it != rhs.scripts.end(); ++it, ++rhsIt)
+        for (auto it = scripts.begin(); it != scripts.end(); ++it)
         {
-            Script *clonedScript = rhsIt->script->Clone();
-            clonedScript->SetGameObject(this);
-            it->script = clonedScript;
+            it->element->SetGameObject(this);
         }
         return *this;
     }
@@ -81,22 +62,17 @@ namespace Engine::Objects
     {
         name = std::move(rhs.name);
         tranform = std::move(rhs.tranform);
-        DeleteScripts();
         scripts = std::move(rhs.scripts);
-        typeToIndex = std::move(rhs.typeToIndex);
         for (auto it = scripts.begin(); it != scripts.end(); ++it)
         {
-            it->script->SetGameObject(this);
+            it->element->SetGameObject(this);
         }
-
-        rhs.scripts.clear();
-        rhs.typeToIndex.clear();
         return *this;
     }
 
     GameObject::~GameObject()
     {
-        ClearScripts();
+        scripts.Clear();
     }
 
     const std::string &GameObject::GetName() const
@@ -109,62 +85,46 @@ namespace Engine::Objects
         return tranform;
     }
 
-    Transform *GameObject::GetTransformPtr()
+    Transform * const GameObject::GetTransformPtr()
     {
         return &tranform;
     }
 
-    void GameObject::UpdateTypeToIndexByScripts(size_t start)
+    const Transform &GameObject::GetTransform() const
     {
-        if (start >= scripts.size())
-        {
-            LOG_ERROR("Can't update order after the end of vector");
-        }
-
-        for (auto it = scripts.begin() + start; it != scripts.end(); ++it)
-        {
-            typeToIndex[it->type] = it - scripts.begin();
-        }
+        return tranform;
     }
 
-    void GameObject::SortScriptsAfterPriorityChangeOfOneElement(size_t start)
+    const Transform *const GameObject::GetTransformPtr() const
     {
-        if (start >= scripts.size())
-        {
-            LOG_ERROR("Can't update order after the end of vector");
-        }
-
-        auto changedElementIt = scripts.begin() + start;
-        auto nextElementIt = changedElementIt + 1;
-        const size_t changedElementPriority = changedElementIt->priority;
-        while (nextElementIt != scripts.end() || changedElementPriority > nextElementIt->priority)
-        {
-            std::iter_swap(changedElementIt, nextElementIt);
-            ++changedElementIt;
-            ++nextElementIt;
-        }
+        return &tranform;
     }
 
-    void GameObject::ClearScripts()
+    const GameObject::ScriptsContainer &GameObject::GetScripts() const
     {
-        DeleteScripts();
-        scripts.clear();
-        typeToIndex.clear();
+        return scripts;
     }
 
-    void GameObject::DeleteScripts()
+    bool GameObject::IsActive() const
     {
-        for (auto it = scripts.begin(); it != scripts.end(); ++it)
-        {
-            delete it->script;
-        }
+        return isActive;
+    }
+
+    void GameObject::SetActive(bool value)
+    {
+        isActive = value;
     }
 
     void GameObject::Update()
     {
+        if (!IsActive())
+        {
+            return;
+        }
+
         for (auto it = scripts.begin(); it != scripts.end(); ++it)
         {
-            it->script->Update();
+            it->element->Update();
         }
     }
 }

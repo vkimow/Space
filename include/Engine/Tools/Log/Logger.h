@@ -49,9 +49,9 @@ namespace Engine::Tools
     };
 }
 
-#define LOG_TRACE(...)      SPDLOG_LOGGER_TRACE(        Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
-#define LOG_DEBUG(...)      SPDLOG_LOGGER_DEBUG(        Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
-#define LOG_INFO(...)       SPDLOG_LOGGER_INFO(         Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
-#define LOG_WARN(...)       SPDLOG_LOGGER_WARN(         Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
-#define LOG_ERROR(...)      SPDLOG_LOGGER_ERROR(        Engine::Tools::Logger::GetInstance()->GetErrorLogger().get(), __VA_ARGS__)
-#define LOG_CRITICAL(...)   SPDLOG_LOGGER_CRITICAL(     Engine::Tools::Logger::GetInstance()->GetErrorLogger().get(), __VA_ARGS__)
+#define LOG_TRACE(...)      SPDLOG_LOGGER_TRACE(        ::Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
+#define LOG_DEBUG(...)      SPDLOG_LOGGER_DEBUG(        ::Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
+#define LOG_INFO(...)       SPDLOG_LOGGER_INFO(         ::Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
+#define LOG_WARN(...)       SPDLOG_LOGGER_WARN(         ::Engine::Tools::Logger::GetInstance()->GetMainLogger().get(), __VA_ARGS__)
+#define LOG_ERROR(...)      SPDLOG_LOGGER_ERROR(        ::Engine::Tools::Logger::GetInstance()->GetErrorLogger().get(), __VA_ARGS__)
+#define LOG_CRITICAL(...)   SPDLOG_LOGGER_CRITICAL(     ::Engine::Tools::Logger::GetInstance()->GetErrorLogger().get(), __VA_ARGS__)

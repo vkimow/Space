@@ -188,6 +188,8 @@ namespace Engine::Graphics
         uniformModel = glGetUniformLocation(id, "model");
         uniformView = glGetUniformLocation(id, "view");
         uniformProjection = glGetUniformLocation(id, "projection");
+        uniformViewProjection = glGetUniformLocation(id, "viewProjection");
+        uniformColor = glGetUniformLocation(id, "color");
     }
 
     void Shader::Validate()

@@ -45,7 +45,6 @@ namespace Engine::Input
     private:
         void UpdateBeforePolling();
         void UpdateAfterPolling();
-        void LateUpdate();
 
     private:
         std::unordered_map<int, PressableKey *const> keys;

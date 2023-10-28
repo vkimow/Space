@@ -54,13 +54,6 @@ namespace Engine::Graphics
         glBindVertexArray(0);
     }
 
-    void Mesh::FullRender()
-    {
-        StartRender();
-        Render();
-        EndRender();
-    }
-
     void Mesh::Clear()
     {
         if (IBO != 0)

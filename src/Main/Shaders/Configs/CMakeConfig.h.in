@@ -1,0 +1,11 @@
+#ifndef SPACE_MAIN_SHADERS_CONFIGS_CMAKE
+#define SPACE_MAIN_SHADERS_CONFIGS_CMAKE
+
+#include <string>
+
+namespace Main::Shaders::Configs
+{
+@SPACE_CURRENT_SHADERS_FOR_CONFIG@
+}
+
+#endif
