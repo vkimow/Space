@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/UI/Menu/Menu.h"
 #include "Engine/UI/Menu/MenuContainer.h"
-#include "Game/Modes/EGameMode.h"
+#include "Game/Mode/EGameMode.h"
 #include "Engine/Tools/Events/MemberFunction.h"
 
 namespace Main::Game
@@ -26,12 +26,10 @@ namespace Main::Game
 
     private:
         GameManager *const gameManager;
-        EGameMode mode;
 
     private:
         void SetGameMode(EGameMode value);
-    private:
-        Engine::Tools::Events::MemberFunction<GameModeMenu, EGameMode> setGameMode;
+        EGameMode GetGameMode() const;
 
     private:
         static size_t priority;

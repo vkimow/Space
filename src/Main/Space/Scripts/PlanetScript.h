@@ -16,9 +16,9 @@ namespace Main::Space
 
     protected:
         Engine::Tools::Interfaces::IClonable *Clone() override final;
-
-    protected:
         void UpdateInner() override final;
+
+    public:
         size_t GetDefaultPriority() const override final;
 
     private:

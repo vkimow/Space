@@ -9,8 +9,6 @@ namespace Main
     {
     public:
         App();
-        App(Engine::Objects::Scene *const scene);
-
 
         App(const App &rhs) = delete;
         App(App &&rhs) = delete;

@@ -1,47 +1,57 @@
 #include "Engine/Objects/Script.h"
-
 #include "Engine/Objects/GameObject.h"
 
 namespace Engine::Objects
 {
     Script::Script()
-        : object(nullptr)
+        : isActive(true)
+        , object(nullptr)
     {}
 
     Script::Script(GameObject *object)
-        : object(object)
+        : isActive(true)
+        , object(object)
     {}
 
     Script::Script(const Script &rhs)
-        : object(rhs.object)
+        : isActive(true)
+        , object(rhs.object)
     {}
 
     Script::Script(Script &&rhs) noexcept
-        : object(rhs.object)
+        : isActive(true)
+        , object(rhs.object)
     {
         rhs.object = nullptr;
     }
 
     Script &Script::operator=(const Script &rhs)
     {
+        isActive = rhs.isActive;
         object = rhs.object;
         return *this;
     }
 
     Script &Script::operator=(Script &&rhs) noexcept
     {
+        isActive = rhs.isActive;
         object = rhs.object;
         rhs.object = nullptr;
         return *this;
     }
 
+    bool Script::IsActive() const
+    {
+        return isActive && object;
+    }
+
+    void Script::SetActive(bool value)
+    {
+        isActive = value;
+    }
+
     void Script::Update()
     {
-        if (!object)
-        {
-            return;
-        }
-
         UpdateInner();
     }
 

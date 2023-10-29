@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Main/EngineHeader.h"
+#include "Space/SpaceHeader.h"
 
 namespace Main::Game
 {

@@ -7,44 +7,67 @@ namespace Main::Game
         : window(window)
         , engine(engine)
         , scene(nullptr)
-        , modeType(EGameMode::Play)
-        , mode(nullptr)
+        , gameModeType(EGameMode::Edit)
+        , gameMode(nullptr)
+        , gameModes()
     {
-        engine->GetUI()->GetMenuManager()->GetContainer().Create<GameModeMenu>(this);
+        auto &menuContainer = engine->GetUI()->GetMenuManager()->GetContainer();
+        auto gameModeMenu = menuContainer.Create<GameModeMenu>(this);
+        gameModeMenu->SetActive(true);
+
         scene = new Main::Game::MainScene("Main", window, engine);
+        auto space = new Space::SpaceMode(engine->GetUI());
+        auto edit = new Editor::EditorMode(engine->GetUI(), engine->GetGraphics()->GetRenderManager());
+        space->SetScene(scene);
+        edit->SetScene(scene);
+
+        gameModes.Add<Space::SpaceMode>(space);
+        gameModes.Add<Editor::EditorMode>(edit);
+        SetGameMode(EGameMode::Edit);
     }
 
     GameManager::~GameManager()
     {
+        auto &menuContainer = engine->GetUI()->GetMenuManager()->GetContainer();
+        menuContainer.Remove<GameModeMenu>();
+
         delete scene;
     }
 
     void GameManager::Update()
     {
-        scene->Update();
+        gameMode->Update();
     }
 
-    void GameManager::SetGameMode(EGameMode mode)
+    void GameManager::SetGameMode(EGameMode value)
     {
-        switch (mode)
+        if (gameMode)
         {
-            case EGameMode::Play:
+            gameMode->End();
+        }
+
+        switch (value)
+        {
+            case EGameMode::Space:
             {
+                gameMode = gameModes.Get<Space::SpaceMode>();
                 LOG_DEBUG("Enter Play Mode");
                 break;
             }
             case EGameMode::Edit:
             {
+                gameMode = gameModes.Get<Editor::EditorMode>();
                 LOG_DEBUG("Enter Edit Mode");
                 break;
             }
         }
-        modeType = mode;
-        OnGameModeChanged(mode);
+
+        gameMode->Start();
+        gameModeType = value;
     }
 
     EGameMode GameManager::GetGameModeType() const
     {
-        return modeType;
+        return gameModeType;
     }
 }

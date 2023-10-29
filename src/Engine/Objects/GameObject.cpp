@@ -4,7 +4,9 @@
 namespace Engine::Objects
 {
     GameObject::GameObject()
-        : name()
+        : isActive(false)
+        , isInvisible(false)
+        , name()
         , tranform()
         , scripts()
     {}
@@ -14,19 +16,25 @@ namespace Engine::Objects
     {}
 
     GameObject::GameObject(const std::string &name, const Transform &transform)
-        : name(name)
+        : isActive(true)
+        , isInvisible(false)
+        , name(name)
         , tranform(transform)
         , scripts()
     {}
 
     GameObject::GameObject(const std::string &name, Transform &&transform)
-        : name(name)
+        : isActive(true)
+        , isInvisible(false)
+        , name(name)
         , tranform(transform)
         , scripts()
     {}
 
     GameObject::GameObject(const GameObject &rhs) noexcept
-        : name()
+        : isActive(rhs.isActive)
+        , isInvisible(rhs.isInvisible)
+        , name(rhs.name + "_copy")
         , tranform(rhs.tranform)
         , scripts(rhs.scripts)
     {
@@ -37,7 +45,9 @@ namespace Engine::Objects
     }
 
     GameObject::GameObject(GameObject &&rhs) noexcept
-        : name(std::move(rhs.name))
+        : isActive(rhs.isActive)
+        , isInvisible(rhs.isInvisible)
+        , name(std::move(rhs.name))
         , tranform(std::move(rhs.tranform))
         , scripts(std::move(rhs.scripts))
     {
@@ -49,6 +59,8 @@ namespace Engine::Objects
 
     GameObject &GameObject::operator=(const GameObject &rhs)
     {
+        isActive = rhs.isActive;
+        isInvisible = rhs.isInvisible;
         tranform = rhs.tranform;
         scripts = rhs.scripts;
         for (auto it = scripts.begin(); it != scripts.end(); ++it)
@@ -60,6 +72,8 @@ namespace Engine::Objects
 
     GameObject &GameObject::operator=(GameObject &&rhs) noexcept
     {
+        isActive = rhs.isActive;
+        isInvisible = rhs.isInvisible;
         name = std::move(rhs.name);
         tranform = std::move(rhs.tranform);
         scripts = std::move(rhs.scripts);
@@ -110,9 +124,19 @@ namespace Engine::Objects
         return isActive;
     }
 
+    bool GameObject::IsInvisible() const
+    {
+        return isInvisible;
+    }
+
     void GameObject::SetActive(bool value)
     {
         isActive = value;
+    }
+
+    void GameObject::SetInvisible(bool value)
+    {
+        isInvisible = value;
     }
 
     void GameObject::Update()
@@ -124,7 +148,66 @@ namespace Engine::Objects
 
         for (auto it = scripts.begin(); it != scripts.end(); ++it)
         {
+            if (!it->element->IsActive())
+            {
+                continue;
+            }
+
             it->element->Update();
+        }
+    }
+
+    void GameObject::UpdateEditor()
+    {
+        if (!IsActive())
+        {
+            return;
+        }
+
+        for (auto it = scripts.begin(); it != scripts.end(); ++it)
+        {
+            if (!it->element->IsActive())
+            {
+                continue;
+            }
+
+            it->element->UpdateEditor();
+        }
+    }
+
+    void GameObject::SelectEditor()
+    {
+        if (!IsActive())
+        {
+            return;
+        }
+
+        for (auto it = scripts.begin(); it != scripts.end(); ++it)
+        {
+            if (!it->element->IsActive())
+            {
+                continue;
+            }
+
+            it->element->SelectEditor();
+        }
+    }
+
+    void GameObject::DeselectEditor()
+    {
+        if (!IsActive())
+        {
+            return;
+        }
+
+        for (auto it = scripts.begin(); it != scripts.end(); ++it)
+        {
+            if (!it->element->IsActive())
+            {
+                continue;
+            }
+
+            it->element->DeselectEditor();
         }
     }
 }

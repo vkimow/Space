@@ -1,10 +1,10 @@
 #pragma once
 
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include "Engine/Tools/Events/Action.h"
 #include "Engine/Tools/Events/MemberFunction.h"
 #include "Engine/Input/Main/Element.h"
-#include "GLFW/glfw3.h"
 
 namespace Engine::Input
 {

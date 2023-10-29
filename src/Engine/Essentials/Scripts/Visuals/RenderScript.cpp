@@ -47,6 +47,17 @@ namespace Engine::Scripts
         manager->GetPool().AddRenderUnit(units.begin(), units.end());
     }
 
+    void RenderScript::UpdateEditor()
+    {
+        manager->GetPool().AddRenderUnit(units.begin(), units.end());
+    }
+
+    void RenderScript::SelectEditor()
+    {}
+
+    void RenderScript::DeselectEditor()
+    {}
+
     size_t RenderScript::GetDefaultPriority() const
     {
         return priority;

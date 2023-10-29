@@ -1,7 +1,6 @@
 #include "Engine/Input/Elements/Devices/Mouse.h"
 #include "Engine/Input/Elements/Vector/Vector.h"
 #include "Engine/Tools/Log/Logger.h"
-#include "GLFW/glfw3.h"
 
 namespace Engine::Input
 {

@@ -2,5 +2,5 @@
 
 namespace Main::Game
 {
-    size_t GameModeMenu::priority = 1;
+    size_t GameModeMenu::priority = 0;
 }

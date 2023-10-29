@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-    float TimeModule::globalTime = glfwGetTime();
+    float TimeModule::globalTime = static_cast<float>(glfwGetTime());
     float TimeModule::deltaTime = 0;
 
     TimeModule::TimeModule()
@@ -13,8 +13,8 @@ namespace Engine
 
     void TimeModule::Update()
     {
-        float now = glfwGetTime();
-        deltaTime = globalTime - now;
+        float now = static_cast<float>(glfwGetTime());
+        deltaTime = now - globalTime;
         globalTime = now;
     }
 

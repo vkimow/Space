@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Tools/Structs/IndividualTypeContainerWithPriority.h"
+#include "Engine/Tools/Structs/TypeMapWithPriority.h"
 #include "Engine/UI/Editor/Editor.h"
 
 namespace Engine
@@ -29,7 +29,7 @@ namespace Engine::UI
             E *editor = new E();
             std::type_index editorType = std::type_index(typeid(E));
             Editor *editorBase = static_cast<Editor *>(editor);
-            editors.Add(editor, editorBase->GetDefaultPriority());
+            editors.Add(editor);
             scriptToEditor.emplace(editorType, std::make_unique<std::type_index>(editorBase->GetScriptType()));
             return editor;
         }
@@ -78,7 +78,7 @@ namespace Engine::UI
         auto end() const { return editors.end(); }
 
     private:
-        Tools::Structs::IndividualTypeContainerWithPriority<Editor> editors;
+        Tools::Structs::TypeMapWithPriority<Editor> editors;
         std::unordered_map<std::type_index, std::unique_ptr<std::type_index>> scriptToEditor;
     };
 }

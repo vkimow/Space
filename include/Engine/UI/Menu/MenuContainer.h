@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Tools/Structs/IndividualTypeContainerWithPriority.h"
+#include "Engine/Tools/Structs/TypeMapWithPriority.h"
 #include "Engine/UI/Menu/Menu.h"
 
 namespace Engine
@@ -27,7 +27,7 @@ namespace Engine::UI
         M *const Create(Args&&... args)
         {
             M *menu = new M(std::forward<Args>(args)...);
-            menus.Add(menu, menu->GetDefaultPriority());
+            menus.Add(menu);
             return menu;
         }
 
@@ -37,6 +37,12 @@ namespace Engine::UI
             return menus.Get<M>();
         }
 
+        template<typename M, typename = std::enable_if_t<std::is_base_of_v<Menu, M>>>
+        void Remove()
+        {
+            return menus.Remove<M>();
+        }
+
     public:
         auto begin() { return menus.begin(); }
         auto end() { return menus.end(); }
@@ -44,6 +50,6 @@ namespace Engine::UI
         auto end() const { return menus.end(); }
 
     private:
-        Tools::Structs::IndividualTypeContainerWithPriority<Menu> menus;
+        Tools::Structs::TypeMapWithPriority<Menu> menus;
     };
 }

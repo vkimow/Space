@@ -7,9 +7,7 @@ namespace Engine::UI
 {
     MenuManager::MenuManager(EditorManager *editorManager)
         : container()
-    {
-        container.Create<GameObjectsMenu>(editorManager);
-    }
+    {}
 
     MenuManager::~MenuManager()
     {}

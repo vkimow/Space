@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Engine/Objects/GameObject.h"
+#include "Engine/Tools/Structs/StructsHeader.h"
 
 namespace Engine
 {
@@ -12,10 +13,18 @@ namespace Engine
     class UIModule;
 }
 
+namespace Engine::Managers
+{
+    class GameObjectManager;
+    class GameObjectEditorManager;
+}
+
 namespace Engine::Objects
 {
     class Scene
     {
+        using GameObjectsContainer = Tools::Structs::MapWithPriority<std::string, GameObject>;
+
     public:
         Scene(const std::string &name, ::Engine::Window *const window, ::Engine::TimeModule *const time, ::Engine::UIModule *const ui, ::Engine::InputModule *const input, ::Engine::GraphicsModule *const graphics);
         Scene(const Scene &rhs) = delete;
@@ -49,70 +58,49 @@ namespace Engine::Objects
         ::Engine::InputModule *const GetInput() const;
         ::Engine::GraphicsModule *const GetGraphics() const;
 
-    protected:
-        template<typename Object = GameObject, typename... Args, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
-        Object *CreateGameObject(const std::string &name, Args&&... args)
-        {
-            Object *object = new Object(name, std::forward<Args>(args)...);
-            objects.insert(std::make_pair(name, object));
-            return object;
-        }
-
-        template<typename Object = GameObject, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
-        Object *CreateGameObject(const std::string &name)
-        {
-            Object *object = new Object(name);
-            objects.insert(std::make_pair(name, object));
-            return object;
-        }
-
-        template<typename Object = GameObject, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
-        Object *CopyGameObject(const std::string &name, Object &&object)
-        {
-            Object *copyObject = new Object(std::forward<Object>(object));
-            static_cast<GameObject *>(copyObject)->name = name;
-            objects.insert(std::make_pair(name, copyObject));
-            return copyObject;
-        }
-
-        template<typename Object = GameObject, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
-        Object *CopyGameObject(Object &&object)
-        {
-            Object *copyObject = new Object(std::forward<Object>(object));
-            objects.insert(std::make_pair(name, copyObject));
-            return copyObject;
-        }
-
-        template<typename Object = GameObject, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
-        Object *CopyGameObject(const std::string &name, const Object &object)
-        {
-            Object *copyObject = new Object(object);
-            static_cast<GameObject *>(copyObject)->name = name;
-            objects.insert(std::make_pair(name, copyObject));
-            return copyObject;
-        }
-
-        template<typename Object = GameObject, typename = std::enable_if_t<std::is_base_of_v<GameObject, Object>>>
-        Object *CopyGameObject(const Object &object)
-        {
-            Object *copyObject = new Object(object);
-            static_cast<GameObject *>(copyObject)->name += "_Copy";
-            objects.insert(std::make_pair(name, copyObject));
-            return copyObject;
-        }
-
-        void UpdateGameObject(const std::string &name);
-        void RemoveGameObject(GameObject *object);
-        void ClearObjects();
-        GameObject *const GetGameObject(const std::string &name);
-
     public:
+        template<typename... Args>
+        GameObject *CreateGameObject(const std::string &name, size_t priority, Args&&... args)
+        {
+            GameObject *object = new GameObject(name, std::forward<Args>(args)...);
+            objects.Add(name, priority, object);
+            return object;
+        }
+
+        template<typename... Args>
+        GameObject *CreateGameObject(const std::string &name, Args&&... args)
+        {
+            return CreateGameObject(name, objects.Size(), std::forward<Args>(args)...);
+        }
+
+        GameObject *CreateGameObject(const std::string &name, size_t priority);
+        GameObject *CreateGameObject(const std::string &name);
+
+        GameObject *CopyGameObject(const std::string &name, size_t priority, GameObject &&object);
+        GameObject *CopyGameObject(const std::string &name, GameObject &&object);
+        GameObject *CopyGameObject(size_t priority, GameObject &&object);
+        GameObject *CopyGameObject(GameObject &&object);
+        GameObject *CopyGameObject(const std::string &name, size_t priority, const GameObject &object);
+        GameObject *CopyGameObject(const std::string &name, const GameObject &object);
+        GameObject *CopyGameObject(size_t priority, const GameObject &object);
+        GameObject *CopyGameObject(const GameObject &object);
+
+        GameObject *const GetGameObject(const std::string &name);
         const GameObject *const GetGameObject(const std::string &name) const;
-        const std::unordered_map<std::string, GameObject *> &GetGameObjects() const;
-        bool ContainsGameObjects(GameObject *object);
+
+        GameObjectsContainer &GetGameObjects();
+        const GameObjectsContainer &GetGameObjects() const;
+
+        bool ContainsGameObject(GameObject *object) const;
+        bool ContainsGameObject(const std::string &name) const;
+
+        void RemoveGameObject(GameObject *object);
+        void RemoveGameObject(const std::string &name);
+
+        void ClearObjects();
 
     private:
-        std::unordered_map<std::string, GameObject *> objects;
+        GameObjectsContainer objects;
 
     private:
         static size_t idCounter;

@@ -5,14 +5,16 @@
 namespace Engine::Objects
 {
     class GameObject;
+    class Scene;
 
-    class Script : public Tools::Interfaces::IClonable
+    class Script: public Tools::Interfaces::IClonable
     {
         friend class GameObject;
+        friend class Scene;
 
     protected:
         Script();
-        Script(GameObject* object);
+        Script(GameObject *object);
 
         Script(const Script &rhs);
         Script(Script &&rhs) noexcept;
@@ -23,6 +25,10 @@ namespace Engine::Objects
     public:
         virtual ~Script() = default;
 
+    public:
+        bool IsActive() const;
+        void SetActive(bool value);
+
     private:
         void Update();
 
@@ -31,12 +37,18 @@ namespace Engine::Objects
 
     protected:
         virtual void UpdateInner() = 0;
-        virtual size_t GetDefaultPriority() const = 0;
+
+    protected:
+        virtual void UpdateEditor() {};
+        virtual void SelectEditor() {};
+        virtual void DeselectEditor() {};
 
     public:
+        virtual size_t GetDefaultPriority() const = 0;
         GameObject *const GetGameObject() const;
 
     private:
+        bool isActive;
         GameObject *object;
     };
 }

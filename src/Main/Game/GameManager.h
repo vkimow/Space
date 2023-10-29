@@ -1,7 +1,8 @@
 #pragma once
 #include "Engine/Main/EngineHeader.h"
-#include "Game/Modes/IGameMode.h"
-#include "Game/Modes/EGameMode.h"
+#include "Game/Mode/ModesHeader.h"
+#include "Space/SpaceHeader.h"
+#include "Editor/EditorHeader.h"
 
 namespace Main
 {
@@ -24,17 +25,16 @@ namespace Main::Game
         void Update();
 
     public:
-        void SetGameMode(EGameMode mode);
+        void SetGameMode(EGameMode value);
         EGameMode GetGameModeType() const;
 
     private:
         Engine::Window *const window;
         Engine::Engine *const engine;
         Engine::Objects::Scene *scene;
-        EGameMode modeType;
-        IGameMode *mode;
 
-    public:
-        CREATE_ACTION(EGameMode, OnGameModeChanged);
+        EGameMode gameModeType;
+        IGameMode *gameMode;
+        Engine::Tools::Structs::TypeMapUnordered<IGameMode> gameModes;
     };
 }

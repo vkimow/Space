@@ -49,6 +49,20 @@ namespace Engine::Scripts
         camera->SetUp(GetGameObject()->GetTransform().GetUpDirection());
     }
 
+    void CameraScript::UpdateEditor()
+    {
+        camera->SetPosition(GetGameObject()->GetTransform().GetPosition());
+        camera->SetFront(GetGameObject()->GetTransform().GetForwardDirection());
+        camera->SetUp(GetGameObject()->GetTransform().GetUpDirection());
+    }
+
+    void CameraScript::SelectEditor()
+    {}
+
+    void CameraScript::DeselectEditor()
+    {}
+
+
     size_t CameraScript::GetDefaultPriority() const
     {
         return priority;

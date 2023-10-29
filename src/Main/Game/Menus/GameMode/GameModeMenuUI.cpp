@@ -11,9 +11,9 @@ namespace Main::Game
     void GameModeMenuUI::UpdateInner()
     {
         GameModeMenu *menu = GetMenu<GameModeMenu>();
-        switch (menu->mode)
+        switch (menu->GetGameMode())
         {
-            case EGameMode::Play:
+            case EGameMode::Space:
             {
                 if (ImGui::Button("Enter Edit Mode"))
                 {
@@ -25,7 +25,7 @@ namespace Main::Game
             {
                 if (ImGui::Button("Enter Play Mode"))
                 {
-                    menu->SetGameMode(EGameMode::Play);
+                    menu->SetGameMode(EGameMode::Space);
                 }
                 break;
             }

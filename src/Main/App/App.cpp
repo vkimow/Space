@@ -22,7 +22,6 @@ namespace Main
 
             engine.StartRender();
             engine.Render();
-            gameManager.scene->Render();
             engine.EndRender();
         }
     }

@@ -9,11 +9,11 @@
 #include <typeinfo>
 #include <typeindex>
 #include "Engine/Tools/Log/Logger.h"
-#include "Engine/Tools/Structs/IndividualTypeContainerWithPriority.h"
+#include "Engine/Tools/Structs/TypeMapWithPriority.h"
 
 namespace Engine::Objects
 {
-    class GameObject
+    class GameObject final
     {
     private:
         struct ScriptInner
@@ -24,10 +24,9 @@ namespace Engine::Objects
         };
 
         friend class Scene;
+        using ScriptsContainer = Tools::Structs::TypeMapWithPriority<Script>;
 
-    using ScriptsContainer = Tools::Structs::IndividualTypeContainerWithPriority<Script>;
-
-    protected:
+    public:
         GameObject();
         GameObject(const std::string &name);
         GameObject(const std::string &name, const Transform &transform);
@@ -49,16 +48,18 @@ namespace Engine::Objects
         const Transform *const GetTransformPtr() const;
         const ScriptsContainer &GetScripts() const;
         bool IsActive() const;
+        bool IsInvisible() const;
 
     public:
         void SetActive(bool value);
+        void SetInvisible(bool value);
 
     public:
         template<typename S, typename... Args, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         S *const EmplaceScript(Args&&... args)
         {
             S *script = new S(this, std::forward<Args>(args)...);
-            scripts.Add(script, static_cast<Script*>(script)->GetDefaultPriority());
+            scripts.Add(script);
             return script;
         }
 
@@ -66,7 +67,7 @@ namespace Engine::Objects
         S *const EmplaceScript()
         {
             S *script = new S(this);
-            scripts.Add(script, static_cast<Script *>(script)->GetDefaultPriority());
+            scripts.Add(script);
             return script;
         }
 
@@ -86,11 +87,11 @@ namespace Engine::Objects
                 return;
             }
             basePointer->SetGameObject(this);
-            scripts.Add(script, static_cast<Script *>(script)->GetDefaultPriority());
+            scripts.Add(script);
         }
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
-        void ConstainsScript()
+        bool ConstainsScript()
         {
             return scripts.Contains<S>();
         }
@@ -110,7 +111,7 @@ namespace Engine::Objects
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         size_t const GetScriptCallOrder()
         {
-            return scripts.GetCallOrder<S>();
+            return scripts.GetOrder<S>();
         }
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
@@ -126,10 +127,16 @@ namespace Engine::Objects
         }
 
     public:
-        virtual void Update();
+        void Update();
+
+    public:
+        void UpdateEditor();
+        void SelectEditor();
+        void DeselectEditor();
 
     private:
         bool isActive;
+        bool isInvisible;
         Transform tranform;
         std::string name;
 

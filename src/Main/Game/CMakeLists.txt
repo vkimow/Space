@@ -32,6 +32,7 @@ add_vkimow_library(
     SOURCES ${SPACE_CURRENT_SOURCES}
     PUBLIC_LINK_LIBS    space::engine::main
                         space::main::shaders
+                        space::main::editor
                         space::main::space
     PRIVATE_INCLUDE_DIRS ${SPACE_CURRENT_SUBSOLUTION_SOURCE_DIR}
 )

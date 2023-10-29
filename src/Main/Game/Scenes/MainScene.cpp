@@ -48,9 +48,6 @@ namespace Main::Game
         auto cube = CreateGameObject("Cube_1");
         Engine::Scripts::RenderScript* script = cube->EmplaceScript<Engine::Scripts::RenderScript>(GetGraphics()->GetRenderManager());
         script->EmplaceRenderUnit("MainShader", "Cube");
-        script->EmplaceRenderUnit("MainShader", "Forward");
-        script->EmplaceRenderUnit("MainShader", "Up");
-        script->EmplaceRenderUnit("MainShader", "Right");
 
         CopyGameObject("Cube_2", *cube);
         CopyGameObject("Cube_3", *cube);
@@ -68,44 +65,26 @@ namespace Main::Game
         Engine::Objects::SetPosition(player, 0.0f, 30.0f, 0.0f);
         Engine::Objects::SetRotationInDegrees(player, 90.0f, -90.0f, 0.0f);
 
-        ///*
+        /*
         auto scheme = GetInput()->GetScheme();
         auto movementInput = scheme->CreateVectorPressable(GLFW_KEY_D, GLFW_KEY_A, GLFW_KEY_W, GLFW_KEY_S);
         auto verticalInput = scheme->CreateDeltaPressable(GLFW_KEY_LEFT_SHIFT, GLFW_KEY_LEFT_CONTROL);
         auto mouseInput = scheme->GetMouse()->GetDeltaPositionInput();
         auto rollInput = scheme->CreateDeltaPressable(GLFW_KEY_Q, GLFW_KEY_E);
         player->EmplaceScript<Engine::Scripts::PlayerController>(movementInput->GetDeltaX(), verticalInput, movementInput->GetDeltaY(), mouseInput->GetDeltaY(), mouseInput->GetDeltaX(), rollInput, 10.0f, 100.0f);
-        //*/
+        */
 
         auto projection = Engine::Graphics::Projection(90, window->GetResolution());
         auto camera = GetGraphics()->GetCameraManager()->AddCamera("Player Camera", projection);
         player->EmplaceScript<Engine::Scripts::CameraScript>(camera);
         GetGraphics()->GetRenderManager()->GetPool().SetCamera(camera);
-
-        GetUI()->GetEditorManager()->SetActive(true);
-        GetUI()->GetEditorManager()->SetTarget(GetGameObject("Cube_1"));
-        GetUI()->GetMenuManager()->GetContainer().Get<Engine::UI::GameObjectsMenu>()->SetScene(this);
-        GetUI()->GetMenuManager()->GetContainer().Get<Engine::UI::GameObjectsMenu>()->SetActive(true);
-        GetUI()->GetMenuManager()->GetContainer().Get<GameModeMenu>()->SetActive(true);
     }
 
     MainScene::~MainScene()
     {}
 
     void MainScene::Update()
-    {
-        Engine::Objects::RotateInOrientation(GetGameObject("Cube_1"), 0.0f, Engine::TimeModule::GetDeltaTime(), 0.0f);
-        Engine::Objects::RotateInOrientation(GetGameObject("Cube_2"), 0.0f, Engine::TimeModule::GetDeltaTime(), 0.0f);
-        Engine::Objects::RotateInOrientation(GetGameObject("Cube_3"), 0.0f, Engine::TimeModule::GetDeltaTime(), 0.0f);
-        Engine::Objects::RotateInOrientation(GetGameObject("Cube_4"), 0.0f, Engine::TimeModule::GetDeltaTime(), 0.0f);
-
-        UpdateGameObject("Cube_1");
-        UpdateGameObject("Cube_2");
-        UpdateGameObject("Cube_3");
-        UpdateGameObject("Cube_4");
-
-        UpdateGameObject("Player");
-    }
+    {}
 
     void MainScene::Render()
     {}

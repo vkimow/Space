@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Engine/Tools/Structs/IndividualTypeContainerWithPriority.h"
+#include "Engine/Tools/Structs/TypeMapWithPriority.h"
 #include "Engine/UI/Menu/Menu.h"
 #include "Engine/UI/Menu/MenuContainer.h"
 

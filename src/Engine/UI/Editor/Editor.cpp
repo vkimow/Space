@@ -6,7 +6,7 @@ namespace Engine::UI
 {
     Editor::Editor(const std::string &name, EditorUI *const ui)
         : name(name)
-        , isActive(false)
+        , isActive(true)
         , target(nullptr)
         , ui(ui)
     {}

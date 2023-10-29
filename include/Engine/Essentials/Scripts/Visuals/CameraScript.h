@@ -26,10 +26,15 @@ namespace Engine::Scripts
 
     protected:
         Tools::Interfaces::IClonable *Clone() override final;
+        void UpdateInner() override final;
+
+    public:
+        size_t GetDefaultPriority() const override final;
 
     protected:
-        void UpdateInner() override final;
-        size_t GetDefaultPriority() const override final;
+        void UpdateEditor() override final;
+        void SelectEditor() override final;
+        void DeselectEditor() override final;
 
     private:
         const static size_t priority;

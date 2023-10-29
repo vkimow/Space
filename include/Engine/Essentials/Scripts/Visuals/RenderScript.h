@@ -38,6 +38,13 @@ namespace Engine::Scripts
 
     protected:
         void UpdateInner() override final;
+
+    protected:
+        void UpdateEditor() override final;
+        void SelectEditor() override final;
+        void DeselectEditor() override final;
+
+    public:
         size_t GetDefaultPriority() const override final;
 
     private:
