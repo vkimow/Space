@@ -10,6 +10,8 @@ namespace Engine::UI
         , isActive(false)
     {
         container.Create<GameObjectEditor>();
+        container.Create<TransformEditor>();
+        container.Create<LightSourceEditor>();
     }
 
     EditorManager::~EditorManager()
@@ -23,6 +25,10 @@ namespace Engine::UI
         }
 
         Editor *editor = container.Get<GameObjectEditor>();
+        editor->SetTarget(object);
+        editor->SetActive(true);
+
+        editor = container.Get<TransformEditor>();
         editor->SetTarget(object);
         editor->SetActive(true);
 

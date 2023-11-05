@@ -46,8 +46,7 @@ add_vkimow_library(
     NAME ${PROJECT_NAME}
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
-    PRIVATE_LINK_LIBS   glm
-                        glew_s
+    PRIVATE_LINK_LIBS   glew_s
                         glfw
                         space::engine::tools
     PRIVATE_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}

@@ -3,7 +3,7 @@
 #include <fstream>
 #include <errno.h>
 
-namespace Engine::Tools::Other
+namespace Engine::Tools::Files
 {
     std::string GetExecutableDirectory()
     {

@@ -15,7 +15,4 @@ namespace Main::Shaders
             initializedGraphics.insert(graphics);
         }
     }
-
-    
-
 }

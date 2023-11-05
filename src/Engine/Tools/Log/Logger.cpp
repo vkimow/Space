@@ -17,10 +17,10 @@ namespace Engine::Tools
 
     Logger::Logger()
     {
-        auto main_file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(Other::GetExecutableDirectory() + "/logs/main.txt", true);
+        auto main_file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(Files::GetExecutableDirectory() + "/logs/main.txt", true);
         main_file_sink->set_pattern("%^[%D %H:%M:%S.%e] [%l] [thread %t] [%g::%!()::%#] %v%$");
         main_file_sink->set_level(spdlog::level::trace);
-        auto error_file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(Other::GetExecutableDirectory() + "/logs/errors.txt", true);
+        auto error_file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(Files::GetExecutableDirectory() + "/logs/errors.txt", true);
         error_file_sink->set_pattern("%^[%D %H:%M:%S.%e] [%l] [thread %t] [%g::%!()::%#] %v%$");
         error_file_sink->set_level(spdlog::level::err);
 #ifdef NDEBUG

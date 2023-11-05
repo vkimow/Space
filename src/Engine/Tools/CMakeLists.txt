@@ -46,7 +46,10 @@ add_vkimow_library(
     NAME ${PROJECT_NAME}
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
-    PUBLIC_LINK_LIBS spdlog
+    PUBLIC_LINK_LIBS    spdlog
+                        glm
+                        imgui
+                        glew_s
     PRIVATE_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
 )
 

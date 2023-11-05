@@ -54,11 +54,17 @@ namespace Engine::Objects
         void SetActive(bool value);
         void SetInvisible(bool value);
 
+    private:
+        void EnableScripts();
+        void DisableScripts();
+
     public:
         template<typename S, typename... Args, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         S *const EmplaceScript(Args&&... args)
         {
             S *script = new S(this, std::forward<Args>(args)...);
+            Script *basePointer = static_cast<Script *>(script);
+            basePointer->OnEnabled();
             scripts.Add(script);
             return script;
         }
@@ -67,6 +73,8 @@ namespace Engine::Objects
         S *const EmplaceScript()
         {
             S *script = new S(this);
+            Script *basePointer = static_cast<Script *>(script);
+            basePointer->OnEnabled();
             scripts.Add(script);
             return script;
         }
@@ -87,6 +95,7 @@ namespace Engine::Objects
                 return;
             }
             basePointer->SetGameObject(this);
+            basePointer->OnEnable();
             scripts.Add(script);
         }
 
@@ -119,6 +128,8 @@ namespace Engine::Objects
         {
             return scripts.Get<S>();
         }
+
+        Script *const GetScript(const std::type_index &type);
 
         template<typename S, typename = std::enable_if_t<std::is_base_of_v<Script, S>>>
         void SetScriptPriority(size_t priority)

@@ -9,7 +9,7 @@ namespace Engine::Scripts
     class CameraScript final: public Objects::Script
     {
     public:
-        CameraScript(Objects::GameObject *object, Graphics::Camera *camera);
+        CameraScript(Objects::GameObject *object, Graphics::VirtualCamera *camera);
         CameraScript(const CameraScript &rhs);
         CameraScript(CameraScript &&rhs) noexcept;
 
@@ -19,10 +19,10 @@ namespace Engine::Scripts
         ~CameraScript() = default;
 
     public:
-        Graphics::Camera *const GetCamera();
+        Graphics::VirtualCamera *const GetCamera();
 
     private:
-        Graphics::Camera *camera;
+        Graphics::VirtualCamera *camera;
 
     protected:
         Tools::Interfaces::IClonable *Clone() override final;

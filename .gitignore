@@ -1,6 +1,7 @@
 /project
 /vendor/*/
 /external/*/
+/src/Test
 /bin
 /lib
 /libs

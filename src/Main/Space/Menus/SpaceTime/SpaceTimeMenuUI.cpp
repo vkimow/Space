@@ -5,7 +5,7 @@
 namespace Main::Space
 {
     SpaceTimeMenuUI::SpaceTimeMenuUI(SpaceTimeMenu *const menu)
-        : MenuUI(menu)
+        : MenuUI(menu, 220.0f,80.0f)
     {}
 
     void SpaceTimeMenuUI::UpdateInner()

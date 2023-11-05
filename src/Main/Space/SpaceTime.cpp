@@ -16,12 +16,6 @@ namespace Main::Space
     {
         deltaTime = timeCoef * Engine::TimeModule::GetDeltaTime();
         globalTime += deltaTime;
-
-        LOG_DEBUG("Delta Time = {}", Engine::TimeModule::GetDeltaTime());
-        LOG_DEBUG("Global Time = {}", Engine::TimeModule::GetGlobalTime());
-        LOG_DEBUG("Space Time Coef = {}", timeCoef);
-        LOG_DEBUG("Space Delta Time = {}", deltaTime);
-        LOG_DEBUG("Space Global Time = {}", globalTime);
     }
 
     void SpaceTime::SetTimeCoef(float value)

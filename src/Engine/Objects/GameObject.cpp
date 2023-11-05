@@ -41,6 +41,7 @@ namespace Engine::Objects
         for (auto it = scripts.begin(); it != scripts.end(); ++it)
         {
             it->element->SetGameObject(this);
+            it->element->OnEnabled();
         }
     }
 
@@ -54,6 +55,7 @@ namespace Engine::Objects
         for (auto it = scripts.begin(); it != scripts.end(); ++it)
         {
             it->element->SetGameObject(this);
+            it->element->OnEnabled();
         }
     }
 
@@ -66,6 +68,7 @@ namespace Engine::Objects
         for (auto it = scripts.begin(); it != scripts.end(); ++it)
         {
             it->element->SetGameObject(this);
+            it->element->OnEnabled();
         }
         return *this;
     }
@@ -80,6 +83,7 @@ namespace Engine::Objects
         for (auto it = scripts.begin(); it != scripts.end(); ++it)
         {
             it->element->SetGameObject(this);
+            it->element->OnEnabled();
         }
         return *this;
     }
@@ -132,11 +136,41 @@ namespace Engine::Objects
     void GameObject::SetActive(bool value)
     {
         isActive = value;
+
+        if (isActive)
+        {
+            EnableScripts();
+        }
+        else
+        {
+            DisableScripts();
+        }
     }
 
     void GameObject::SetInvisible(bool value)
     {
         isInvisible = value;
+    }
+
+    void GameObject::EnableScripts()
+    {
+        for (auto it = scripts.begin(); it != scripts.end(); ++it)
+        {
+            it->element->OnEnabled();
+        }
+    }
+
+    void GameObject::DisableScripts()
+    {
+        for (auto it = scripts.begin(); it != scripts.end(); ++it)
+        {
+            it->element->OnDisabled();
+        }
+    }
+
+    Script *const GameObject::GetScript(const std::type_index &type)
+    {
+        return scripts.Get(type);
     }
 
     void GameObject::Update()

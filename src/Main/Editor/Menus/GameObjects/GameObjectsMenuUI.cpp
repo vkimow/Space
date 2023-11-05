@@ -6,7 +6,7 @@
 namespace Main::Editor
 {
     GameObjectsMenuUI::GameObjectsMenuUI(GameObjectsMenu *const menu)
-        : MenuUI(menu)
+        : MenuUI(menu, 200.0f, 700.0f)
     {}
 
     void GameObjectsMenuUI::UpdateInner()

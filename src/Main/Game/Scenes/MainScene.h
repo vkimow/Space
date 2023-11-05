@@ -8,11 +8,14 @@ namespace Main::Game
     class MainScene final: public Engine::Objects::Scene
     {
     public:
-        MainScene(const std::string &name, Engine::Window *const window, Engine::Engine *const engine);
+        MainScene(const std::string &name, Engine::Window *const window, Engine::Engine *const engine, Space::SpaceManager *const space);
         ~MainScene();
 
     public:
         virtual void Update() override;
         virtual void Render() override;
+
+    private:
+        Space::SpaceManager *space;
     };
 }

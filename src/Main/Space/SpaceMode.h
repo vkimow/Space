@@ -32,6 +32,10 @@ namespace Main::Space
     public:
         void SetScene(Engine::Objects::Scene *value) override final;
 
+    public:
+        SpaceManager &GetSpaceManager();
+        const SpaceManager &GetSpaceManager() const;
+
     private:
         Engine::Objects::Scene *scene;
         Engine::UIModule *ui;

@@ -89,17 +89,18 @@ namespace Engine::Scripts
     {
         if (!(xInput->IsZero() && yInput->IsZero() && zInput->IsZero()))
         {
-            glm::vec3 moveDelta(xInput->GetDelta(), -yInput->GetDelta(), -zInput->GetDelta());
+            glm::vec3 moveDelta(xInput->GetDelta(), yInput->GetDelta(), -zInput->GetDelta());
             moveDelta *= movementSpeed * TimeModule::GetDeltaTime();
             Objects::MoveInOrientation(GetGameObject(), moveDelta);
+            auto newPos = GetGameObject()->GetTransform().GetPosition();
         }
 
         if (!(pitchInput->IsZero() && yawInput->IsZero() && rollInput->IsZero()))
         {
-            glm::vec3 rotationDelta(pitchInput->GetDelta(), yawInput->GetDelta(), rollInput->GetDelta());
+            glm::vec3 rotationDelta(pitchInput->GetDelta(), -yawInput->GetDelta(), -rollInput->GetDelta());
             rotationDelta *= rotationSpeed * TimeModule::GetDeltaTime();
             rotationDelta = glm::radians(rotationDelta);
-            Objects::RotateInOrientation(GetGameObject(), rotationDelta);
+            Objects::RotateInOrientation(GetGameObject(), rotationDelta); 
         }
     }
 

@@ -46,7 +46,6 @@ add_vkimow_library(
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
     PUBLIC_LINK_LIBS    glew_s
                         glfw
-                        glm
                         space::engine::tools
                         space::engine::window
                         space::engine::objects

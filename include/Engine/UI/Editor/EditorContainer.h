@@ -28,9 +28,8 @@ namespace Engine::UI
         {
             E *editor = new E();
             std::type_index editorType = std::type_index(typeid(E));
-            Editor *editorBase = static_cast<Editor *>(editor);
             editors.Add(editor);
-            scriptToEditor.emplace(editorType, std::make_unique<std::type_index>(editorBase->GetScriptType()));
+            scriptToEditor.emplace(editor->GetScriptType(), std::make_unique<std::type_index>(editorType));
             return editor;
         }
 

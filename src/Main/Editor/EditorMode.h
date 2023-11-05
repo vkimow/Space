@@ -16,7 +16,7 @@ namespace Main::Editor
         friend class Game::GameManager;
 
     private:
-        EditorMode(Engine::UIModule *ui, Engine::Graphics::RenderManager *render);
+        EditorMode(Engine::UIModule *ui, Engine::Graphics::RenderManager *render, Engine::Graphics::LightManager *lightManager);
         EditorMode(const EditorMode &rhs) = delete;
         EditorMode(EditorMode &&rhs) = delete;
         EditorMode &operator=(const EditorMode &rhs) = delete;

@@ -4,6 +4,8 @@
 
 #include "Engine/Input/InputHeader.h"
 #include "Engine/Graphics/Camera/Projection.h"
+#include "Engine/Graphics/Camera/IVirtualCamera.h"
+#include "Engine/Graphics/Elements/Shader.h"
 
 namespace Engine::Graphics
 {
@@ -12,61 +14,48 @@ namespace Engine::Graphics
         friend class CameraManager;
 
     private:
-        Camera() = delete;
-        Camera(const std::string &name);
-        Camera(const std::string &name, glm::vec3 position);
-        Camera(const std::string &name, const Projection &projection);
-        Camera(const std::string &name, glm::vec3 position, const Projection &projection);
-
-        Camera(const Camera &rhs);
-        Camera(Camera &&rhs) noexcept;
+        Camera();
         ~Camera();
 
     public:
+        Camera(const Camera &rhs) = delete;
+        Camera(Camera &&rhs) noexcept = delete;
         Camera &operator=(const Camera &rhs) = delete;
         Camera &operator=(Camera &&rhs) noexcept = delete;
 
     public:
-        glm::vec3 GetPosition();
-        glm::vec3 GetDirection();
-        Projection &GetProjection();
-        const std::string &GetName() const;
+        const glm::vec3 &GetPosition() const;
+        const glm::mat4& GetViewMatrix() const;
+        const glm::mat4 &GetProjectionMatrix() const;
+        glm::mat4 GetViewProjectionMatrix() const;
+        bool InTransition();
 
     public:
-        glm::mat4 GetViewMatrix();
-        glm::mat4 GetProjectionMatrix();
-        glm::mat4 GetViewProjectionMatrix();
-
-    public:
-        void SetPosition(const glm::vec3 &value);
-        void SetFront(const glm::vec3 &value);
-        void SetUp(const glm::vec3 &value);
-        void SetProjection(const Projection &value);
+        void SetTarget(IVirtualCamera *value, bool forced = false);
+        void Update();
+        void Use(Shader *shader);
 
     private:
-        void UpdateProjectionMatrix();
-        ::Engine::Tools::Events::MemberFunction<Camera, void> updateProjectionMatrix;
-
-    private:
-        void SetCallbacks();
-        void ClearCallbacks();
-
-    private:
-        glm::vec3 position;
-        glm::vec3 front;
-        glm::vec3 up;
+        IVirtualCamera *target;
 
     private:
         glm::mat4 viewMatrix;
         glm::mat4 projectionMatrix;
-        glm::mat4 viewProjectionMatrix;
-
-        bool isViewUpdated;
-        bool isProjectionUpdated;
-        bool isViewProjectionUpdated;
 
     private:
-        const std::string name;
-        Projection projection;
+        bool inTransition;
+        float transitionElapsedTime;
+        static const float TransitionTime;
+
+    private:
+        glm::vec3 currentPosition;
+        glm::vec3 currentDirection;
+        glm::vec3 currentUp;
+        Projection currentProjection;
+        glm::vec3 previousPosition;
+        glm::vec3 previousDirection;
+        glm::vec3 previousUp;
+        Projection previousProjection;
+
     };
 }

@@ -4,7 +4,7 @@
 namespace Engine::Graphics
 {
     CameraManager::CameraManager()
-        : mainCamera(nullptr)
+        : mainCamera(new Camera())
         , cameras()
     {}
 
@@ -15,44 +15,47 @@ namespace Engine::Graphics
             delete it->second;
         }
         cameras.clear();
+
+        delete mainCamera;
     }
 
-    Camera *const CameraManager::GetCamera(const std::string &name) const
+    void CameraManager::Update()
     {
-        return cameras.at(name);
+        mainCamera->Update();
     }
-    bool CameraManager::ContainsCamera(const std::string &name) const
+
+    bool CameraManager::ContainsVirtualCamera(const std::string &name) const
     {
         return cameras.contains(name);
     }
 
-    bool CameraManager::ContainsCamera(Camera *const camera) const
+    bool CameraManager::ContainsVirtualCamera(IVirtualCamera *const camera) const
     {
-        return ContainsCamera(camera->name);
+        return ContainsVirtualCamera(camera->GetName());
     }
 
-    void CameraManager::RemoveCamera(const std::string &name)
+    void CameraManager::RemoveVirtualCamera(const std::string &name)
     {
         delete cameras[name];
         cameras.erase(name);
     }
 
-    void CameraManager::RemoveCamera(Camera *const camera)
+    void CameraManager::RemoveVirtualCamera(IVirtualCamera *const camera)
     {
-        RemoveCamera(camera->name);
+        RemoveVirtualCamera(camera->GetName());
     }
 
-    void CameraManager::SetMainCamera(const std::string &name)
+    void CameraManager::SetTarget(const std::string &name) const
     {
-        mainCamera = cameras[name];
+        mainCamera->SetTarget(cameras.at(name));
     }
 
-    void CameraManager::SetMainCamera(Camera *const camera)
+    void CameraManager::SetTarget(IVirtualCamera *const camera) const
     {
-        SetMainCamera(camera->name);
+        mainCamera->SetTarget(camera);
     }
 
-    Camera *const CameraManager::GetMainCamera()
+    Camera *CameraManager::GetMainCamera() const
     {
         return mainCamera;
     }

@@ -1,5 +1,6 @@
 #include "Space/SpaceMode.h"
 #include "Space/Menus/MenusHeader.h"
+#include "Space/Editors/EditorsHeader.h"
 
 namespace Main::Space
 {
@@ -7,10 +8,13 @@ namespace Main::Space
         : scene(nullptr)
         , ui(ui)
         , objectsManager()
-        , spaceManager(&objectsManager)
+        , spaceManager()
     {
         auto &menuContainer = ui->GetMenuManager()->GetContainer();
-        menuContainer.Create<SpaceTimeMenu>(spaceManager.GetTime());
+        menuContainer.Create<SpaceTimeMenu>(&(spaceManager.GetTime()));
+
+        auto &editorContainer = ui->GetEditorManager()->GetContainer();
+        editorContainer.Create<CelestialBodyEditor>();
     }
 
     SpaceMode::~SpaceMode()
@@ -24,8 +28,8 @@ namespace Main::Space
 
     void SpaceMode::Update()
     {
-        objectsManager.UpdateAll();
         spaceManager.Update();
+        objectsManager.UpdateAll();
     }
 
     void SpaceMode::End()
@@ -38,5 +42,15 @@ namespace Main::Space
     {
         scene = value;
         objectsManager.SetScene(scene);
+    }
+
+    SpaceManager &SpaceMode::GetSpaceManager()
+    {
+        return spaceManager;
+    }
+
+    const SpaceManager &SpaceMode::GetSpaceManager() const
+    {
+        return spaceManager;
     }
 }

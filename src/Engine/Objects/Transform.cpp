@@ -1,17 +1,11 @@
 #include "Engine/Objects/Transform.h"
 #include "Engine/Tools/Log/Logger.h"
+#include "Engine/Tools/Other/Geometry.h"
 #include <iostream>
 #include <iomanip>
 
 namespace Engine::Objects
 {
-    glm::vec3 RotateVector(glm::quat q, glm::vec3 v)
-    {
-        glm::vec3 t = glm::cross(glm::vec3(q.x, q.y, q.z), v);
-        t *= 2;
-        return v + q.w * t + glm::cross(glm::vec3(q.x, q.y, q.z), t);
-    }
-
     Transform::Transform()
         : position()
         , rotation(1.0f, 0.0f, 0.0f, 0.0f)
@@ -187,7 +181,7 @@ namespace Engine::Objects
 
     void Transform::Move(const glm::vec3 &delta)
     {
-        position += RotateVector(rotation, delta);
+        position += delta;
         mainMatrixIsUpdated = false;
         positionMatrixIsUpdated = false;
     }
@@ -358,6 +352,11 @@ namespace Engine::Objects
         return positionMatrix;
     }
 
+    glm::mat4 Transform::GetPositionRotationMatrix()
+    {
+        return GetPositionMatrix() * GetRotationMatrix();
+    }
+
     const glm::mat4 &Transform::GetRotationMatrix()
     {
         if (!rotationMatrixIsUpdated)
@@ -378,17 +377,17 @@ namespace Engine::Objects
         return scaleMatrix;
     }
 
-    glm::vec3 Transform::GetForwardDirection()
+    const glm::vec3& Transform::GetForwardDirection()
     {
         if (!forwardIsUpdated)
         {
-            forward = GetRotationMatrix()[2];
+            forward = -GetRotationMatrix()[2];
             forwardIsUpdated = true;
         }
         return forward;
     }
 
-    glm::vec3 Transform::GetUpDirection()
+    const glm::vec3& Transform::GetUpDirection()
     {
         if (!upIsUpdated)
         {
@@ -398,7 +397,7 @@ namespace Engine::Objects
         return up;
     }
 
-    glm::vec3 Transform::GetRightDirection()
+    const glm::vec3& Transform::GetRightDirection()
     {
         if (!rightIsUpdated)
         {

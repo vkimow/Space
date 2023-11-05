@@ -2,6 +2,29 @@
 
 namespace Engine::Graphics
 {
+    Container::Container()
+        : shaders()
+        , rendables()
+        , textures()
+        , materials()
+        , nameToShaders()
+        , nameToRendables()
+        , nameToTextures()
+        , nameToMaterials()
+        , shadersLock()
+        , rendablesLock()
+        , texturesLock()
+        , materialsLock()
+    {}
+
+    Container::~Container()
+    {
+        Clear<Shader>(shaders, nameToShaders, shadersLock);
+        Clear<IRendable>(rendables, nameToRendables, rendablesLock);
+        Clear<ITexture>(textures, nameToTextures, texturesLock);
+        Clear<IMaterial>(materials, nameToMaterials, materialsLock);
+    }
+
     Shader *const Container::GetShader(size_t index) const
     {
         return shaders[index];
@@ -37,19 +60,9 @@ namespace Engine::Graphics
         return ContainsInner<Shader>(shaders, shader);
     }
 
-    Texture *const Container::GetTexture(size_t index) const
+    size_t Container::GetTextureIndex(ITexture *const texture) const
     {
-        return textures[index];
-    }
-
-    Texture *const Container::GetTexture(const std::string &name) const
-    {
-        return nameToTextures.at(name).value;
-    }
-
-    size_t Container::GetTextureIndex(Texture *const texture) const
-    {
-        return GetIndexInner<Texture>(textures, texture);
+        return GetIndexInner<ITexture>(textures, texture);
     }
 
     size_t Container::GetTextureIndex(const std::string &name) const
@@ -67,24 +80,14 @@ namespace Engine::Graphics
         return nameToTextures.contains(name);
     }
 
-    bool Container::ContainsTexture(Texture *const texture) const
+    bool Container::ContainsTexture(ITexture *const texture) const
     {
-        return ContainsInner<Texture>(textures, texture);
+        return ContainsInner<ITexture>(textures, texture);
     }
 
-    Material *const Container::GetMaterial(size_t index) const
+    size_t Container::GetMaterialIndex(IMaterial * const material) const
     {
-        return materials[index];
-    }
-
-    Material *const Container::GetMaterial(const std::string &name) const
-    {
-        return nameToMaterials.at(name).value;
-    }
-
-    size_t Container::GetMaterialIndex(Material * const material) const
-    {
-        return GetIndexInner<Material>(materials, material);
+        return GetIndexInner<IMaterial>(materials, material);
     }
 
     size_t Container::GetMaterialIndex(const std::string &name) const
@@ -102,9 +105,9 @@ namespace Engine::Graphics
         return nameToMaterials.contains(name);
     }
 
-    bool Container::ContainsMaterial(Material *const material) const
+    bool Container::ContainsMaterial(IMaterial *const material) const
     {
-        return ContainsInner<Material>(materials, material);
+        return ContainsInner<IMaterial>(materials, material);
     }
 
     Line *const Container::GetLine(size_t index) const

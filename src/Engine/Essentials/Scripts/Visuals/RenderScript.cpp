@@ -72,13 +72,13 @@ namespace Engine::Scripts
     void RenderScript::AddRenderUnit(const Graphics::RenderUnit &unit)
     {
         auto unitCopy = unit;
-        unitCopy.SetTransform(GetGameObject()->GetTransformPtr());
+        unitCopy.SetTransformMatrix(GetGameObject()->GetTransformPtr());
         units.push_back(std::move(unitCopy));
     }
 
     void RenderScript::AddRenderUnit(Graphics::RenderUnit && unit)
     {
-        unit.SetTransform(GetGameObject()->GetTransformPtr());
+        unit.SetTransformMatrix(GetGameObject()->GetTransformPtr());
         units.push_back(std::move(unit));
     }
 
@@ -86,7 +86,7 @@ namespace Engine::Scripts
     {
         for (auto it = units.begin(); it != units.end(); ++it)
         {
-            it->SetTransform(GetGameObject()->GetTransformPtr());
+            it->SetTransformMatrix(GetGameObject()->GetTransformPtr());
         }
     }
 }

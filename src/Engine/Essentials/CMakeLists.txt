@@ -44,9 +44,8 @@ add_vkimow_library(
     NAME ${PROJECT_NAME}
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
-    PUBLIC_LINK_LIBS    glew_s
+    PRIVATE_LINK_LIBS   glew_s
                         glfw
-                        glm
                         space::engine::tools
                         space::engine::window
                         space::engine::objects
@@ -54,5 +53,5 @@ add_vkimow_library(
                         space::engine::input
                         space::engine::audio
                         space::engine::graphics
-    PUBLIC_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
+    PRIVATE_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
 )

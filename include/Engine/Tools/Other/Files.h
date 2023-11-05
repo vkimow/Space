@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-namespace Engine::Tools::Other
+namespace Engine::Tools::Files
 {
     std::string GetExecutableDirectory();
     std::string ReadFile(const std::string_view file_path);

@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "Engine/Tools/Other/ImGui.h"
 
 namespace Engine
 {
@@ -23,6 +24,8 @@ namespace Engine
 
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 130");
+
+        ImGui::InitializeStyle();
     }
 
     UIModule::~UIModule()   

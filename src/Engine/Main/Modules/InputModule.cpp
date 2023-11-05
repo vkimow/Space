@@ -127,7 +127,7 @@ namespace Engine
         if (scheme->HasMouse())
         {
             auto mouse = scheme->GetMouse();
-            mouse->SetPosition(xPos, -yPos);
+            mouse->SetPosition(xPos, yPos);
         }
     }
 

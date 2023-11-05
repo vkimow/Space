@@ -7,8 +7,7 @@ namespace Main::Space
     {}
 
     GameObjectManager::~GameObjectManager()
-    {
-    }
+    {}
 
     void GameObjectManager::SetScene(Engine::Objects::Scene *value)
     {

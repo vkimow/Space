@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine/UI/Buffer.h"
 #include "Engine/UI/Editor/Editor.h"
 #include "Engine/UI/Editor/EditorUI.h"
 #include "Engine/UI/Editor/EditorContainer.h"
@@ -28,23 +29,10 @@ namespace Engine::UI
 
     public:
         const std::string &GetTargetName() const;
-
-    public:
-        bool *GetIsActive();
-        float *GetPosition();
-        float *GetRotation();
-        float *GetScale();
+        Buffer<bool> &GetIsActive();
 
     private:
-        glm::vec3 bufferPosition;
-        glm::vec3 bufferRotation;
-        glm::vec3 bufferScale;
-
-    private:
-        float position[3];
-        float rotation[3];
-        float scale[3];
-        bool isActive;
+        Buffer<bool> isActive;
 
     private:
         static const size_t priority;

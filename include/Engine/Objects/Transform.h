@@ -70,18 +70,18 @@ namespace Engine::Objects
         void Scale(float x, float y, float z);
 
     public:
-        glm::vec3 GetPosition() const { return position; }
-        glm::quat GetRotation() const { return rotation; }
+        const glm::vec3& GetPosition() const { return position; }
+        const glm::quat& GetRotation() const { return rotation; }
         glm::vec3 GetRotationInRadians() const { return glm::eulerAngles(rotation); }
         glm::vec3 GetRotationInDegrees() const { return glm::degrees(GetRotationInRadians()); }
-        glm::vec3 GetScale() const { return scale; }
+        const glm::vec3& GetScale() const { return scale; }
 
     public:
         const glm::mat4& GetTransformMatrix();
         const glm::mat4& GetRotationMatrix();
         const glm::mat4& GetScaleMatrix();
         const glm::mat4& GetPositionMatrix();
-
+        glm::mat4 GetPositionRotationMatrix();
 
     private:
         glm::vec3 position;
@@ -97,9 +97,9 @@ namespace Engine::Objects
         bool mainMatrixIsUpdated;
 
     public:
-        glm::vec3 GetForwardDirection();
-        glm::vec3 GetUpDirection();
-        glm::vec3 GetRightDirection();
+        const glm::vec3& GetForwardDirection();
+        const glm::vec3& GetUpDirection();
+        const glm::vec3& GetRightDirection();
         void ClearDirectionUpdatedFlags();
 
     private:

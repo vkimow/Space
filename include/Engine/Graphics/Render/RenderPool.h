@@ -6,6 +6,8 @@
 #include "Engine/Graphics/Render/RenderUnit.h"
 #include "Engine/Graphics/Elements/Container.h"
 #include "Engine/Graphics/Camera/Camera.h"
+#include "Engine/Graphics/Light/LightManager.h"
+#include <memory>
 #include <mutex>
 
 namespace Engine::Graphics
@@ -18,7 +20,7 @@ namespace Engine::Graphics
         {
             RenderElement texture;
             RenderElement material;
-            Objects::Transform *transform;
+            std::shared_ptr<IModelMatrix> modelMatrix;
         };
 
         using RendableIndex = size_t;
@@ -30,7 +32,7 @@ namespace Engine::Graphics
         using RenderQueue = ShaderToMeshes;
 
     private:
-        RenderPool(Container *const container);
+        RenderPool(Container *container, Camera *camera, LightManager *lightManager);
         RenderPool() = delete;
         RenderPool(const RenderPool &rhs) = delete;
         RenderPool(RenderPool &&rhs) = delete;
@@ -40,7 +42,6 @@ namespace Engine::Graphics
 
     public:
         void RenderAll();
-        void SetCamera(Camera * const value);
 
     public:
         void AddRenderUnit(auto first, auto last)
@@ -55,7 +56,8 @@ namespace Engine::Graphics
     private:
         RenderQueue queue;
         Container *const container;
-        Camera * camera;
+        Camera *camera;
+        LightManager *lightManager;
 
     private:
         std::mutex shadersLock;

@@ -2,8 +2,8 @@
 
 namespace Engine::Graphics
 {
-    RenderManager::RenderManager(Container *const container)
-        : pool(container)
+    RenderManager::RenderManager(Container *const container, Camera *camera, LightManager *lightManager)
+        : pool(container, camera, lightManager)
         , unitBuilder(container)
     {}
 

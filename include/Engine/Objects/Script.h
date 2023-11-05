@@ -2,8 +2,15 @@
 
 #include "Engine/Tools/Interfaces/IClonable.h"
 
+namespace Engine::UI
+{
+    class Editor;
+    class EditorUI;
+}
+
 namespace Engine::Objects
 {
+    class Transform;
     class GameObject;
     class Scene;
 
@@ -11,6 +18,8 @@ namespace Engine::Objects
     {
         friend class GameObject;
         friend class Scene;
+        friend class UI::Editor;
+        friend class UI::EditorUI;
 
     protected:
         Script();
@@ -30,6 +39,14 @@ namespace Engine::Objects
         void SetActive(bool value);
 
     private:
+        void OnEnabled();
+        void OnDisabled();
+
+    protected:
+        virtual void OnEnabledInner() {};
+        virtual void OnDisabledInner() {};
+
+    private:
         void Update();
 
     protected:
@@ -46,9 +63,12 @@ namespace Engine::Objects
     public:
         virtual size_t GetDefaultPriority() const = 0;
         GameObject *const GetGameObject() const;
+        Transform &GetTransform();
+        const Transform &GetTransform() const;
 
     private:
         bool isActive;
+        bool isEnabled;
         GameObject *object;
     };
 }

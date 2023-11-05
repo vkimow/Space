@@ -3,5 +3,6 @@
 
 #include "Engine/Essentials/Scripts/Visuals/CameraScript.h"
 #include "Engine/Essentials/Scripts/Visuals/RenderScript.h"
+#include "Engine/Essentials/Scripts/Visuals/LightSourceScript.h"
 
 #endif

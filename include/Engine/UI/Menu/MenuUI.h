@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include <imgui.h>
 
 namespace Engine::UI
 {
@@ -11,7 +12,7 @@ namespace Engine::UI
         friend class Menu;
 
     protected:
-        MenuUI(Menu *const menu);
+        MenuUI(Menu *const menu, float width, float height, ImGuiWindowFlags_ flags = ImGuiWindowFlags_NoResize);
         MenuUI(const MenuUI &rhs) = delete;
         MenuUI(MenuUI &&rhs) noexcept = delete;
         MenuUI &operator=(const MenuUI &rhs) = delete;
@@ -30,5 +31,7 @@ namespace Engine::UI
 
     private:
         Menu *const menu;
+        ImVec2 size;
+        ImGuiWindowFlags_ flags;
     };
 }

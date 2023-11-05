@@ -4,6 +4,7 @@
 #include <typeindex>
 #include "Engine/Objects/Script.h"
 #include "Engine/Objects/GameObject.h"
+#include "Engine/UI/Buffer.h"
 
 namespace Engine::UI
 {
@@ -13,9 +14,10 @@ namespace Engine::UI
     {
         friend class EditorContainer;
         friend class EditorManager;
+        friend class EditorUI;
 
     protected:
-        Editor(const std::string& name, EditorUI *const ui);
+        Editor(const std::string &name, EditorUI *const ui, bool scriptCanBeDisactivated = true);
         Editor(const Editor &rhs) = delete;
         Editor(Editor &&rhs) noexcept = delete;
         Editor &operator=(const Editor &rhs) = delete;
@@ -23,17 +25,20 @@ namespace Engine::UI
 
     public:
         virtual ~Editor();
-        
-    private:
+
+    protected:
         void Update();
         void SetTarget(Objects::GameObject *const object);
+
+    public:
+        Objects::GameObject *const GetTarget() const;
 
     public:
         void SetActive(bool value);
         bool IsActive() const;
 
     public:
-        const std::string& GetName() const;
+        const std::string &GetName() const;
         virtual size_t GetDefaultPriority() const = 0;
         virtual std::type_index GetScriptType() const = 0;
 
@@ -44,15 +49,22 @@ namespace Engine::UI
     protected:
         template<typename EUI, typename = std::enable_if_t<std::is_base_of_v<EditorUI, EUI>>>
         EUI *const GetUI() { return static_cast<EUI *const>(ui); }
-        template<typename S, typename = std::enable_if_t<std::is_base_of_v<Objects::Script, S>>>
+        template<typename S = Objects::Script, typename = std::enable_if_t<std::is_base_of_v<Objects::Script, S>>>
         S *const GetScriptFromTarget() { return target->GetScript<S>(); }
-        Objects::GameObject *const GetTarget();
-        const Objects::GameObject *const GetTarget() const;
+        template<typename S = Objects::Script, typename = std::enable_if_t<std::is_base_of_v<Objects::Script, S>>>
+        S *const BufferTargetScript() { targetScript = target->GetScript<S>(); return GetTargetScript<S>(); }
+        template<typename S = Objects::Script, typename = std::enable_if_t<std::is_base_of_v<Objects::Script, S>>>
+        S *const GetTargetScript() const { return static_cast<S*>(targetScript); }
 
     private:
         const std::string name;
         bool isActive;
         EditorUI *const ui;
         Objects::GameObject *target;
+        Objects::Script *targetScript;
+
+    private:
+        Buffer<bool> isScriptActive;
+        bool scriptCanBeDisactivated;
     };
 }

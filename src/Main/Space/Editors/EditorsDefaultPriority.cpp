@@ -2,5 +2,5 @@
 
 namespace Main::Space
 {
-    size_t PlanetEditor::priority = 1;
+    size_t CelestialBodyEditor::priority = 5;
 }

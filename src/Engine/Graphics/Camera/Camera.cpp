@@ -2,165 +2,142 @@
 #include "Engine/Graphics/Camera/Camera.h"
 #include "Engine/Tools/Log/Logger.h"
 #include "Engine/Main/Modules/TimeModule.h"
+#include <glm/gtc/quaternion.hpp>
+#include <glm/ext/quaternion_common.hpp>
 
 namespace Engine::Graphics
 {
-    Camera::Camera(const std::string &name, glm::vec3 position)
-        : Camera(name, position, Projection())
-    {}
+    const float Camera::TransitionTime = 2.0f;
 
-    Camera::Camera(const std::string &name, const Projection &projection)
-        : Camera(name, glm::vec3(0.0f), projection)
-    {}
-
-    Camera::Camera(const std::string &name, glm::vec3 position, const Projection &projection)
-        : name(name)
-        , position(position)
-        , up(glm::vec3(0.0f, 1.0f, 0.0f))
-        , front(glm::vec3(0.0f, 0.0f, -1.0f))
-        , projection(projection)
+    Camera::Camera()
+        : target(nullptr)
         , viewMatrix()
         , projectionMatrix()
-        , viewProjectionMatrix()
-        , isViewUpdated(false)
-        , isProjectionUpdated(false)
-        , isViewProjectionUpdated(false)
-        , updateProjectionMatrix(this, &Camera::UpdateProjectionMatrix)
-    {
-        SetCallbacks();
-    }
-
-    Camera::Camera(const Camera &rhs)
-        : name(rhs.name)
-        , position(rhs.position)
-        , up(rhs.up)
-        , front(rhs.front)
-        , projection(rhs.projection)
-        , viewMatrix(rhs.viewMatrix)
-        , projectionMatrix(rhs.projectionMatrix)
-        , viewProjectionMatrix(rhs.viewProjectionMatrix)
-        , isViewUpdated(rhs.isViewUpdated)
-        , isProjectionUpdated(rhs.isProjectionUpdated)
-        , isViewProjectionUpdated(rhs.isViewProjectionUpdated)
-        , updateProjectionMatrix(this, &Camera::UpdateProjectionMatrix)
-    {
-        SetCallbacks();
-    }
-
-    Camera::Camera(Camera &&rhs) noexcept
-        : name(rhs.name)
-        , position(std::move(rhs.position))
-        , up(std::move(rhs.up))
-        , front(std::move(rhs.front))
-        , projection(std::move(rhs.projection))
-        , viewMatrix(std::move(rhs.viewMatrix))
-        , projectionMatrix(std::move(rhs.projectionMatrix))
-        , viewProjectionMatrix(std::move(rhs.viewProjectionMatrix))
-        , isViewUpdated(rhs.isViewUpdated)
-        , isProjectionUpdated(rhs.isProjectionUpdated)
-        , isViewProjectionUpdated(rhs.isViewProjectionUpdated)
-        , updateProjectionMatrix(this, &Camera::UpdateProjectionMatrix)
-    {
-        rhs.ClearCallbacks();
-        SetCallbacks();
-    }
+        , inTransition()
+        , transitionElapsedTime(0.0f)
+        , currentPosition()
+        , currentDirection()
+        , currentUp()
+        , currentProjection()
+        , previousPosition()
+        , previousDirection()
+        , previousUp()
+        , previousProjection()
+    {}
 
     Camera::~Camera()
-    {
-        ClearCallbacks();
-    }
+    {}
 
-    glm::vec3 Camera::GetPosition()
+    const glm::vec3 &Camera::GetPosition() const
     {
-        return position;
-    }
-
-    glm::vec3 Camera::GetDirection()
-    {
-        return front;
-    }
-
-    Projection &Camera::GetProjection()
-    {
-        return projection;
-    }
-
-    const std::string &Camera::GetName() const
-    {
-        return name;
-    }
-
-    glm::mat4 Camera::GetViewMatrix()
-    {
-        if (!isViewUpdated)
+        if (inTransition)
         {
-            viewMatrix = glm::lookAt(position, position + front, up);
-            isViewUpdated = true;
+            return currentPosition;
         }
-        return glm::lookAt(position, position + front, up);
+        else
+        {
+            return target->GetPosition();
+        }
     }
 
-    glm::mat4 Camera::GetProjectionMatrix()
+    const glm::mat4 &Camera::GetViewMatrix() const
     {
-        if (!isProjectionUpdated)
-        {
-            projectionMatrix = projection.GetProjectionMatrix();
-            isProjectionUpdated = true;
-        }
+        return viewMatrix;
+    }
+
+    const glm::mat4 &Camera::GetProjectionMatrix() const
+    {
         return projectionMatrix;
     }
 
-    glm::mat4 Camera::GetViewProjectionMatrix()
+    glm::mat4 Camera::GetViewProjectionMatrix() const
     {
-        if (!isViewProjectionUpdated)
+        return GetProjectionMatrix() * GetViewMatrix();
+    }
+
+    bool Camera::InTransition()
+    {
+        return inTransition;
+    }
+
+    void Camera::SetTarget(IVirtualCamera *value, bool forced)
+    {
+        if (forced)
         {
-            viewProjectionMatrix = GetProjectionMatrix() * GetViewMatrix();
-            isViewProjectionUpdated = true;
+            inTransition = false;
         }
-        return viewProjectionMatrix;
+        else if (inTransition)
+        {
+            previousPosition = currentPosition;
+            previousDirection = currentDirection;
+            previousUp = currentUp;
+            previousProjection = currentProjection;
+            inTransition = true;
+            transitionElapsedTime = 0.0f;
+        }
+        else if (target)
+        {
+            previousPosition = target->GetPosition();
+            previousDirection = target->GetDirection();
+            previousUp = target->GetUp();
+            previousProjection = target->GetProjection();
+            inTransition = true;
+            transitionElapsedTime = 0.0f;
+        }
+
+        target = value;
     }
 
-    void Camera::SetPosition(const glm::vec3& value)
+    void Camera::Update()
     {
-        position = value;
-        isViewUpdated = false;
-        isViewProjectionUpdated = false;
+        if (inTransition)
+        {
+            transitionElapsedTime += TimeModule::GetDeltaTime();
+            float t = transitionElapsedTime / TransitionTime;
+            if (transitionElapsedTime >= TransitionTime)
+            {
+                t = 1.0f;
+                inTransition = false;
+            }
+
+            t -= 1.0f;
+            t = 1.0f - t * t * t * t;
+            currentPosition = glm::mix(previousPosition, target->GetPosition(), t);
+            currentDirection = glm::mix(previousDirection, target->GetDirection(), t);
+            currentUp = glm::mix(previousUp, target->GetUp(), t);
+            viewMatrix = glm::lookAt(currentPosition, currentPosition + currentDirection, currentUp);
+
+            float fov = previousProjection.GetFovDegrees() + (target->GetProjection().GetFovDegrees() - previousProjection.GetFovDegrees()) * t;
+            float aspectRatio = previousProjection.GetAspectRatio() + (target->GetProjection().GetAspectRatio() - previousProjection.GetAspectRatio()) * t;
+
+            float prevFar = previousProjection.GetFar();
+            float prevNear = previousProjection.GetNear();
+            float tarFar = target->GetProjection().GetFar();
+            float tarNear = target->GetProjection().GetNear();
+            float far = prevFar + ((tarFar - prevFar) * t);
+            float near = prevNear + ((tarNear - prevNear) * t);
+
+            currentProjection = Projection(fov, aspectRatio, near, far);
+            projectionMatrix = currentProjection.GetProjectionMatrix();
+        }
+        else
+        {
+            if (target->ShouldUpdateView())
+            {
+                viewMatrix = target->GetViewMatrix();
+            }
+            if (target->ShouldUpdateProjection())
+            {
+                projectionMatrix = target->GetProjectionMatrix();
+            }
+        }
     }
 
-    void Camera::SetFront(const glm::vec3& value)
+    void Camera::Use(Shader *shader)
     {
-        front = glm::normalize(value);
-        isViewUpdated = false;
-        isViewProjectionUpdated = false;
-    }
-
-    void Camera::SetUp(const glm::vec3 &value)
-    {
-        up = glm::normalize(value);
-        isViewUpdated = false;
-        isViewProjectionUpdated = false;
-    }
-
-    void Camera::SetProjection(const Projection &value)
-    {
-        projection = value;
-        isProjectionUpdated = false;
-        isViewProjectionUpdated = false;
-    }
-
-    void Camera::UpdateProjectionMatrix()
-    {
-        isProjectionUpdated = false;
-        isViewProjectionUpdated = false;
-    }
-
-    void Camera::SetCallbacks()
-    {
-        projection.AddListenerOnProjectionUpdated(updateProjectionMatrix);
-    }
-
-    void Camera::ClearCallbacks()
-    {
-        projection.RemoveListenerOnProjectionUpdated(updateProjectionMatrix);
+        shader->SetMatrix4("View", GetViewMatrix());
+        shader->SetMatrix4("Projection", GetProjectionMatrix());
+        shader->SetMatrix4("ViewProjection", GetViewProjectionMatrix());
+        shader->SetVector3f("EyePosition", GetPosition());
     }
 }

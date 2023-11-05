@@ -9,45 +9,25 @@
 
 namespace Main::Game
 {
-    MainScene::MainScene(const std::string &name, Engine::Window *const window, Engine::Engine *const engine)
+    MainScene::MainScene(const std::string &name, Engine::Window *const window, Engine::Engine *const engine, Space::SpaceManager *const space)
         : Scene(name, window, engine->GetTime(), engine->GetUI(), engine->GetInput(), engine->GetGraphics())
+        , space(space)
     {
-        // Vertices of a cube
-        float vertices[] = {
-            -1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, // 0
-             1.0f, -1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // 1
-             1.0f,  1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, // 2
-            -1.0f,  1.0f, -1.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f, // 3
-            -1.0f, -1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f, 0.0f, // 4
-             1.0f, -1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 0.0f, // 5
-             1.0f,  1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 1.0f, // 6
-            -1.0f,  1.0f,  1.0f, 0.0f, 0.0f,  1.0f, 0.0f, 1.0f  // 7
-        };
-
-        unsigned int indices[] = {
-            0, 1, 2, // front face
-            2, 3, 0, // front face
-            1, 5, 6, // right face
-            6, 2, 1, // right face
-            5, 4, 7, // back face
-            7, 6, 5, // back face
-            4, 0, 3, // left face
-            3, 7, 4, // left face
-            3, 2, 6, // top face
-            6, 7, 3, // top face
-            4, 5, 1, // bottom face
-            1, 0, 4  // bottom face
-        };
-
+       
         Shaders::InitializeShaders(GetGraphics());
-        GetGraphics()->GetContainer()->AddMesh("Cube", vertices, indices, sizeof(vertices) / sizeof(vertices[0]), sizeof(indices) / sizeof(indices[0]));
+
+        GetGraphics()->GetContainer()->AddMesh("Cube", Engine::Graphics::Cube());
         GetGraphics()->GetContainer()->AddLine("Forward", glm::vec3(0.0f), glm::vec3(0.0f, 0.0f, 15.0f));
         GetGraphics()->GetContainer()->AddLine("Up", glm::vec3(0.0f), glm::vec3(0.0f, 15.0f, 0.0f));
         GetGraphics()->GetContainer()->AddLine("Right", glm::vec3(0.0f), glm::vec3(15.0f, 0.0f, 0.0f));
 
+
         auto cube = CreateGameObject("Cube_1");
-        Engine::Scripts::RenderScript* script = cube->EmplaceScript<Engine::Scripts::RenderScript>(GetGraphics()->GetRenderManager());
-        script->EmplaceRenderUnit("MainShader", "Cube");
+        Engine::Scripts::RenderScript* renderScript = cube->EmplaceScript<Engine::Scripts::RenderScript>(GetGraphics()->GetRenderManager());
+        renderScript->EmplaceRenderUnit("MainShader", "Cube");
+        Space::CelestialBodyScript *celestialBodyScript = cube->EmplaceScript<Space::CelestialBodyScript>(space, GetGraphics());
+        celestialBodyScript->SetMass(200.0f);
+        celestialBodyScript->SetVelocity(glm::vec3(0.0, 0.0f, 100.0f));
 
         CopyGameObject("Cube_2", *cube);
         CopyGameObject("Cube_3", *cube);
@@ -62,7 +42,7 @@ namespace Main::Game
         GetGameObject("Cube_4")->GetTransform().SetRotationInDegrees(0.0f, 0.0f, 30.0f);
 
         auto player = CreateGameObject("Player");
-        Engine::Objects::SetPosition(player, 0.0f, 30.0f, 0.0f);
+        Engine::Objects::SetPosition(player, 0.0f, 100.0f, 0.0f);
         Engine::Objects::SetRotationInDegrees(player, 90.0f, -90.0f, 0.0f);
 
         /*
@@ -74,17 +54,18 @@ namespace Main::Game
         player->EmplaceScript<Engine::Scripts::PlayerController>(movementInput->GetDeltaX(), verticalInput, movementInput->GetDeltaY(), mouseInput->GetDeltaY(), mouseInput->GetDeltaX(), rollInput, 10.0f, 100.0f);
         */
 
-        auto projection = Engine::Graphics::Projection(90, window->GetResolution());
-        auto camera = GetGraphics()->GetCameraManager()->AddCamera("Player Camera", projection);
+        auto projection = Engine::Graphics::Projection(90, window->GetResolution(), 0.01f, 100000.0f);
+        auto camera = GetGraphics()->GetCameraManager()->AddVirtualCamera<Engine::Graphics::VirtualCamera>("Player Camera", projection);
         player->EmplaceScript<Engine::Scripts::CameraScript>(camera);
-        GetGraphics()->GetRenderManager()->GetPool().SetCamera(camera);
     }
 
     MainScene::~MainScene()
     {}
 
     void MainScene::Update()
-    {}
+    {
+
+    }
 
     void MainScene::Render()
     {}

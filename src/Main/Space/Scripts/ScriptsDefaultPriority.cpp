@@ -2,5 +2,5 @@
 
 namespace Main::Space
 {
-    const size_t PlanetScript::priority = 1;
+    const size_t CelestialBodyScript::priority = 10;
 }

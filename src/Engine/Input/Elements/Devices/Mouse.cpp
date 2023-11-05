@@ -83,7 +83,7 @@ namespace Engine::Input
         glm::vec2 newPos(x, y);
         glm::vec2 previousPos = position->GetVector();
         position->ChangeVector(newPos);
-        deltaPosition->ChangeVector(newPos - previousPos);
+        deltaPosition->ChangeVector(newPos.x - previousPos.x, previousPos.y - newPos.y);
     }
 
     void Mouse::SetScroll(float horizontal, float vertical)

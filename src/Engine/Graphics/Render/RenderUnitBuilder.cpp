@@ -9,65 +9,75 @@ namespace Engine::Graphics
     RenderUnitBuilder::~RenderUnitBuilder()
     {}
 
-    RenderUnit RenderUnitBuilder::Create(size_t shader, size_t rendable)
+    RenderUnit RenderUnitBuilder::Create(RenderElement shader, RenderElement rendable)
     {
-        return RenderUnit(shader, rendable);
+        return RenderUnit(shader, rendable, RenderElement(), RenderElement());
     }
 
-    RenderUnit RenderUnitBuilder::Create(size_t shader, size_t rendable, size_t material)
+    RenderUnit RenderUnitBuilder::Create(RenderElement shader, RenderElement rendable, RenderElement material)
     {
-        return RenderUnit(shader, rendable, material);
+        return RenderUnit(shader, rendable, material, RenderElement());
     }
 
-    RenderUnit RenderUnitBuilder::Create(size_t shader, size_t rendable, size_t texture, size_t material)
+    RenderUnit RenderUnitBuilder::Create(RenderElement shader, RenderElement rendable, RenderElement material, RenderElement texture)
     {
-        return RenderUnit(shader, rendable, texture, material);
+        return RenderUnit(shader, rendable, material, texture);
     }
 
-    RenderUnit RenderUnitBuilder::Create(size_t shader, size_t rendable, Objects::Transform *const transform)
+    RenderUnit RenderUnitBuilder::Create(const char *shader, const char *rendable)
     {
-        return RenderUnit(shader, rendable, transform);
+        return RenderUnit(shader ? container->GetShaderIndex(shader) : RenderElement(),
+            rendable ? container->GetRendableIndex(rendable) : RenderElement(),
+            RenderElement(),
+            RenderElement()
+        );
     }
 
-    RenderUnit RenderUnitBuilder::Create(size_t shader, size_t rendable, size_t material, Objects::Transform *const transform)
+    RenderUnit RenderUnitBuilder::Create(const char *shader, const char *rendable, const char *material)
     {
-        return RenderUnit(shader, rendable, material, transform);
+        return RenderUnit(shader ? container->GetShaderIndex(shader) : RenderElement(),
+            rendable ? container->GetRendableIndex(rendable) : RenderElement(),
+            material ? container->GetMaterialIndex(material) : RenderElement(),
+            RenderElement()
+        );
     }
 
-    RenderUnit RenderUnitBuilder::Create(size_t shader, size_t rendable, size_t texture, size_t material, Objects::Transform *const transform)
+    RenderUnit RenderUnitBuilder::Create(const char *shader, const char *rendable, const char *material, const char *texture)
     {
-        return RenderUnit(shader, rendable, texture, material, transform);
+        return RenderUnit(shader ? container->GetShaderIndex(shader) : RenderElement(),
+            rendable ? container->GetRendableIndex(rendable) : RenderElement(),
+            material ? container->GetMaterialIndex(material) : RenderElement(),
+            texture ? container->GetTextureIndex(texture) : RenderElement()
+        );
     }
 
-    RenderUnit RenderUnitBuilder::Create(const std::string& shader, const std::string& rendable)
+    RenderUnit RenderUnitBuilder::Create(const std::string &shader, const std::string &rendable)
     {
-        return RenderUnit(container->GetShaderIndex(shader), container->GetRendableIndex(rendable));
+        return RenderUnit(container->GetShaderIndex(shader),
+            container->GetRendableIndex(rendable),
+            RenderElement(),
+            RenderElement()
+        );
     }
 
-    RenderUnit RenderUnitBuilder::Create(const std::string& shader, const std::string& rendable, const std::string& material)
+    RenderUnit RenderUnitBuilder::Create(const std::string &shader, const std::string &rendable, const std::string &material)
     {
-        return RenderUnit(container->GetShaderIndex(shader), container->GetRendableIndex(rendable), container->GetMaterialIndex(material));
+        return RenderUnit(container->GetShaderIndex(shader),
+            container->GetRendableIndex(rendable),
+            container->GetMaterialIndex(material),
+            RenderElement()
+        );
     }
 
-    RenderUnit RenderUnitBuilder::Create(const std::string& shader, const std::string& rendable, const std::string& texture, const std::string& material)
+    RenderUnit RenderUnitBuilder::Create(const std::string &shader, const std::string &rendable, const std::string &material, const std::string &texture)
     {
-        return RenderUnit(container->GetShaderIndex(shader), container->GetRendableIndex(rendable), container->GetTextureIndex(texture), container->GetMaterialIndex(material));
+        return RenderUnit(container->GetShaderIndex(shader),
+            container->GetRendableIndex(rendable),
+            container->GetMaterialIndex(material),
+            container->GetTextureIndex(texture)
+        );
     }
 
-    RenderUnit RenderUnitBuilder::Create(const std::string& shader, const std::string& rendable, Objects::Transform *const transform)
-    {
-        return RenderUnit(container->GetShaderIndex(shader), container->GetRendableIndex(rendable), transform);
-    }
-
-    RenderUnit RenderUnitBuilder::Create(const std::string& shader, const std::string& rendable, const std::string& material, Objects::Transform *const transform)
-    {
-        return RenderUnit(container->GetShaderIndex(shader), container->GetRendableIndex(rendable), container->GetMaterialIndex(material), transform);
-    }
-
-    RenderUnit RenderUnitBuilder::Create(const std::string& shader, const std::string& rendable, const std::string& texture, const std::string& material, Objects::Transform *const transform)
-    {
-        return RenderUnit(container->GetShaderIndex(shader), container->GetRendableIndex(rendable), container->GetTextureIndex(texture), container->GetMaterialIndex(material), transform);
-    }
 
 }
 

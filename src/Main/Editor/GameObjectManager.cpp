@@ -36,9 +36,9 @@ namespace Main::Editor
 
         if (selectedObject)
         {
-            auto forward = render->GetUnitBuilder().Create("MainShader", "Forward", selectedObject->GetTransformPtr());
-            auto right = render->GetUnitBuilder().Create("MainShader", "Right", selectedObject->GetTransformPtr());
-            auto Up = render->GetUnitBuilder().Create("MainShader", "Up", selectedObject->GetTransformPtr());
+            auto forward = render->GetUnitBuilder().Create("MainShader", "Forward", nullptr, nullptr, selectedObject->GetTransformPtr());
+            auto right = render->GetUnitBuilder().Create("MainShader", "Right", nullptr, nullptr, selectedObject->GetTransformPtr());
+            auto Up = render->GetUnitBuilder().Create("MainShader", "Up", nullptr, nullptr, selectedObject->GetTransformPtr());
 
             render->GetPool().AddRenderUnit(forward);
             render->GetPool().AddRenderUnit(right);

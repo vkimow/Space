@@ -52,7 +52,6 @@ add_vkimow_library(
                         SDL2main
     PRIVATE_LINK_LIBS   glfw
                         glew_s
-                        glm
                         space::engine::tools
                         space::engine::input
                         space::engine::objects

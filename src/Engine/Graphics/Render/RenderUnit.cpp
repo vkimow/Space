@@ -1,107 +1,65 @@
 #include "Engine/Graphics/Render/RenderUnit.h"
 #include "Engine/Tools/Log/Logger.h"
 #include "Engine/Graphics/Elements/Container.h"
+#include "Engine/Graphics/Elements/ModelMatrix/ModelMatrixHeader.h"
 
 namespace Engine::Graphics
 {
-    RenderUnit::RenderUnit(size_t shader, size_t rendable)
+    RenderUnit::RenderUnit(RenderElement shader, RenderElement rendable, RenderElement material, RenderElement texture)
         : shader(shader)
         , rendable(rendable)
-        , texture()
-        , material()
-        , transform(nullptr)
-    {}
-    RenderUnit::RenderUnit(size_t shader, size_t rendable, size_t material)
-        : shader(shader)
-        , rendable(rendable)
-        , texture()
         , material(material)
-        , transform(nullptr)
-    {}
-    RenderUnit::RenderUnit(size_t shader, size_t rendable, size_t texture, size_t material)
-        : shader(shader)
-        , rendable(rendable)
         , texture(texture)
-        , material(material)
-        , transform(nullptr)
+        , modelMatrix(nullptr)
     {}
-    RenderUnit::RenderUnit(size_t shader, size_t rendable, Objects::Transform *const transform)
-        : shader(shader)
-        , rendable(rendable)
-        , texture()
-        , material()
-        , transform(transform)
-    {
-        if (!transform)
-        {
-            LOG_ERROR("Transform in null!");
-        }
-    }
 
-    RenderUnit::RenderUnit(size_t shader, size_t rendable, size_t material, Objects::Transform *const transform)
+    RenderUnit::RenderUnit(RenderElement shader, RenderElement rendable, RenderElement material, RenderElement texture, Objects::Transform *const transform)
         : shader(shader)
         , rendable(rendable)
-        , texture()
         , material(material)
-        , transform(transform)
-    {
-        if (!transform)
-        {
-            LOG_ERROR("Transform in null!");
-        }
-    }
-
-    RenderUnit::RenderUnit(size_t shader, size_t rendable, size_t texture, size_t material, Objects::Transform *const transform)
-        : shader(shader)
-        , rendable(rendable)
         , texture(texture)
+        , modelMatrix(std::make_shared<TransformMatrixFromTransformPtr>(transform))
+    {}
+
+    RenderUnit::RenderUnit(RenderElement shader, RenderElement rendable, RenderElement material, RenderElement texture, const glm::mat4 &matrix)
+        : shader(shader)
+        , rendable(rendable)
         , material(material)
-        , transform(transform)
-    {
-        if (!transform)
-        {
-            LOG_ERROR("Transform in null!");
-        }
-    }
+        , texture(texture)
+        , modelMatrix(std::make_shared<TransformMatrixFromMatrix>(matrix))
+    {}
+
+    RenderUnit::RenderUnit(RenderElement shader, RenderElement rendable, RenderElement material, RenderElement texture, glm::mat4 &&matrix)
+        : shader(shader)
+        , rendable(rendable)
+        , material(material)
+        , texture(texture)
+        , modelMatrix(std::make_shared<TransformMatrixFromMatrix>(std::move(matrix)))
+    {}
 
     RenderUnit::RenderUnit(const RenderUnit &rhs)
         : shader(rhs.shader)
         , rendable(rhs.rendable)
-        , texture(rhs.texture)
         , material(rhs.material)
-        , transform(rhs.transform)
-    {
-        if (!transform)
-        {
-            LOG_ERROR("Transform in null!");
-        }
-    }
+        , texture(rhs.texture)
+        , modelMatrix(rhs.modelMatrix)
+    {}
 
     RenderUnit::RenderUnit(RenderUnit &&rhs) noexcept
         : shader(std::move(rhs.shader))
         , rendable(std::move(rhs.rendable))
-        , texture(std::move(rhs.texture))
         , material(std::move(rhs.material))
-        , transform(rhs.transform)
-    {
-        if (!transform)
-        {
-            LOG_ERROR("Transform in null!");
-        }
-        rhs.transform = nullptr;
-    }
+        , texture(std::move(rhs.texture))
+        , modelMatrix(std::move(rhs.modelMatrix))
+    {}
 
     RenderUnit &RenderUnit::operator=(const RenderUnit &rhs)
     {
         shader = rhs.shader;
         rendable = rhs.rendable;
-        texture = rhs.texture;
         material = rhs.material;
-        transform = rhs.transform;
-        if (!transform)
-        {
-            LOG_ERROR("Transform in null!");
-        }
+        texture = rhs.texture;
+        modelMatrix = rhs.modelMatrix;
         return *this;
     }
 
@@ -109,14 +67,9 @@ namespace Engine::Graphics
     {
         shader = std::move(rhs.shader);
         rendable = std::move(rhs.rendable);
-        texture = std::move(rhs.texture);
         material = std::move(rhs.material);
-        transform = rhs.transform;
-        if (!transform)
-        {
-            LOG_ERROR("Transform in null!");
-        }
-        rhs.transform = nullptr;
+        texture = std::move(rhs.texture);
+        modelMatrix = std::move(rhs.modelMatrix);
         return *this;
     }
 
@@ -143,9 +96,19 @@ namespace Engine::Graphics
         material = RenderElement(index);
     }
 
-    void RenderUnit::SetTransform(Objects::Transform *const transform)
+    void RenderUnit::SetTransformMatrix(Objects::Transform *const transform)
     {
-        this->transform = transform;
+        modelMatrix = std::make_shared<TransformMatrixFromTransformPtr>(transform);
+    }
+
+    void RenderUnit::SetTransformMatrix(const glm::mat4 &matrix)
+    {
+        modelMatrix = std::make_shared<TransformMatrixFromMatrix>(matrix);
+    }
+
+    void RenderUnit::SetTransformMatrix(glm::mat4 &&matrix)
+    {
+        modelMatrix = std::make_shared<TransformMatrixFromMatrix>(std::move(matrix));
     }
 
     size_t RenderUnit::GetShaderIndex() const
@@ -199,14 +162,14 @@ namespace Engine::Graphics
         return texture;
     }
 
+    std::shared_ptr<IModelMatrix> RenderUnit::GetModelMatrix() const
+    {
+        return modelMatrix;
+    }
+
     RenderElement RenderUnit::GetMaterial() const
     {
         return material;
-    }
-
-    Objects::Transform *const RenderUnit::GetTransform() const
-    {
-        return transform;
     }
 
     bool RenderUnit::ContainsShader() const
@@ -229,8 +192,8 @@ namespace Engine::Graphics
         return material.IsExist();
     }
 
-    bool RenderUnit::ContainsTransform() const
+    bool RenderUnit::ContainsModelMatrix() const
     {
-        return transform;
+        return modelMatrix != nullptr;
     }
 }

@@ -4,11 +4,14 @@
 
 namespace Engine::UI
 {
-    Editor::Editor(const std::string &name, EditorUI *const ui)
+    Editor::Editor(const std::string &name, EditorUI *const ui, bool scriptCanBeDisactivated)
         : name(name)
         , isActive(true)
         , target(nullptr)
+        , targetScript(nullptr)
         , ui(ui)
+        , isScriptActive(true)
+        , scriptCanBeDisactivated(scriptCanBeDisactivated)
     {}
 
     Editor::~Editor()
@@ -19,6 +22,10 @@ namespace Engine::UI
     void Editor::SetTarget(Objects::GameObject *const object)
     {
         target = object;
+        if (scriptCanBeDisactivated)
+        {
+            isScriptActive = object->GetScript(GetScriptType())->isActive;
+        }
         UpdateFromTarget();
     }
 
@@ -30,6 +37,11 @@ namespace Engine::UI
     void Editor::Update()
     {
         ui->Update();
+        if (scriptCanBeDisactivated && isScriptActive.IsValueDiffersFromBuffer())
+        {
+            isScriptActive.SetValueToBuffer();
+            GetTarget()->GetScript(GetScriptType())->SetActive(isScriptActive);
+        }
         UpdateFromUI();
     }
 
@@ -43,12 +55,7 @@ namespace Engine::UI
         return name;
     }
 
-    Objects::GameObject *const Editor::GetTarget()
-    {
-        return target;
-    }
-
-    const Objects::GameObject *const Editor::GetTarget() const
+    Objects::GameObject *const Editor::GetTarget() const
     {
         return target;
     }

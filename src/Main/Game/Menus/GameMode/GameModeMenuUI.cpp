@@ -5,7 +5,7 @@
 namespace Main::Game
 {
     GameModeMenuUI::GameModeMenuUI(GameModeMenu *const menu)
-        : MenuUI(menu)
+        : MenuUI(menu, 150.0f, 60.0f)
     {}
 
     void GameModeMenuUI::UpdateInner()

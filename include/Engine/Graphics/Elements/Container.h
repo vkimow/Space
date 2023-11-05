@@ -1,11 +1,8 @@
 #pragma once
 
-#include "Engine/Graphics/Elements/IRendable.h"
 #include "Engine/Graphics/Elements/Shader.h"
-#include "Engine/Graphics/Elements/Mesh.h"
-#include "Engine/Graphics/Elements/Line.h"
-#include "Engine/Graphics/Elements/Material.h"
-#include "Engine/Graphics/Elements/Texture.h"
+#include "Engine/Graphics/Elements/Interfaces/InterfacesHeader.h"
+#include "Engine/Graphics/Elements/Rendables/RendablesHeader.h"
 #include "Engine/Tools/Log/Logger.h"
 #include <unordered_map>
 #include <string>
@@ -22,8 +19,12 @@ namespace Engine::Graphics
         struct Inner
         {
             size_t index;
-            T *const value;
+            T *value;
         };
+
+    public:
+        Container();
+        ~Container();
 
     public:
         template<typename... Args>
@@ -48,6 +49,11 @@ namespace Engine::Graphics
             return AddRendable<Mesh>(name, std::forward<Args>(args)...);
         }
 
+        void AddMesh(const std::string &name, Mesh *newMesh)
+        {
+            AddRendable<Mesh>(name, newMesh);
+        }
+
         Mesh *const GetMesh(size_t index) const;
         Mesh *const GetMesh(const std::string &name) const;
         size_t GetMeshIndex(Mesh *const mesh) const;
@@ -64,6 +70,11 @@ namespace Engine::Graphics
             return AddRendable<Line>(name, std::forward<Args>(args)...);
         }
 
+        void AddLine(const std::string &name, Line* newLine)
+        {
+            AddRendable<Line>(name, newLine);
+        }
+
         Line *const GetLine(size_t index) const;
         Line *const GetLine(const std::string &name) const;
         size_t GetLineIndex(Line *const line) const;
@@ -78,6 +89,12 @@ namespace Engine::Graphics
         T *const AddRendable(const std::string &name, Args... args)
         {
             return AddInner<T, IRendable>(name, rendables, nameToRendables, rendablesLock, std::forward<Args>(args)...);
+        }
+
+        template<typename T, typename = std::enable_if_t<std::is_base_of_v<IRendable, T>>>
+        void AddRendable(const std::string &name, T* newRendable)
+        {
+            return AddInner<T, IRendable>(name, rendables, nameToRendables, rendablesLock, newRendable);
         }
 
         template<typename T, typename = std::enable_if_t<std::is_base_of_v<IRendable, T>>>
@@ -100,50 +117,101 @@ namespace Engine::Graphics
         bool ContainsRendable(IRendable *const rendable) const;
 
     public:
-        template<typename... Args>
-        Texture *const AddTexture(const std::string &name, Args... args)
+        template<typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<ITexture, T>>>
+        T *const AddTexture(const std::string &name, Args... args)
         {
-            return AddInner<Texture>(name, textures, nameToTextures, texturesLock, std::forward<Args>(args)...);
+            return AddInner<T, ITexture>(name, textures, nameToTextures, texturesLock, std::forward<Args>(args)...);
         }
 
-        Texture *const GetTexture(size_t index) const;
-        Texture *const GetTexture(const std::string &name) const;
-        size_t GetTextureIndex(Texture *const texture) const;
+        template<typename T = ITexture, typename = std::enable_if_t<std::is_base_of_v<ITexture, T>>>
+        T *const GetTexture(size_t index) const
+        {
+            return static_cast<T *>(textures[index]);
+        }
+
+        template<typename T = ITexture, typename = std::enable_if_t<std::is_base_of_v<ITexture, T>>>
+        T *const GetTexture(const std::string &name) const
+        {
+            return static_cast<T *>(nameToTextures.at(name).value);
+        }
+
+        size_t GetTextureIndex(ITexture *const texture) const;
         size_t GetTextureIndex(const std::string &name) const;
 
         bool ContainsTexture(size_t index) const;
         bool ContainsTexture(const std::string &name) const;
-        bool ContainsTexture(Texture *const texture) const;
+        bool ContainsTexture(ITexture *const texture) const;
 
     public:
-        template<typename... Args>
-        Texture *const AddMaterial(const std::string &name, Args... args)
+        template<typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<IMaterial, T>>>
+        T *const AddMaterial(const std::string &name, Args... args)
         {
-            return AddInner<Material>(name, materials, nameToMaterials, materialsLock, std::forward<Args>(args)...);
+            return AddInner<T, IMaterial>(name, materials, nameToMaterials, materialsLock, std::forward<Args>(args)...);
         }
 
-        Material *const GetMaterial(size_t index) const;
-        Material *const GetMaterial(const std::string &name) const;
-        size_t GetMaterialIndex(Material * material) const;
+        template<typename T = IMaterial, typename = std::enable_if_t<std::is_base_of_v<IMaterial, T>>>
+        T *const GetMaterial(size_t index) const
+        {
+            return static_cast<T *>(materials[index]);
+        }
+
+        template<typename T = IMaterial, typename = std::enable_if_t<std::is_base_of_v<IMaterial, T>>>
+        T *const GetMaterial(const std::string &name) const
+        {
+            return static_cast<T *>(nameToMaterials.at(name).value);
+        }
+
+        size_t GetMaterialIndex(IMaterial *material) const;
         size_t GetMaterialIndex(const std::string &name) const;
 
         bool ContainsMaterial(size_t index) const;
         bool ContainsMaterial(const std::string &name) const;
-        bool ContainsMaterial(Material *const material) const;
+        bool ContainsMaterial(IMaterial *const material) const;
 
     private:
         template<typename T, typename BaseT = T, typename... Args>
         T *const AddInner(const std::string &name, std::vector<BaseT *> &vector, std::unordered_map<std::string, Inner<BaseT>> &map, std::mutex &mutex, Args... args)
         {
             T *newElement = new T(std::forward<Args>(args)...);
-            BaseT *newElementBase = static_cast<BaseT *>(newElement);
             {
                 std::lock_guard<std::mutex> guard(mutex);
-                vector.push_back(newElementBase);
-                size_t index = vector.size() - 1;
-                map.emplace(name, Inner<BaseT>(index, newElementBase));
+
+                if (map.contains(name))
+                {
+                    auto pos = std::find(vector.begin(), vector.end(), map[name].value);
+                    BaseT *elementToDelete = *pos;
+                    *pos = newElement;
+                    delete elementToDelete;
+                    map[name].value = newElement;
+                }
+                else
+                {
+                    vector.push_back(newElement);
+                    size_t index = vector.size() - 1;
+                    map.emplace(name, Inner<BaseT>(index, newElement));
+                }
             }
             return newElement;
+        }
+
+        template<typename T, typename BaseT = T>
+        void AddInner(const std::string &name, std::vector<BaseT *> &vector, std::unordered_map<std::string, Inner<BaseT>> &map, std::mutex &mutex, T *newElement)
+        {
+            std::lock_guard<std::mutex> guard(mutex);
+            if (map.contains(name))
+            {
+                auto pos = std::find(vector.begin(), vector.end(), map[name].value);
+                BaseT *elementToDelete = *pos;
+                *pos = newElement;
+                delete elementToDelete;
+                map[name].value = newElement;
+            }
+            else
+            {
+                vector.push_back(newElement);
+                size_t index = vector.size() - 1;
+                map.emplace(name, Inner<BaseT>(index, newElement));
+            }
         }
 
         template<typename T>
@@ -165,16 +233,29 @@ namespace Engine::Graphics
             return it != vector.end();
         }
 
+        template<typename T>
+        void Clear(std::vector<T *> &vector, std::unordered_map<std::string, Inner<T>> &map, std::mutex &mutex)
+        {
+            std::lock_guard<std::mutex> guard(mutex);
+            for (auto it = vector.begin(); it != vector.end(); ++it)
+            {
+                delete *it;
+            }
+
+            vector.clear();
+            map.clear();
+        }
+
     private:
         std::vector<Shader *> shaders;
         std::vector<IRendable *> rendables;
-        std::vector<Texture *> textures;
-        std::vector<Material *> materials;
+        std::vector<ITexture *> textures;
+        std::vector<IMaterial *> materials;
 
         std::unordered_map<std::string, Inner<Shader>> nameToShaders;
         std::unordered_map<std::string, Inner<IRendable>> nameToRendables;
-        std::unordered_map<std::string, Inner<Texture>> nameToTextures;
-        std::unordered_map<std::string, Inner<Material>> nameToMaterials;
+        std::unordered_map<std::string, Inner<ITexture>> nameToTextures;
+        std::unordered_map<std::string, Inner<IMaterial>> nameToMaterials;
 
     private:
         std::mutex shadersLock;

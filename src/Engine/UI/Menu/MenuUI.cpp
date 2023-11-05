@@ -4,8 +4,10 @@
 
 namespace Engine::UI
 {
-    MenuUI::MenuUI(Menu *const menu)
+    MenuUI::MenuUI(Menu *const menu, float width, float height, ImGuiWindowFlags_ flags)
         : menu(menu)
+        , size(width, height)
+        , flags(flags)
     {}
 
     MenuUI::~MenuUI()
@@ -13,7 +15,8 @@ namespace Engine::UI
 
     void MenuUI::Update()
     {
-        ImGui::Begin(menu->GetName().c_str(), &(menu->isActive));
+        ImGui::SetNextWindowSize(size, ImGuiCond_::ImGuiCond_Appearing);
+        ImGui::Begin(menu->GetName().c_str(), nullptr, flags);
         UpdateInner();
         ImGui::End();
     }

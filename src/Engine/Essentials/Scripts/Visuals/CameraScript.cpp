@@ -3,7 +3,7 @@
 
 namespace Engine::Scripts
 {
-    CameraScript::CameraScript(Objects::GameObject *object, Graphics::Camera *camera)
+    CameraScript::CameraScript(Objects::GameObject *object, Graphics::VirtualCamera *camera)
         : Script(object)
         , camera(camera)
     {}
@@ -32,7 +32,7 @@ namespace Engine::Scripts
         return *this;
     }
 
-    Graphics::Camera *const CameraScript::GetCamera()
+    Graphics::VirtualCamera *const CameraScript::GetCamera()
     {
         return camera;
     }
@@ -45,14 +45,14 @@ namespace Engine::Scripts
     void CameraScript::UpdateInner()
     {
         camera->SetPosition(GetGameObject()->GetTransform().GetPosition());
-        camera->SetFront(GetGameObject()->GetTransform().GetForwardDirection());
+        camera->SetDirection(GetGameObject()->GetTransform().GetForwardDirection());
         camera->SetUp(GetGameObject()->GetTransform().GetUpDirection());
     }
 
     void CameraScript::UpdateEditor()
     {
         camera->SetPosition(GetGameObject()->GetTransform().GetPosition());
-        camera->SetFront(GetGameObject()->GetTransform().GetForwardDirection());
+        camera->SetDirection(GetGameObject()->GetTransform().GetForwardDirection());
         camera->SetUp(GetGameObject()->GetTransform().GetUpDirection());
     }
 

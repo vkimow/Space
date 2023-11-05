@@ -12,6 +12,7 @@ namespace Engine::Graphics
         : index(index)
         , isExist(true)
     {}
+
     RenderElement::RenderElement(const RenderElement &rhs)
         : index(rhs.index)
         , isExist(rhs.isExist)

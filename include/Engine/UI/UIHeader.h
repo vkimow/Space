@@ -3,5 +3,6 @@
 
 #include "Engine/UI/Menu/MenuHeader.h"
 #include "Engine/UI/Editor/EditorHeader.h"
+#include "Engine/UI/Buffer.h"
 
 #endif

@@ -2,7 +2,9 @@
 
 #include <unordered_map>
 #include <string>
+#include <type_traits>
 #include "Engine/Graphics/Camera/Camera.h"
+#include "Engine/Graphics/Camera/VirtualCamera.h"
 
 namespace Engine::Graphics
 {
@@ -18,33 +20,48 @@ namespace Engine::Graphics
         CameraManager &operator=(CameraManager &&rhs) noexcept = delete;
 
     public:
-        template<typename ...Args>
-        Camera *const AddCamera(const std::string &name, Args... args)
-        {
-            Camera *camera = new Camera(name, std::forward<Args>(args)...);
-            cameras.insert(std::make_pair(name, camera));
-
-            if (!mainCamera)
-            {
-                mainCamera = camera;
-            }
-
-            return camera;
-        }
-
-        Camera *const GetCamera(const std::string &name) const;
-        bool ContainsCamera(const std::string &name) const;
-        bool ContainsCamera(Camera *const camera) const;
-        void RemoveCamera(const std::string &name);
-        void RemoveCamera(Camera *const camera);
+        void Update();
 
     public:
-        void SetMainCamera(const std::string &name);
-        void SetMainCamera(Camera *const camera);
-        Camera *const GetMainCamera();
+        template<typename VCamera, typename ...Args, typename = std::enable_if_t<std::is_base_of_v<IVirtualCamera, VCamera>>>
+        VCamera *const AddVirtualCamera(const std::string &name, Args... args)
+        {
+            VCamera *vCamera = new VCamera(name, std::forward<Args>(args)...);
+            cameras.emplace(name, vCamera);
+
+            if (!mainCamera->target)
+            {
+                mainCamera->SetTarget(vCamera);
+            }
+
+            return vCamera;
+        }
+
+        template<typename VCamera = IVirtualCamera, typename = std::enable_if_t<std::is_base_of_v<IVirtualCamera, VCamera>>>
+        VCamera *const GetVirtualCamera(const std::string &name) const
+        {
+            return static_cast<VCamera *const>(cameras.at(name));
+        }
+
+        bool ContainsVirtualCamera(const std::string &name) const;
+        bool ContainsVirtualCamera(IVirtualCamera *const camera) const;
+        void RemoveVirtualCamera(const std::string &name);
+        void RemoveVirtualCamera(IVirtualCamera *const camera);
+
+    public:
+        void SetTarget(const std::string &name) const;
+        void SetTarget(IVirtualCamera *const camera) const;
+        template<typename VCamera = IVirtualCamera, typename = std::enable_if_t<std::is_base_of_v<IVirtualCamera, VCamera>>>
+        VCamera *const GetTarget() const
+        {
+            return mainCamera->target;
+        }
+
+    public:
+        Camera *GetMainCamera() const;
 
     private:
         Camera *mainCamera;
-        std::unordered_map<std::string, Camera *> cameras;
+        std::unordered_map<std::string, IVirtualCamera *> cameras;
     };
 }

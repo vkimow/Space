@@ -48,7 +48,6 @@ add_vkimow_library(
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
     PUBLIC_LINK_LIBS    imgui
     PRIVATE_LINK_LIBS   glfw
-                        glm
                         space::engine::tools
                         space::engine::objects
     PRIVATE_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}

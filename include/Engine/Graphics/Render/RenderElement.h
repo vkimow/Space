@@ -12,6 +12,7 @@ namespace Engine::Graphics
     public:
         RenderElement();
         RenderElement(size_t index);
+
         RenderElement(const RenderElement &rhs);
         RenderElement(RenderElement &&rhs) noexcept;
         RenderElement &operator=(const RenderElement &rhs);
