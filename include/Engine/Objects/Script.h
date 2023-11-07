@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine/Tools/Interfaces/IClonable.h"
+#include <unordered_set>
 
 namespace Engine::UI
 {

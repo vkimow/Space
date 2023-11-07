@@ -1,11 +1,12 @@
 #pragma once
 
-#include <memory>
-#include "Engine/Main/Modules/ModulesHeader.h"
-
 namespace Engine
 {
     class Window;
+    class TimeModule;
+    class InputModule;
+    class UIModule;
+    class GraphicsModule;
 
     class Engine
     {
@@ -28,10 +29,10 @@ namespace Engine
     public:
         void StartTick();
         void EndTick();
-        void Render();
+
         void StartRender();
+        void Render();
         void EndRender();
-        void FullRender();
 
     private:
         TimeModule *const  time;

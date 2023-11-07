@@ -3,9 +3,9 @@
 
 namespace Main::Space
 {
-    SpaceManager::SpaceManager()
+    SpaceManager::SpaceManager(Engine::Graphics::Container* container)
         : time()
-        , gravitySimulation(this)
+        , gravitySimulation(this, container)
         , celestialBodies()
     {}
 

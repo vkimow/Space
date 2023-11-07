@@ -1,6 +1,6 @@
 #include "Shaders/ShaderCreator.h"
 #include "Shaders/Configs/CMakeConfig.h"
-#include "Engine/Tools/Other/Files.h"
+#include "Engine/Graphics/Elements/Shader.h"
 #include <unordered_set>
 
 namespace Main::Shaders
@@ -11,7 +11,7 @@ namespace Main::Shaders
     {
         if (!initializedGraphics.contains(graphics))
         {
-            graphics->GetContainer()->AddShader("MainShader", Configs::SHADER_VERT_RELATIVE_PATH, Configs::SHADER_FRAG_RELATIVE_PATH);
+            Engine::Graphics::CreateShaderFromFile(graphics->GetContainer(), "MainShader", Configs::SHADER_VERT_RELATIVE_PATH, Configs::SHADER_FRAG_RELATIVE_PATH);
             initializedGraphics.insert(graphics);
         }
     }

@@ -8,5 +8,6 @@ namespace Engine::Graphics
     {
     public:
         virtual void Use(Shader *shader) = 0;
+        virtual void Disable(Shader *shader) = 0;
     };
 }

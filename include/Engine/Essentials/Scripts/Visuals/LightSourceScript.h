@@ -2,6 +2,7 @@
 
 #include "Engine/Objects/Script.h"
 #include "Engine/Graphics/Light/LightSourceType.h"
+#include "Engine/Tools/Events/MemberFunction.h"
 
 namespace Engine::Graphics
 {
@@ -39,9 +40,12 @@ namespace Engine::Scripts
         void SetDefaultLightSource(Graphics::LightSourceType value);
         Graphics::LightSource *const GetLightSource() const;
         void ClearLightSource();
-
-    public:
         size_t GetDefaultPriority() const override final;
+
+    private:
+        void SetRadius(float value);
+    public:
+        Tools::Events::MemberFunction<LightSourceScript, float> setRadius;
 
     private:
         Graphics::LightManager *lightManager;

@@ -15,10 +15,7 @@ namespace Engine::Graphics
     private:
         VirtualCamera() = delete;
         VirtualCamera(const std::string &name);
-        VirtualCamera(const std::string &name, glm::vec3 position);
         VirtualCamera(const std::string &name, const Projection &projection);
-        VirtualCamera(const std::string &name, glm::vec3 position, const Projection &projection);
-
         VirtualCamera(const VirtualCamera &rhs);
         VirtualCamera(VirtualCamera &&rhs) noexcept;
         ~VirtualCamera();
@@ -33,7 +30,6 @@ namespace Engine::Graphics
         const glm::vec3& GetDirection() const override final;
         const glm::vec3 &GetUp() const override final;
         const Projection &GetProjection() const override final;
-        Projection &GetProjection();
 
     public:
         glm::mat4 GetViewMatrix() override final;
@@ -49,6 +45,12 @@ namespace Engine::Graphics
         void SetTarget(const glm::vec3 &value);
         void SetUp(const glm::vec3 &value);
         void SetProjection(const Projection &value);
+        void SetProjection(Projection &&value);
+        void SetFov(float value);
+        void SetFovInDegrees(float value);
+        void SetAspect(float value);
+        void SetNear(float value);
+        void SetFar(float value);
 
     private:
         void UpdateProjectionMatrix();

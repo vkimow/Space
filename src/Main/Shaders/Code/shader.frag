@@ -7,6 +7,8 @@ out vec4 FragColor;
 
 const int MAX_POINT_LIGHTS = 16;
 const int MAX_SPOT_LIGHTS = 16;
+const int MAX_PLANETS_COUNT = 128;
+const int MAX_STAR_COUNT = 4;
 
 uniform vec3 EyePosition;
 
@@ -34,6 +36,7 @@ struct PointLight
 	Light diffuse;
 	Light specular;
 	vec3 k;
+	float radius;
 };
 
 struct SpotLight
@@ -54,6 +57,79 @@ struct Lights
 };
 
 uniform Lights lights;
+
+struct CelestialBody
+{
+	vec4 positionAndRadius;
+	bool useToCalculateLight;
+};
+
+struct Space
+{
+	CelestialBody planets[MAX_PLANETS_COUNT];
+	uint planetsCount;
+};
+
+uniform Space space;
+
+struct Material
+{
+	vec4 albedo;
+	float metallic;
+	float roughness;
+};
+
+uniform Material material;
+
+float GetNearest(vec3 position, CelestialBody celestialBody)
+{
+	return length(celestialBody.positionAndRadius.xyz - position) - celestialBody.positionAndRadius.w;
+}
+
+float GetNearest(vec3 position)
+{
+	float result = 3.402823466e+38;
+	for(int i = 0; i < space.planetsCount; ++i)
+	{
+		if (space.planets[i].useToCalculateLight)
+		{
+			float distance = GetNearest(position, space.planets[i]);
+			result = min(distance, result);
+		}
+	}
+	return result;
+}
+
+float CalculateShadowFactor(vec3 rayOrigin, vec3 normalizedDirection, float distance, float lightRadius)
+{
+	if (space.planetsCount == 0)
+	{
+		return 0.0;
+	}
+
+	vec3 ray = rayOrigin + normalizedDirection * lightRadius;
+	float estimatedDistance = distance - lightRadius;
+	float shadow = 1.0;
+	if (lightRadius < 1.0)
+	{
+		lightRadius = 1.0;
+	}
+
+	float nearest = 1.0;
+	while (estimatedDistance > 0.1)
+	{
+		if (nearest < 0.00001)
+		{
+			return shadow;
+		}
+		nearest = GetNearest(ray);
+		estimatedDistance -= nearest;
+		shadow = min(shadow, ((distance - estimatedDistance)/distance));
+		ray += normalizedDirection * nearest;
+	}
+
+	return 0.0;
+}
 
 vec3 CalculateLight(Light light)
 {
@@ -97,12 +173,19 @@ vec3 CalculateDirectionalLight(DirectionalLight directional)
 
 vec3 CalculatePointLight(PointLight point)
 {
+	vec3 ambient = CalculateLight(point.ambient);
     vec3 direction = FragPos - point.position;
     float distance = length(direction);
+	if (distance < point.radius)
+	{
+		return vec3(0.0, 0.0, 0.0);
+	}
+
     direction = normalize(direction);
-	vec3 color = CalculateLightByDirection(point.ambient, point.diffuse, point.specular, direction);
+	vec3 color = CalculateLightByDirection(point.diffuse, point.specular, direction);
 	float attenuation = 1.0f / (point.k.x * distance * distance + point.k.y * distance + point.k.z);
-	return color * attenuation;
+	float shadowFactor = CalculateShadowFactor(point.position, direction, distance, point.radius);
+	return ambient + (1.0 - shadowFactor) * (color * attenuation);
 }
 
 vec3 CalculateSpotLight(SpotLight spot)
@@ -151,6 +234,6 @@ vec3 CalculateLight()
 
 void main()
 {
-	vec3 result = CalculateLight();
-	FragColor = vec4(result, 1.0);
+	vec4 light = vec4(CalculateLight(), 1.0);
+	FragColor = light * material.albedo;
 }

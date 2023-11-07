@@ -1,9 +1,6 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-#include <vector>
-#include <memory>
-
+struct GLFWwindow;
 namespace Engine
 {
     namespace Input

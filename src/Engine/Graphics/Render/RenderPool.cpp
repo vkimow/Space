@@ -38,19 +38,26 @@ namespace Engine::Graphics
 
                 for (auto it3 = elements.begin(); it3 != elements.end(); ++it3)
                 {
+                    IMaterial *material = nullptr;
                     if (it3->material)
                     {
-                        IMaterial *material = container->GetMaterial(it3->material.GetIndex());
+                        material = container->GetMaterial(it3->material.GetIndex());
                         material->Use(shader);
                     }
+                    ITexture *texture = nullptr;
                     if (it3->texture)
                     {
-                        ITexture *texture = container->GetTexture(it3->texture.GetIndex());
+                        texture = container->GetTexture(it3->texture.GetIndex());
                         texture->Use(shader);
                     }
 
                     it3->modelMatrix->Use(shader);
                     rendable->Render();
+
+                    if (material)
+                    {
+                        material->Disable(shader);
+                    }
                 }
 
                 rendable->EndRender();

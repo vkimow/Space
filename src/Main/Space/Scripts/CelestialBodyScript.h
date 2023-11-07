@@ -2,6 +2,7 @@
 #include "Engine/Objects/Script.h"
 #include "Engine/Objects/GameObject.h"
 #include "Engine/Main/Modules/GraphicsModule.h"
+#include "Engine/Tools/Events/Action.h"
 
 namespace Main::Space
 {
@@ -11,7 +12,7 @@ namespace Main::Space
     {
     public:
         CelestialBodyScript(Engine::Objects::GameObject *object, SpaceManager *space, Engine::GraphicsModule *graphics);
-        CelestialBodyScript(Engine::Objects::GameObject *object, float mass, const glm::vec3 &velocity, SpaceManager *space, Engine::GraphicsModule *graphics);
+        CelestialBodyScript(Engine::Objects::GameObject *object, float mass, float radius, const glm::vec3 &velocity, SpaceManager *space, Engine::GraphicsModule *graphics);
         CelestialBodyScript(const CelestialBodyScript &rhs);
         CelestialBodyScript(CelestialBodyScript &&rhs) noexcept;
         CelestialBodyScript &operator=(const CelestialBodyScript &rhs);
@@ -31,14 +32,20 @@ namespace Main::Space
 
     public:
         void SetMass(float value);
+        void SetRadius(float value);
         void SetVelocity(const glm::vec3 &value);
 
     public:
         float GetMass() const;
+        float GetRadius() const;
         const glm::vec3 &GetVelocity() const;
+
+    public:
+        CREATE_ACTION(float, OnRadiusChanged);
 
     private:
         float mass;
+        float radius;
         glm::vec3 velocity;
         SpaceManager *const space;
         Engine::GraphicsModule *const graphics;

@@ -1,0 +1,74 @@
+project(PostProcessing CXX)
+
+set_vkimow_custom_target_dir(
+    TARGET ${PROJECT_NAME}
+    VARIABLE Shaders
+    DIR ${SPACE_CURRENT_SOURCE_DIR}/PostProcessing/Shaders
+)
+
+message("SPACE_CURRENT_SHADERS_DIR = ${SPACE_CURRENT_SHADERS_DIR}")
+
+set_vkimow_custom_target_dir(
+    TARGET ${PROJECT_NAME}
+    VARIABLE Configs
+    DIR ${SPACE_CURRENT_SOURCE_DIR}/PostProcessing/Configs
+)
+
+message("SPACE_CURRENT_CONFIGS_DIR = ${SPACE_CURRENT_CONFIGS_DIR}")
+
+# shaders
+find_vkimow_auto_files(
+    TARGET ${PROJECT_NAME}
+    ROOT_DIR ${SPACE_CURRENT_SHADERS_DIR}
+    VARIABLE Shaders
+    EXTENSIONS .frag .vert .geom
+)
+
+#variables
+set_vkimow_target_variable(
+    TARGET ${PROJECT_NAME}
+    VARIABLE SHADERS_RELATIVE_PATH
+    VALUE "Shaders/PostProcessing"
+)
+
+#variables
+set_vkimow_target_variable(
+    TARGET ${PROJECT_NAME}
+    VARIABLE SHADERS_FOR_CONFIG
+    VALUE ""
+)
+
+foreach(SHADER IN ITEMS ${SPACE_CURRENT_AUTO_SHADERS})
+    string(REPLACE "${SPACE_CURRENT_SHADERS_DIR}/" "" SHADER_FULL_NAME ${SHADER})
+    get_filename_component(SHADER_FULL_NAME ${SHADER} NAME)
+    get_filename_component(SHADER_EXTENSION_WITH_DOT ${SHADER_FULL_NAME} EXT)
+    string(SUBSTRING ${SHADER_EXTENSION_WITH_DOT} 1 -1 SHADER_EXTENSION)
+    get_filename_component(SHADER_NAME ${SHADER_FULL_NAME} NAME_WE)
+    string(TOUPPER ${SHADER_EXTENSION} SHADER_EXTENSION_UPPER)
+    string(TOUPPER ${SHADER_NAME} SHADER_NAME_UPPER)
+
+    set(SHADER_VARIABLE_TYPE "const std::string")
+    set(SHADER_VARIABLE_NAME "${SHADER_NAME_UPPER}_${SHADER_EXTENSION_UPPER}_RELATIVE_PATH")
+    set(SHADER_VARIABLE_VALUE "\"${SPACE_CURRENT_SHADERS_RELATIVE_PATH}/${SHADER_FULL_NAME}\"")
+    set(SHADER_FOR_CONFIG "${SHADER_VARIABLE_TYPE} ${SHADER_VARIABLE_NAME} = ${SHADER_VARIABLE_VALUE};")
+    if (NOT "${SPACE_CURRENT_SHADERS_FOR_CONFIG}" STREQUAL "")
+        set(SPACE_CURRENT_SHADERS_FOR_CONFIG "${SPACE_CURRENT_SHADERS_FOR_CONFIG}\n    ${SHADER_FOR_CONFIG}")
+    else()
+        set(SPACE_CURRENT_SHADERS_FOR_CONFIG "    ${SHADER_FOR_CONFIG}")
+    endif()
+endforeach()
+
+process_vkimow_configure_folder(
+    FILES_DIR ${SPACE_CURRENT_CONFIGS_DIR}
+    OUTPUT_DIR ${SPACE_CURRENT_CONFIGS_DIR}
+    EXTENSIONS .in
+)
+
+# copy targets
+add_vkimow_copy_target(
+    NAME Engine_CopyPostProcessingShaders
+    INPUT_DIR ${SPACE_CURRENT_SHADERS_DIR}
+    OUTPUT_DIR ${SPACE_BIN_CONFIG_DIR}/${SPACE_CURRENT_SHADERS_RELATIVE_PATH}
+    REQUIRED_FOR Graphics
+    COMMENT "Copying shaders from ${SPACE_CURRENT_SHADERS_DIR} into ${SPACE_BIN_CONFIG_DIR}/${SPACE_CURRENT_SHADERS_RELATIVE_PATH} directory"
+)

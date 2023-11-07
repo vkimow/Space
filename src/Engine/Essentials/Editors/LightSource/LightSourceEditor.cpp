@@ -31,6 +31,7 @@ namespace Engine::UI
         specular = lightSource->GetSpecular();
         attenuation = lightSource->GetAttenuation();
         angle = lightSource->GetAngle();
+        radius = lightSource->GetRadius();
     }
 
     void LightSourceEditor::UpdateFromUI()
@@ -71,6 +72,12 @@ namespace Engine::UI
             angle.SetValueToBuffer();
             lightSource->SetAngle(angle);
         }
+
+        if (radius.IsValueDiffersFromBuffer())
+        {
+            radius.SetValueToBuffer();
+            lightSource->SetRadius(radius);
+        }
     }
 
     Buffer<Graphics::LightSourceType> &LightSourceEditor::GetType()
@@ -101,5 +108,10 @@ namespace Engine::UI
     Buffer<float> &LightSourceEditor::GetAngle()
     {
         return angle;
+    }
+
+    Buffer<float> &LightSourceEditor::GetRadius()
+    {
+        return radius;
     }
 }

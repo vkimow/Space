@@ -10,6 +10,7 @@ namespace Engine::Scripts
         : Script(object)
         , lightManager(lightManager)
         , lightSource(lightManager->GetContainer().CreateLightSource())
+        , setRadius(this, &LightSourceScript::SetRadius)
     {
         lightSource->SetTransform(GetGameObject()->GetTransformPtr());
         SetDefaultLightSource(lightSourceType);
@@ -19,6 +20,7 @@ namespace Engine::Scripts
         : Script(rhs)
         , lightManager(rhs.lightManager)
         , lightSource(new Graphics::LightSource(*rhs.lightSource))
+        , setRadius(this, &LightSourceScript::SetRadius)
     {
         lightManager->GetContainer().AddLightSource(lightSource);
     }
@@ -27,6 +29,7 @@ namespace Engine::Scripts
         : Script(std::move(rhs))
         , lightManager(rhs.lightManager)
         , lightSource(rhs.lightSource)
+        , setRadius(this, &LightSourceScript::SetRadius)
     {
         rhs.lightSource = nullptr;
     }
@@ -130,5 +133,10 @@ namespace Engine::Scripts
     size_t LightSourceScript::GetDefaultPriority() const
     {
         return priority;
+    }
+
+    void LightSourceScript::SetRadius(float value)
+    {
+        lightSource->SetRadius(value);
     }
 }

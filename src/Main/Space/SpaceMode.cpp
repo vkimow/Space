@@ -4,17 +4,18 @@
 
 namespace Main::Space
 {
-    SpaceMode::SpaceMode(Engine::UIModule *ui)
+    SpaceMode::SpaceMode(Engine::UIModule *ui, Engine::GraphicsModule *graphics)
         : scene(nullptr)
         , ui(ui)
         , objectsManager()
-        , spaceManager()
+        , spaceManager(graphics->GetContainer())
     {
         auto &menuContainer = ui->GetMenuManager()->GetContainer();
         menuContainer.Create<SpaceTimeMenu>(&(spaceManager.GetTime()));
 
         auto &editorContainer = ui->GetEditorManager()->GetContainer();
         editorContainer.Create<CelestialBodyEditor>();
+        editorContainer.Create<StarEditor>();
     }
 
     SpaceMode::~SpaceMode()

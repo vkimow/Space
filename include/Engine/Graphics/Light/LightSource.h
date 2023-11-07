@@ -35,6 +35,7 @@ namespace Engine::Graphics
             LightValueUniform specular;
             LightAttenuationUniform attenuation;
             GLuint position;
+            GLuint radius;
         };
 
         struct SpotLightUniform final: public PointLightUniform
@@ -59,7 +60,7 @@ namespace Engine::Graphics
     public:
         void Use(Shader *shader) override final;
         void Disable(Shader *shader) override final;
-        
+
     public:
         void SetActive(bool value) override final;
         bool IsActive() const override final;
@@ -69,6 +70,7 @@ namespace Engine::Graphics
         void SetTransform(Objects::Transform *value);
         void SetAngle(float value);
         void SetAngleInDegrees(float value);
+        void SetRadius(float value);
 
     public:
         LightSourceType GetType() const;
@@ -84,12 +86,13 @@ namespace Engine::Graphics
         const glm::vec3 &GetDirection() const;
         float GetAngle() const;
         float GetAngleInDegrees() const;
+        float GetRadius();
 
     public:
         void ClearTransofrm();
 
     private:
-        LightManager * const lightManager;
+        LightManager *const lightManager;
 
     private:
         bool isActive;
@@ -99,6 +102,7 @@ namespace Engine::Graphics
         LightValue diffuse;
         LightValue specular;
         LightAttenuation attenuation;
+        float radius;
 
     private:
         float angle;

@@ -107,17 +107,19 @@ namespace Engine::Graphics
             currentUp = glm::mix(previousUp, target->GetUp(), t);
             viewMatrix = glm::lookAt(currentPosition, currentPosition + currentDirection, currentUp);
 
-            float fov = previousProjection.GetFovDegrees() + (target->GetProjection().GetFovDegrees() - previousProjection.GetFovDegrees()) * t;
-            float aspectRatio = previousProjection.GetAspectRatio() + (target->GetProjection().GetAspectRatio() - previousProjection.GetAspectRatio()) * t;
+            float aspectRatio = target->GetProjection().GetAspectRatio();
 
+            float prevFov = previousProjection.GetFov();
             float prevFar = previousProjection.GetFar();
             float prevNear = previousProjection.GetNear();
+            float tarFov = target->GetProjection().GetFov();
             float tarFar = target->GetProjection().GetFar();
             float tarNear = target->GetProjection().GetNear();
+            float fov = prevFov + ((tarFov - prevFov) * t);
             float far = prevFar + ((tarFar - prevFar) * t);
             float near = prevNear + ((tarNear - prevNear) * t);
 
-            currentProjection = Projection(fov, aspectRatio, near, far);
+            currentProjection = Projection(target->GetProjection().GetAspectRatio(), fov, aspectRatio, near, far);
             projectionMatrix = currentProjection.GetProjectionMatrix();
         }
         else

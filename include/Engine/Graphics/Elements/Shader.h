@@ -11,20 +11,21 @@
 
 namespace Engine::Graphics
 {
+    class Container;
     class Shader
     {
         friend class Container;
 
     private:
         Shader() = delete;
-        Shader(const std::string &vertexLocation, const std::string &fragmentLocation);
-        Shader(const std::string &vertexLocation, const std::string &geometryLocation, const std::string &fragmentLocation);
-        Shader(const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &fragmentLocation);
-        Shader(const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &geometryLocation, const std::string &fragmentLocation);
-        Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> fragmentLocation);
-        Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> geometryLocation, std::shared_ptr<std::string> fragmentLocation);
-        Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string> tesselationEvaluationLocation, std::shared_ptr<std::string> fragmentLocation);
-        Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string>  tesselationEvaluationLocation, std::shared_ptr<std::string>  geometryLocation, std::shared_ptr<std::string> fragmentLocation);
+        Shader(const std::string &vertexCode, const std::string &fragmentCode);
+        Shader(const std::string &vertexCode, const std::string &geometryCode, const std::string &fragmentCode);
+        Shader(const std::string &vertexCode, const std::string &tesselationControlCode, const std::string &tesselationEvaluationCode, const std::string &fragmentCode);
+        Shader(const std::string &vertexCode, const std::string &tesselationControlCode, const std::string &tesselationEvaluationCode, const std::string &geometryCode, const std::string &fragmentCode);
+        Shader(std::shared_ptr<std::string> vertexCode, std::shared_ptr<std::string> fragmentCode);
+        Shader(std::shared_ptr<std::string> vertexCode, std::shared_ptr<std::string> geometryCode, std::shared_ptr<std::string> fragmentCode);
+        Shader(std::shared_ptr<std::string> vertexCode, std::shared_ptr<std::string> tesselationControlCode, std::shared_ptr<std::string> tesselationEvaluationCode, std::shared_ptr<std::string> fragmentCode);
+        Shader(std::shared_ptr<std::string> vertexCode, std::shared_ptr<std::string> tesselationControlCode, std::shared_ptr<std::string>  tesselationEvaluationCode, std::shared_ptr<std::string>  geometryCode, std::shared_ptr<std::string> fragmentCode);
         Shader(const Shader &rhs) = delete;
         Shader(Shader &&rhs) = delete;
         Shader &operator=(const Shader &rhs) = delete;
@@ -32,22 +33,22 @@ namespace Engine::Graphics
         ~Shader();
 
     private:
-        void Create(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string> tesselationEvaluationLocation, std::shared_ptr<std::string> geometryLocation, std::shared_ptr<std::string> fragmentLocation);
         GLuint AddShader(GLuint theProgram, std::shared_ptr<std::string> shaderCode, GLenum shaderType);
         void LinkProgram();
 
     public:
         void Validate();
         void Use();
+        void Disable();
         void Clear();
 
     public:
-        void SetFloat(const std::string &name, GLfloat value); 
+        void SetFloat(const std::string &name, GLfloat value);
         void SetFloat(const std::string &name, size_t count, GLfloat *values);
         void SetInt(const std::string &name, GLint value);
         void SetInt(const std::string &name, size_t count, GLint *values);
         void SetUnsigned(const std::string &name, GLuint value);
-        void SetUnsigned(const std::string &name, size_t count, GLuint* values);
+        void SetUnsigned(const std::string &name, size_t count, GLuint *values);
 
         void SetVector2f(const std::string &name, GLfloat x, GLfloat y);
         void SetVector2f(const std::string &name, const glm::vec<2, GLfloat> &value);
@@ -149,4 +150,13 @@ namespace Engine::Graphics
         GLuint id;
         std::unordered_map<std::string, GLuint> uniforms;
     };
+
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, const std::string &vertexLocation, const std::string &fragmentLocation);
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, const std::string &vertexLocation, const std::string &geometryLocation, const std::string &fragmentLocation);
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &fragmentLocation);
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &geometryLocation, const std::string &fragmentLocation);
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> fragmentLocation);
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> geometryLocation, std::shared_ptr<std::string> fragmentLocation);
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string> tesselationEvaluationLocation, std::shared_ptr<std::string> fragmentLocation);
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string>  tesselationEvaluationLocation, std::shared_ptr<std::string>  geometryLocation, std::shared_ptr<std::string> fragmentLocation);
 }

@@ -8,6 +8,13 @@ namespace Engine::Graphics
         , roughness(0.0f)
     {}
 
+    PBRMaterial::PBRMaterial(float r, float g, float b, float a, float metallic, float roughness)
+        : albedo(r, g, b, a)
+        , metallic(metallic)
+        , roughness(roughness)
+    {}
+
+
     PBRMaterial::PBRMaterial(const glm::vec4 &albedo, float metallic, float roughness)
         : albedo(albedo)
         , metallic(metallic)
@@ -25,9 +32,16 @@ namespace Engine::Graphics
 
     void PBRMaterial::Use(Shader * shader)
     {
-        shader->SetVector4f("albedo", albedo);
-        shader->SetFloat("metallic", metallic);
-        shader->SetFloat("roughness", roughness);
+        shader->SetVector4f("material.albedo", albedo);
+        shader->SetFloat("material.metallic", metallic);
+        shader->SetFloat("material.roughness", roughness);
+    }
+
+    void PBRMaterial::Disable(Shader *shader)
+    {
+        shader->SetVector4f("material.albedo", 0.0f, 0.0f, 0.0f, 0.0f);
+        shader->SetFloat("material.metallic", 0.0f);
+        shader->SetFloat("material.roughness", 0.0f);
     }
 
     void PBRMaterial::SetAlbedo(const glm::vec4 &value)

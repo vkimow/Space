@@ -15,7 +15,7 @@ namespace Main::Space
         using CelestialBodyContainer = std::vector<CelestialBodyScript*>;
 
     private:
-        SpaceManager();
+        SpaceManager(Engine::Graphics::Container* container);
         SpaceManager(const SpaceManager &rhs) = delete;
         SpaceManager(SpaceManager &&rhs) = delete;
         SpaceManager &operator=(const SpaceManager &rhs) = delete;

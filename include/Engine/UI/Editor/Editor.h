@@ -5,6 +5,7 @@
 #include "Engine/Objects/Script.h"
 #include "Engine/Objects/GameObject.h"
 #include "Engine/UI/Buffer.h"
+#include <unordered_set>
 
 namespace Engine::UI
 {
@@ -41,6 +42,7 @@ namespace Engine::UI
         const std::string &GetName() const;
         virtual size_t GetDefaultPriority() const = 0;
         virtual std::type_index GetScriptType() const = 0;
+        virtual const std::unordered_set<std::type_index> *const EditorsToDisable() const { return nullptr; };
 
     protected:
         virtual void UpdateFromTarget() = 0;

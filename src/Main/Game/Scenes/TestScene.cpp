@@ -58,22 +58,14 @@ namespace Main::Game
         auto verticalInput = scheme->CreateDeltaPressable(GLFW_KEY_SPACE, GLFW_KEY_LEFT_CONTROL);
         auto mouseInput = scheme->GetMouse()->GetDeltaPositionInput();
         auto rollInput = scheme->CreateDeltaPressable(GLFW_KEY_Q, GLFW_KEY_E);
-        key = scheme->CreatePressableKey(GLFW_KEY_C);
         player->EmplaceScript<Engine::Scripts::PlayerController>(movementInput->GetDeltaX(), verticalInput, movementInput->GetDeltaY(), mouseInput->GetDeltaY(), mouseInput->GetDeltaX(), rollInput, 10.0f, 100.0f);
 
-        auto projection = Engine::Graphics::Projection(90, window->GetResolution(), 0.01f, 100000.0f);
+        auto projection = Engine::Graphics::Projection(window, 90, 0.01f, 100000.0f);
         auto vCamera = GetGraphics()->GetCameraManager()->AddVirtualCamera<Engine::Graphics::VirtualCamera>("Player Camera", projection);
         player->EmplaceScript<Engine::Scripts::CameraScript>(vCamera);
 
         auto ambient = GetGraphics()->GetLightManager()->GetContainer().InitializeAmbientLight();
         ambient->GetLight().SetIntensity(0.2f);
-
-        auto directional = GetGraphics()->GetLightManager()->GetContainer().InitializeDirectionalLight();
-        directional->GetDiffuse().SetColor(0.5, 1.0f, 0.5f);
-        directional->GetDiffuse().SetIntensity(1.0f);
-        directional->GetSpecular().SetColor(0.0f, 0.0f, 1.0f);
-        directional->GetSpecular().SetIntensity(1.0f);
-        directional->SetDirection(1, -1, -1);
 
         auto pointLight = CreateGameObject("PointLight");
         auto pointLightScript = pointLight->EmplaceScript<Engine::Scripts::LightSourceScript>(GetGraphics()->GetLightManager(), Engine::Graphics::LightSourceType::PointLight);

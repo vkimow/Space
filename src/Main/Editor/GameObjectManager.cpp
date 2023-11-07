@@ -36,9 +36,9 @@ namespace Main::Editor
 
         if (selectedObject)
         {
-            auto forward = render->GetUnitBuilder().Create("MainShader", "Forward", nullptr, nullptr, selectedObject->GetTransformPtr());
-            auto right = render->GetUnitBuilder().Create("MainShader", "Right", nullptr, nullptr, selectedObject->GetTransformPtr());
-            auto Up = render->GetUnitBuilder().Create("MainShader", "Up", nullptr, nullptr, selectedObject->GetTransformPtr());
+            auto forward = render->GetUnitBuilder().Create("MainShader", "Forward", "Blue", nullptr, selectedObject->GetTransformPtr());
+            auto right = render->GetUnitBuilder().Create("MainShader", "Right", "Red", nullptr, selectedObject->GetTransformPtr());
+            auto Up = render->GetUnitBuilder().Create("MainShader", "Up", "Green", nullptr, selectedObject->GetTransformPtr());
 
             render->GetPool().AddRenderUnit(forward);
             render->GetPool().AddRenderUnit(right);
@@ -54,6 +54,7 @@ namespace Main::Editor
     void GameObjectManager::Select(Engine::Objects::GameObject * object)
     {
         Deselect();
+        uiEditor->SetActive(true);
         uiEditor->SetTarget(object);
         selectedObject = object;
         selectedObject->SelectEditor();

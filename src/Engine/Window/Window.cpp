@@ -46,7 +46,6 @@ namespace Engine
         glfwSetFramebufferSizeCallback(glfwWindow, FramebufferResizeCallback);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwSwapInterval(1);
-        glEnable(GL_DEPTH_TEST);
     }
 
     Window::~Window()

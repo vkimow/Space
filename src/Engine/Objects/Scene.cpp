@@ -34,27 +34,27 @@ namespace Engine::Objects
         return name;
     }
 
-    Engine::Window *const Scene::GetWindow() const
+    Window *const Scene::GetWindow() const
     {
         return window;
     }
 
-    Engine::TimeModule *const Scene::GetTime() const
+    TimeModule *const Scene::GetTime() const
     {
         return time;
     }
 
-    ::Engine::UIModule *const Scene::GetUI() const
+    UIModule *const Scene::GetUI() const
     {
         return ui;
     }
 
-    Engine::InputModule *const Scene::GetInput() const
+    InputModule *const Scene::GetInput() const
     {
         return input;
     }
 
-    Engine::GraphicsModule *const Scene::GetGraphics() const
+    GraphicsModule *const Scene::GetGraphics() const
     {
         return graphics;
     }

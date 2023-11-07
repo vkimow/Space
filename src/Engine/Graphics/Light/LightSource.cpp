@@ -11,6 +11,7 @@ namespace Engine::Graphics
         , specular()
         , attenuation()
         , position(0)
+        , radius(0)
     {}
 
     LightSource::PointLightUniform::PointLightUniform(Shader *shader, const std::string &path)
@@ -19,6 +20,7 @@ namespace Engine::Graphics
         , specular(shader, path + ".specular")
         , attenuation(shader, path + ".k")
         , position(shader->GetUniform(path + ".position", false))
+        , radius(shader->GetUniform(path + ".radius", false))
     {}
 
     LightSource::SpotLightUniform::SpotLightUniform()
@@ -44,6 +46,7 @@ namespace Engine::Graphics
         , attenuation()
         , angle(1.0f)
         , halfAngleCos(glm::cos(angle / 2.0f))
+        , radius(0.0f)
     {}
 
     LightSource::LightSource(const LightSource &rhs)
@@ -57,6 +60,7 @@ namespace Engine::Graphics
         , attenuation(rhs.attenuation)
         , angle(rhs.angle)
         , halfAngleCos(rhs.halfAngleCos)
+        , radius(rhs.radius)
     {}
 
     LightSource &LightSource::operator=(const LightSource &rhs)
@@ -70,6 +74,7 @@ namespace Engine::Graphics
         attenuation = rhs.attenuation;
         angle = rhs.angle;
         halfAngleCos = rhs.halfAngleCos;
+        radius = rhs.radius;
         return *this;
     }
 
@@ -89,6 +94,7 @@ namespace Engine::Graphics
                 specular.Use(shader, pointLightUniform.specular);
                 attenuation.Use(shader, pointLightUniform.attenuation);
                 shader->SetVector3f(pointLightUniform.position, GetPosition());
+                shader->SetFloat(pointLightUniform.radius, GetRadius());
                 break;
             }
             case LightSourceType::SpotLight:
@@ -101,6 +107,7 @@ namespace Engine::Graphics
                 shader->SetVector3f(spotLightUniform.position, GetPosition());
                 shader->SetVector3f(spotLightUniform.direction, GetDirection());
                 shader->SetFloat(spotLightUniform.angle, halfAngleCos);
+                shader->SetFloat(spotLightUniform.radius, GetRadius());
                 break;
             }
         }
@@ -174,6 +181,17 @@ namespace Engine::Graphics
         SetAngle(glm::radians(value));
     }
 
+    void LightSource::SetRadius(float value)
+    {
+        if (value < 0.0f)
+        {
+            radius = 0.0f;
+            return;
+        }
+
+        radius = value;
+    }
+
     void LightSource::ClearTransofrm()
     {
         transform = nullptr;
@@ -237,6 +255,11 @@ namespace Engine::Graphics
     float LightSource::GetAngleInDegrees() const
     {
         return glm::degrees(GetAngle());
+    }
+
+    float LightSource::GetRadius()
+    {
+        return radius;
     }
 
     LightSourceType LightSource::GetType() const

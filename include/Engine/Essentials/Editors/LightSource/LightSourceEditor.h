@@ -38,6 +38,7 @@ namespace Engine::UI
         Buffer<Graphics::LightValue> &GetSpecular();
         Buffer<Graphics::LightAttenuation> &GetAttenuation();
         Buffer<float> &GetAngle();
+        Buffer<float> &GetRadius();
 
     private:
         Buffer<Graphics::LightSourceType> type;
@@ -46,6 +47,7 @@ namespace Engine::UI
         Buffer<Graphics::LightValue> specular;
         Buffer<Graphics::LightAttenuation> attenuation;
         Buffer<float> angle;
+        Buffer<float> radius;
 
     private:
         static const size_t priority;

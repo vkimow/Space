@@ -25,6 +25,6 @@ namespace Engine::UI
         ImGui::LightValue("Diffuse", editor->GetDiffuse().GetBuffer());
         ImGui::LightValue("Specular", editor->GetSpecular().GetBuffer());
         ImGui::LightAttenuation("Attenuation", GetEditorName().c_str(), editor->GetAttenuation().GetBuffer());
-
+        ImGui::DragFloat(GetVariableName("StartRadius").c_str(), editor->GetRadius().GetBufferPtr(), 0.1f, 0.0, 100000.0f);
     }
 }

@@ -6,17 +6,22 @@
 
 namespace Engine::Graphics
 {
-    VirtualCamera::VirtualCamera(const std::string &name, glm::vec3 position)
-        : VirtualCamera(name, position, Projection())
-    {}
+    VirtualCamera::VirtualCamera(const std::string &name)
+        : name(name)
+        , position(0.0f)
+        , up(glm::vec3(0.0f, 1.0f, 0.0f))
+        , direction(glm::vec3(0.0f, 0.0f, 0.0f))
+        , projection()
+        , shouldUpdateView(true)
+        , shouldUpdateProjection(true)
+        , updateProjectionMatrix(this, &VirtualCamera::UpdateProjectionMatrix)
+    {
+        SetCallbacks();
+    }
 
     VirtualCamera::VirtualCamera(const std::string &name, const Projection &projection)
-        : VirtualCamera(name, glm::vec3(0.0f), projection)
-    {}
-
-    VirtualCamera::VirtualCamera(const std::string &name, glm::vec3 position, const Projection &projection)
         : name(name)
-        , position(position)
+        , position(0.0f)
         , up(glm::vec3(0.0f, 1.0f, 0.0f))
         , direction(glm::vec3(0.0f, 0.0f, 0.0f))
         , projection(projection)
@@ -50,7 +55,6 @@ namespace Engine::Graphics
         , shouldUpdateProjection(rhs.shouldUpdateProjection)
         , updateProjectionMatrix(this, &VirtualCamera::UpdateProjectionMatrix)
     {
-        rhs.ClearCallbacks();
         SetCallbacks();
     }
 
@@ -75,11 +79,6 @@ namespace Engine::Graphics
     }
 
     const Projection &VirtualCamera::GetProjection() const
-    {
-        return projection;
-    }
-
-    Projection &VirtualCamera::GetProjection()
     {
         return projection;
     }
@@ -137,8 +136,43 @@ namespace Engine::Graphics
 
     void VirtualCamera::SetProjection(const Projection &value)
     {
+        ClearCallbacks();
         projection = value;
+        SetCallbacks();
         shouldUpdateProjection = true;
+    }
+
+    void VirtualCamera::SetProjection(Projection &&value)
+    {
+        ClearCallbacks();
+        projection = std::move(value);
+        SetCallbacks();
+        shouldUpdateProjection = true;
+    }
+
+    void VirtualCamera::SetFov(float value)
+    {
+        projection.SetFov(value);
+    }
+
+    void VirtualCamera::SetFovInDegrees(float value)
+    {
+        projection.SetFovInDegrees(value);
+    }
+
+    void VirtualCamera::SetAspect(float value)
+    {
+        projection.SetAspect(value);
+    }
+
+    void VirtualCamera::SetNear(float value)
+    {
+        projection.SetNear(value);
+    }
+
+    void VirtualCamera::SetFar(float value)
+    {
+        projection.SetFar(value);
     }
 
     void VirtualCamera::UpdateProjectionMatrix()

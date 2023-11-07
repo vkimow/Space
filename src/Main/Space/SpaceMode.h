@@ -17,7 +17,7 @@ namespace Main::Space
         friend class Game::GameManager;
 
     private:
-        SpaceMode(Engine::UIModule *ui);
+        SpaceMode(Engine::UIModule *ui, Engine::GraphicsModule *graphics);
         SpaceMode(const SpaceMode &rhs) = delete;
         SpaceMode(SpaceMode &&rhs) = delete;
         SpaceMode &operator=(const SpaceMode &rhs) = delete;

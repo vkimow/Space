@@ -22,17 +22,16 @@ namespace Engine::UI
                 ImGui::LightValue("Light", menu->GetAmbientLight().GetBuffer());
             }
         }
-
-        ImGui::Checkbox("##ActiveDirectional", menu->GetIsDirectionalEnabled().GetBufferPtr());
-        ImGui::SameLine();
-        if (ImGui::CollapsingHeader("Directional Light", ImGuiTreeNodeFlags_DefaultOpen))
-        {
-            if (menu->GetIsDirectionalEnabled())
-            {
-                ImGui::InputVector3("Direction##Directional", menu->GetDirectionalDirection().GetBuffer());
-                ImGui::LightValue("Diffuse", menu->GetDirectionalDiffuse().GetBuffer());
-                ImGui::LightValue("Specular", menu->GetDirectionalSpecular().GetBuffer());
-            }
-        }
+        //ImGui::Checkbox("##ActiveDirectional", menu->GetIsDirectionalEnabled().GetBufferPtr());
+        //ImGui::SameLine();
+        //if (ImGui::CollapsingHeader("Directional Light", ImGuiTreeNodeFlags_DefaultOpen))
+        //{
+        //    if (menu->GetIsDirectionalEnabled())
+        //    {
+        //        ImGui::InputVector3("Direction##Directional", menu->GetDirectionalDirection().GetBuffer());
+        //        ImGui::LightValue("Diffuse", menu->GetDirectionalDiffuse().GetBuffer());
+        //        ImGui::LightValue("Specular", menu->GetDirectionalSpecular().GetBuffer());
+        //    }
+        //}
     }
 }

@@ -7,6 +7,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <type_traits>
 #include "Engine/Tools/Events/Action.h"
+#include "Engine/Tools/Events/MemberFunction.h"
+#include "Engine/Window/Window.h"
 
 namespace Engine::Graphics
 {
@@ -15,45 +17,49 @@ namespace Engine::Graphics
 
     public:
         Projection();
+        Projection(Window *const window);
         Projection(const Projection &rhs);
         Projection(Projection &&rhs) noexcept;
         Projection &operator=(const Projection &rhs);
         Projection &operator=(Projection &&rhs) noexcept;
 
-        Projection(float fovDegrees, float aspectRatio, float near, float far);
-        Projection(float fovDegrees, float width, float height, float near, float far);
-        Projection(float fovDegrees, float near = 0.01f, float far = 100.0f);
+        Projection(Window *const window, float fovDegrees = 90.0f, float near = 0.01f, float far = 100.0f);
+        Projection(float fovDegrees, float width, float height, float near = 0.01f, float far = 100.0f);
         Projection(float fovDegrees, glm::vec2 framebuffer, float near = 0.01f, float far = 100.0f);
-        Projection(float fovDegrees, glm::ivec2 framebuffer, float near = 0.01f, float far = 100.0f);
 
         ~Projection();
 
     public:
         glm::mat4 GetProjectionMatrix() const;
-        float GetFovDegrees() const;
+        float GetFov() const;
+        float GetFovInDegrees() const;
         float GetAspectRatio() const;
         float GetNear() const;
         float GetFar() const;
 
     public:
         template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-        void UpdateFov(T fovDegrees) { this->fovDegrees = static_cast<float>(fovDegrees); OnProjectionUpdated(); }
+        void SetFov(T value) { fov = static_cast<float>(value); OnProjectionUpdated(); }
         template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-        void UpdateAspectByFramebuffer(glm::vec<2,T> framebuffer) { UpdateAspect(static_cast<float>(framebuffer.x) / static_cast<float>(framebuffer.y));}
+        void SetFovInDegrees(T value) { SetFov(glm::radians(static_cast<float>(value))); }
+        template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
+        void SetAspect(glm::vec<2, T> frame) { SetAspect(static_cast<float>(frame.x) / static_cast<float>(frame.y)); }
         template<typename T_1, typename T_2, typename = std::enable_if_t<std::is_arithmetic_v<T_1>>, typename = std::enable_if_t<std::is_arithmetic_v<T_2>>>
-        void UpdateAspect(T_1 width, T_2 height) { UpdateAspect(static_cast<float>(width) / static_cast<float>(height));}
+        void SetAspect(T_1 width, T_2 height) { SetAspect(static_cast<float>(width) / static_cast<float>(height)); }
         template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-        void UpdateAspect(T aspectRatio) { this->aspectRatio = static_cast<float>(aspectRatio); OnProjectionUpdated(); }
+        void SetAspect(T value) { aspectRatio = static_cast<float>(value); OnProjectionUpdated(); }
         template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-        void UpdateNear(T near) { this->near = static_cast<float>(near); OnProjectionUpdated(); }
+        void SetNear(T value) { near = static_cast<float>(value); OnProjectionUpdated(); }
         template<typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-        void UpdateFar(T far) { this->far = static_cast<float>(far); OnProjectionUpdated(); }
+        void SetFar(T value) { far = static_cast<float>(value); OnProjectionUpdated(); }
 
     private:
+        Tools::Events::MemberFunction<Projection, glm::ivec2> setAspect;
         CREATE_ACTION(void, OnProjectionUpdated);
 
     private:
-        float fovDegrees;
+        Window *const window;
+        float fov;
         float aspectRatio;
         float near;
         float far;

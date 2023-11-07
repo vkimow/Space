@@ -30,6 +30,7 @@ namespace Engine::Graphics
         template<typename... Args>
         Shader *const AddShader(const std::string &name, Args... args)
         {
+            LOG_DEBUG("Add Shader {}", name);
             return AddInner<Shader>(name, shaders, nameToShaders, shadersLock, std::forward<Args>(args)...);
         }
 
@@ -46,11 +47,13 @@ namespace Engine::Graphics
         template<typename... Args>
         Mesh *const AddMesh(const std::string &name, Args... args)
         {
+            LOG_DEBUG("Add Mesh {}", name);
             return AddRendable<Mesh>(name, std::forward<Args>(args)...);
         }
 
         void AddMesh(const std::string &name, Mesh *newMesh)
         {
+            LOG_DEBUG("Add Mesh {}", name);
             AddRendable<Mesh>(name, newMesh);
         }
 
@@ -120,6 +123,7 @@ namespace Engine::Graphics
         template<typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<ITexture, T>>>
         T *const AddTexture(const std::string &name, Args... args)
         {
+            LOG_DEBUG("Add Texture {}", name);
             return AddInner<T, ITexture>(name, textures, nameToTextures, texturesLock, std::forward<Args>(args)...);
         }
 
@@ -146,6 +150,7 @@ namespace Engine::Graphics
         template<typename T, typename... Args, typename = std::enable_if_t<std::is_base_of_v<IMaterial, T>>>
         T *const AddMaterial(const std::string &name, Args... args)
         {
+            LOG_DEBUG("Add Material {}", name);
             return AddInner<T, IMaterial>(name, materials, nameToMaterials, materialsLock, std::forward<Args>(args)...);
         }
 

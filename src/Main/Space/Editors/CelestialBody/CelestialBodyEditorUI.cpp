@@ -12,7 +12,9 @@ namespace Main::Space
     void CelestialBodyEditorUI::UpdateInner()
     {
         auto editor = GetEditor<CelestialBodyEditor>();
-        ImGui::InputFloat("Mass", editor->mass.GetBufferPtr());
-        ImGui::InputVector3("Velocity", editor->velocity.GetBuffer());
+        ImGui::DragVector3("Position", editor->position.GetBuffer());
+        ImGui::DragFloat("Mass", editor->mass.GetBufferPtr(), 0.1f);
+        ImGui::DragFloat("Radius", editor->radius.GetBufferPtr(), 0.1f);
+        ImGui::DragVector3("Velocity", editor->velocity.GetBuffer());
     }
 }

@@ -1,10 +1,13 @@
 #pragma once
 
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
-#include "Engine/UI/UIHeader.h"
+namespace Engine::UI
+{
+    class MenuManager;
+    class EditorManager;
+}
 
+struct GLFWwindow;
+struct ImGuiIO;
 namespace Engine
 {
     class InputModule;

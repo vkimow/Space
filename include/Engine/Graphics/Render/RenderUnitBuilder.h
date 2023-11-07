@@ -77,8 +77,8 @@ namespace Engine::Graphics
         {
             return RenderUnit(shader ? container->GetShaderIndex(shader) : RenderElement(),
                 rendable ? container->GetRendableIndex(rendable) : RenderElement(),
-                texture ? container->GetTextureIndex(texture) : RenderElement(),
                 material ? container->GetMaterialIndex(material) : RenderElement(),
+                texture ? container->GetTextureIndex(texture) : RenderElement(),
                 std::forward<TransformMatrixSource>(transformMatrixSource)
             );
         }

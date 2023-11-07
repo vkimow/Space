@@ -9,8 +9,9 @@ namespace Engine::Graphics
 
     private:
         PBRMaterial();
-        PBRMaterial(const glm::vec4 &albedo, float metallic, float roughness);
-        PBRMaterial(glm::vec4 &&albedo, float metallic, float roughness);
+        PBRMaterial(float r, float g, float b, float a, float metallic = 1.0f, float roughness = 1.0f);
+        PBRMaterial(const glm::vec4 &albedo, float metallic = 1.0f, float roughness = 1.0f);
+        PBRMaterial(glm::vec4 &&albedo, float metallic = 1.0f, float roughness = 1.0f);
         PBRMaterial(const PBRMaterial &rhs) = delete;
         PBRMaterial(PBRMaterial &&rhs) = delete;
         PBRMaterial &operator=(const PBRMaterial &rhs) = delete;
@@ -19,6 +20,7 @@ namespace Engine::Graphics
 
     public:
         void Use(Shader *shader) override final;
+        void Disable(Shader *shader) override final;
 
     public:
         void SetAlbedo(const glm::vec4 &value);

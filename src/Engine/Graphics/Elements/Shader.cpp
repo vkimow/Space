@@ -3,89 +3,55 @@
 #include "Engine/Tools/Other/Files.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <regex>
+#include "Engine/Graphics/Elements/Container.h"
 
 namespace Engine::Graphics
 {
-    Shader::Shader(const std::string &vertexLocation, const std::string &fragmentLocation)
-        : Shader(std::make_shared<std::string>(vertexLocation),
+    Shader::Shader(const std::string &vertexCode, const std::string &fragmentCode)
+        : Shader(std::make_shared<std::string>(vertexCode),
             nullptr,
             nullptr,
             nullptr,
-            std::make_shared<std::string>(fragmentLocation))
+            std::make_shared<std::string>(fragmentCode))
     {}
 
-    Shader::Shader(const std::string &vertexLocation, const std::string &geometryLocation, const std::string &fragmentLocation)
-        : Shader(std::make_shared<std::string>(vertexLocation),
+    Shader::Shader(const std::string &vertexCode, const std::string &geometryCode, const std::string &fragmentCode)
+        : Shader(std::make_shared<std::string>(vertexCode),
             nullptr,
             nullptr,
-            std::make_shared<std::string>(geometryLocation),
-            std::make_shared<std::string>(fragmentLocation))
+            std::make_shared<std::string>(geometryCode),
+            std::make_shared<std::string>(fragmentCode))
     {}
 
-    Shader::Shader(const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &fragmentLocation)
-        : Shader(std::make_shared<std::string>(vertexLocation),
-            std::make_shared<std::string>(tesselationControlLocation),
-            std::make_shared<std::string>(tesselationEvaluationLocation),
+    Shader::Shader(const std::string &vertexCode, const std::string &tesselationControlCode, const std::string &tesselationEvaluationCode, const std::string &fragmentCode)
+        : Shader(std::make_shared<std::string>(vertexCode),
+            std::make_shared<std::string>(tesselationControlCode),
+            std::make_shared<std::string>(tesselationEvaluationCode),
             nullptr,
-            std::make_shared<std::string>(fragmentLocation))
+            std::make_shared<std::string>(fragmentCode))
     {}
 
-    Shader::Shader(const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &geometryLocation, const std::string &fragmentLocation)
-        : Shader(std::make_shared<std::string>(vertexLocation),
-            std::make_shared<std::string>(tesselationControlLocation),
-            std::make_shared<std::string>(tesselationEvaluationLocation),
-            std::make_shared<std::string>(geometryLocation),
-            std::make_shared<std::string>(fragmentLocation))
+    Shader::Shader(const std::string &vertexCode, const std::string &tesselationControlCode, const std::string &tesselationEvaluationCode, const std::string &geometryCode, const std::string &fragmentCode)
+        : Shader(std::make_shared<std::string>(vertexCode),
+            std::make_shared<std::string>(tesselationControlCode),
+            std::make_shared<std::string>(tesselationEvaluationCode),
+            std::make_shared<std::string>(geometryCode),
+            std::make_shared<std::string>(fragmentCode))
     {}
 
-    Shader::Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> fragmentLocation)
-        : Shader(vertexLocation, nullptr, nullptr, nullptr, fragmentLocation)
+    Shader::Shader(std::shared_ptr<std::string> vertexCode, std::shared_ptr<std::string> fragmentCode)
+        : Shader(vertexCode, nullptr, nullptr, nullptr, fragmentCode)
     {}
-    Shader::Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> geometryLocation, std::shared_ptr<std::string> fragmentLocation)
-        : Shader(vertexLocation, nullptr, nullptr, geometryLocation, fragmentLocation)
+    Shader::Shader(std::shared_ptr<std::string> vertexCode, std::shared_ptr<std::string> geometryCode, std::shared_ptr<std::string> fragmentCode)
+        : Shader(vertexCode, nullptr, nullptr, geometryCode, fragmentCode)
     {}
-    Shader::Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string> tesselationEvaluationLocation, std::shared_ptr<std::string> fragmentLocation)
-        : Shader(vertexLocation, tesselationControlLocation, tesselationEvaluationLocation, nullptr, fragmentLocation)
+    Shader::Shader(std::shared_ptr<std::string> vertexCode, std::shared_ptr<std::string> tesselationControlCode, std::shared_ptr<std::string> tesselationEvaluationCode, std::shared_ptr<std::string> fragmentCode)
+        : Shader(vertexCode, tesselationControlCode, tesselationEvaluationCode, nullptr, fragmentCode)
     {}
 
-    Shader::Shader(std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string> tesselationEvaluationLocation, std::shared_ptr<std::string> geometryLocation, std::shared_ptr<std::string> fragmentLocation)
+    Shader::Shader(std::shared_ptr<std::string> vertexCode, std::shared_ptr<std::string> tesselationControlCode, std::shared_ptr<std::string> tesselationEvaluationCode, std::shared_ptr<std::string> geometryCode, std::shared_ptr<std::string> fragmentCode)
         : id(0)
-    {
-        std::shared_ptr<std::string> vertex = nullptr;
-        std::shared_ptr<std::string> tesselationControl = nullptr;
-        std::shared_ptr<std::string> tesselationEvaluation = nullptr;
-        std::shared_ptr<std::string> geometry = nullptr;
-        std::shared_ptr<std::string> fragment = nullptr;
-
-        if (vertexLocation)
-        {
-            vertex = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*vertexLocation));
-        }
-        if (tesselationControlLocation)
-        {
-            tesselationControl = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*tesselationControlLocation));
-        }
-        if (tesselationEvaluationLocation)
-        {
-            tesselationEvaluation = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*tesselationEvaluationLocation));
-        }
-        if (geometryLocation)
-        {
-            geometry = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*geometryLocation));
-        }
-        if (fragmentLocation)
-        {
-            fragment = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*fragmentLocation));
-        }
-        Create(vertex, tesselationControl, tesselationEvaluation, geometry, fragment);
-    }
-
-    Shader::~Shader()
-    {
-        Clear();
-    }
-
-    void Shader::Create(std::shared_ptr<std::string> vertexCode, std::shared_ptr<std::string> tesselationControlCode, std::shared_ptr<std::string> tesselationEvaluationCode, std::shared_ptr<std::string> geometryCode, std::shared_ptr<std::string> fragmentCode)
+        , uniforms()
     {
         id = glCreateProgram();
         if (!id)
@@ -145,6 +111,11 @@ namespace Engine::Graphics
         }
     }
 
+    Shader::~Shader()
+    {
+        Clear();
+    }
+
     GLuint Shader::AddShader(GLuint theProgram, std::shared_ptr<std::string> shaderCode, GLenum shaderType)
     {
         GLuint theShader = glCreateShader(shaderType);
@@ -202,6 +173,11 @@ namespace Engine::Graphics
     void Shader::Use()
     {
         glUseProgram(id);
+    }
+
+    void Shader::Disable()
+    {
+        glUseProgram(0);
     }
 
     void Shader::Clear()
@@ -678,6 +654,114 @@ namespace Engine::Graphics
         }
 
         return uniforms[name];
+    }
+
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, const std::string &vertexLocation, const std::string &fragmentLocation)
+    {
+        return CreateShaderFromFile(container, name,
+            std::make_shared<std::string>(vertexLocation),
+            nullptr,
+            nullptr,
+            nullptr,
+            std::make_shared<std::string>(fragmentLocation)
+        );
+    }
+
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, const std::string &vertexLocation, const std::string &geometryLocation, const std::string &fragmentLocation)
+    {
+        return CreateShaderFromFile(container, name,
+            std::make_shared<std::string>(vertexLocation),
+            nullptr,
+            nullptr,
+            std::make_shared<std::string>(geometryLocation),
+            std::make_shared<std::string>(fragmentLocation)
+        );
+    }
+
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &fragmentLocation)
+    {
+        return CreateShaderFromFile(container, name,
+            std::make_shared<std::string>(vertexLocation),
+            std::make_shared<std::string>(tesselationControlLocation),
+            std::make_shared<std::string>(tesselationEvaluationLocation),
+            nullptr,
+            std::make_shared<std::string>(fragmentLocation)
+        );
+    }
+
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, const std::string &vertexLocation, const std::string &tesselationControlLocation, const std::string &tesselationEvaluationLocation, const std::string &geometryLocation, const std::string &fragmentLocation)
+    {
+        return CreateShaderFromFile(container, name,
+            std::make_shared<std::string>(vertexLocation),
+            std::make_shared<std::string>(tesselationControlLocation),
+            std::make_shared<std::string>(tesselationEvaluationLocation),
+            std::make_shared<std::string>(geometryLocation),
+            std::make_shared<std::string>(fragmentLocation)
+        );
+    }
+
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> fragmentLocation)
+    {
+        return CreateShaderFromFile(container, name,
+            vertexLocation,
+            nullptr,
+            nullptr,
+            nullptr,
+            fragmentLocation
+        );
+    }
+
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> geometryLocation, std::shared_ptr<std::string> fragmentLocation)
+    {
+        return CreateShaderFromFile(container, name,
+            vertexLocation,
+            nullptr,
+            nullptr,
+            geometryLocation,
+            fragmentLocation
+        );
+    }
+
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string> tesselationEvaluationLocation, std::shared_ptr<std::string> fragmentLocation)
+    {
+        return CreateShaderFromFile(container, name,
+            vertexLocation,
+            tesselationControlLocation,
+            tesselationEvaluationLocation,
+            nullptr,
+            fragmentLocation
+        );
+    }
+
+    Shader *CreateShaderFromFile(Container *const container, const std::string &name, std::shared_ptr<std::string> vertexLocation, std::shared_ptr<std::string> tesselationControlLocation, std::shared_ptr<std::string> tesselationEvaluationLocation, std::shared_ptr<std::string> geometryLocation, std::shared_ptr<std::string> fragmentLocation)
+    {
+        std::shared_ptr<std::string> vertex = nullptr;
+        std::shared_ptr<std::string> tesselationControl = nullptr;
+        std::shared_ptr<std::string> tesselationEvaluation = nullptr;
+        std::shared_ptr<std::string> geometry = nullptr;
+        std::shared_ptr<std::string> fragment = nullptr;
+
+        if (vertexLocation)
+        {
+            vertex = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*vertexLocation));
+        }
+        if (tesselationControlLocation)
+        {
+            tesselationControl = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*tesselationControlLocation));
+        }
+        if (tesselationEvaluationLocation)
+        {
+            tesselationEvaluation = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*tesselationEvaluationLocation));
+        }
+        if (geometryLocation)
+        {
+            geometry = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*geometryLocation));
+        }
+        if (fragmentLocation)
+        {
+            fragment = std::make_shared<std::string>(Engine::Tools::Files::ReadRelativeFile(*fragmentLocation));
+        }
+        return container->AddShader(name, vertex, tesselationControl, tesselationEvaluation, geometry, fragment);
     }
 }
 

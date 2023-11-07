@@ -7,7 +7,7 @@ namespace Engine
         : time(new TimeModule())
         , input(new InputModule(window->GetInnerWindow()))
         , ui(new UIModule(window->GetInnerWindow()))
-        , graphics(new GraphicsModule(window->GetInnerWindow()))
+        , graphics(new GraphicsModule(window))
     {
         window->engine = this;
     }
@@ -54,24 +54,18 @@ namespace Engine
 
     void Engine::StartRender()
     {
-        graphics->StartUpdate();
+        graphics->StartRender();
     }
 
     void Engine::Render()
     {
-        graphics->GetRenderManager()->GetPool().RenderAll();
+        graphics->Render();
+        graphics->PostProcessing();
         ui->Render();
     }
 
     void Engine::EndRender()
     {
-        graphics->EndUpdate();
-    }
-
-    void Engine::FullRender()
-    {
-        StartRender();
-        Render();
-        EndRender();
+        graphics->EndRender();
     }
 }

@@ -4,6 +4,6 @@
 #include "Engine/Tools/Other/Files.h"
 #include "Engine/Tools/Other/Geometry.h"
 #include "Engine/Tools/Other/ImGui.h"
-#include "Engine/UI/Buffer.h"
+#include "Engine/Tools/Other/GL.h"
 
 #endif

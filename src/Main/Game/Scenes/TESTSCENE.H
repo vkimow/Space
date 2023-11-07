@@ -17,8 +17,5 @@ namespace Main::Game
 
     private:
         Space::SpaceManager *space;
-        Engine::Input::Pressable* key;
-        bool IsPressed = false;
-        bool someSwitch = true;
     };
 }

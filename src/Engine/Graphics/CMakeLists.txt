@@ -17,7 +17,7 @@ find_vkimow_auto_files(
     ROOT_DIR ${SPACE_CURRENT_SOURCE_DIR}
     EXCLUDE_DIRS ${SPACE_CURRENT_TESTS_DIR}
     VARIABLE Sources
-    EXTENSIONS .cpp .h
+    EXTENSIONS .cpp .h .frag .geom .vert
 )
 
 set_vkimow_target_files(
@@ -56,8 +56,11 @@ add_vkimow_library(
                         space::engine::input
                         space::engine::objects
     PRIVATE_INCLUDE_DIRS ${SPACE_INCLUDE_DIR}
+                         ${SPACE_SOURCE_DIR}
 )
 
 if(SPACE_ENABLE_TESTS)
     add_subdirectory(Tests)
 endif()
+
+add_subdirectory(PostProcessing)

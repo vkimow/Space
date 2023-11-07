@@ -3,6 +3,8 @@
 #include "Engine/Tools/Other/Geometry.h"
 #include "Space/CelestialBodyMock.h"
 #include "Space/Scripts/CelestialBodyScript.h"
+#include <glm/gtc/type_ptr.hpp>
+#include "Space/Scripts/StarScript.h"
 
 namespace Main::Space
 {
@@ -71,8 +73,9 @@ namespace Main::Space
         return GetMocks(bodies.begin(), bodies.end());
     }
 
-    GravitySimulation::GravitySimulation(SpaceManager *space)
+    GravitySimulation::GravitySimulation(SpaceManager *space, Engine::Graphics::Container *container)
         : space(space)
+        , container(container)
         , paths()
         , pathsUsage()
     {}
@@ -84,13 +87,41 @@ namespace Main::Space
     {
         auto &celestialBodies = space->GetCelestialBodies();
         CelestialBodyScript *celestialBody = nullptr;
-
         for (auto it = celestialBodies.begin(); it != celestialBodies.end(); ++it)
         {
             celestialBody = *it;
             glm::vec3 acceleration = CalculateAcceleration(celestialBody, celestialBodies.begin(), celestialBodies.end());
             celestialBody->ApplyAcceleration(acceleration);
         }
+
+        UpdateLightning();
+    }
+
+    void GravitySimulation::UpdateLightning()
+    {
+        auto &celestialBodies = space->GetCelestialBodies();
+        CelestialBodyScript *celestialBody = nullptr;
+        std::vector<glm::vec4> positionAndRadius;
+        std::vector<bool> useToCalculateLight;
+        for (auto it = celestialBodies.begin(); it != celestialBodies.end(); ++it)
+        {
+            celestialBody = *it;
+            positionAndRadius.emplace_back(celestialBody->GetTransform().GetPosition(), celestialBody->GetRadius());
+            useToCalculateLight.push_back(!celestialBody->GetGameObject()->ConstainsScript<StarScript>());
+        }
+
+        size_t planetsCount = positionAndRadius.size() > 128 ? 128 : positionAndRadius.size();
+        auto shader = container->GetShader("MainShader");
+        shader->Use();
+        for (size_t i = 0; i < planetsCount; ++i)
+        {
+            std::string planet = "space.planets[" + std::to_string(i) + "].positionAndRadius";
+            shader->SetVector4f(planet, positionAndRadius[i]);
+            std::string useToCalcLight = "space.planets[" + std::to_string(i) + "].useToCalculateLight";
+            shader->SetInt(useToCalcLight, useToCalculateLight[i]);
+        }
+        shader->SetUnsigned("space.planetsCount", planetsCount);
+        shader->Disable();
     }
 
     void GravitySimulation::CalculatePaths()
@@ -133,6 +164,7 @@ namespace Main::Space
         if (pathsUsage.empty())
         {
             CalculatePaths();
+            UpdateLightning();
         }
 
         pathsUsage.insert(script);

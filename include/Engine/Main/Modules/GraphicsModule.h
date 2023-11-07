@@ -1,20 +1,24 @@
 #pragma once
 
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-#include "Engine/Graphics/Camera/CameraManager.h"
-#include "Engine/Graphics/Light/LightManager.h"
-#include "Engine/Graphics/Render/RenderManager.h"
-#include "Engine/Graphics/Elements/Container.h"
+struct GLFWwindow;
+namespace Engine::Graphics
+{
+    class PostProcessingManager;
+    class RenderManager;
+    class LightManager;
+    class CameraManager;
+    class Container;
+}
 
 namespace Engine
 {
+    class Window;
     class GraphicsModule
     {
         friend class Engine;
 
     private:
-        GraphicsModule(GLFWwindow *const window);
+        GraphicsModule(Window *const window);
 
         GraphicsModule() = delete;
         GraphicsModule(const GraphicsModule &rhs) = delete;
@@ -25,10 +29,13 @@ namespace Engine
         ~GraphicsModule();
 
     private:
-        void StartUpdate();
-        void EndUpdate();
+        void StartRender();
+        void Render();
+        void EndRender();
+        void PostProcessing();
 
     public:
+        Graphics::PostProcessingManager *const GetPostProcessing();
         Graphics::RenderManager *const GetRenderManager();
         Graphics::LightManager *const GetLightManager();
         Graphics::CameraManager *const GetCameraManager();
@@ -40,5 +47,6 @@ namespace Engine
         Graphics::CameraManager *const cameraManager;
         Graphics::LightManager *const lightManager;
         Graphics::RenderManager *const renderManager;
+        Graphics::PostProcessingManager *const postProcessing;
     };
 }

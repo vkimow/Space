@@ -5,6 +5,7 @@
 #include <type_traits>
 #include "Engine/Graphics/Camera/Camera.h"
 #include "Engine/Graphics/Camera/VirtualCamera.h"
+#include "Engine/Window/Window.h"
 
 namespace Engine::Graphics
 {
@@ -61,7 +62,7 @@ namespace Engine::Graphics
         Camera *GetMainCamera() const;
 
     private:
-        Camera *mainCamera;
+        Camera *const mainCamera;
         std::unordered_map<std::string, IVirtualCamera *> cameras;
     };
 }
