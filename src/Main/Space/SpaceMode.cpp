@@ -1,12 +1,14 @@
 #include "Space/SpaceMode.h"
 #include "Space/Menus/MenusHeader.h"
 #include "Space/Editors/EditorsHeader.h"
+#include <Game/Menus/GameMode/GameModeMenu.h>
 
 namespace Main::Space
 {
-    SpaceMode::SpaceMode(Engine::UIModule *ui, Engine::GraphicsModule *graphics)
+    SpaceMode::SpaceMode(Engine::UIModule *ui, Engine::GraphicsModule *graphics, Engine::InputModule *input)
         : scene(nullptr)
         , ui(ui)
+        , input(input)
         , objectsManager()
         , spaceManager(graphics->GetContainer())
     {
@@ -22,10 +24,7 @@ namespace Main::Space
     {}
 
     void SpaceMode::Start()
-    {
-        auto &menuContainer = ui->GetMenuManager()->GetContainer();
-        menuContainer.Get<SpaceTimeMenu>()->SetActive(true);
-    }
+    {}
 
     void SpaceMode::Update()
     {
@@ -34,10 +33,7 @@ namespace Main::Space
     }
 
     void SpaceMode::End()
-    {
-        auto &menuContainer = ui->GetMenuManager()->GetContainer();
-        menuContainer.Get<SpaceTimeMenu>()->SetActive(false);
-    }
+    {}
 
     void SpaceMode::SetScene(Engine::Objects::Scene *value)
     {

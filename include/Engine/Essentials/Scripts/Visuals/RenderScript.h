@@ -24,6 +24,7 @@ namespace Engine::Scripts
         {
             units.push_back(manager->GetUnitBuilder().Create(std::forward<Args>(args)..., GetGameObject()->GetTransformPtr()));
         }
+        void Clear();
 
     private:
         void UpdateUnitsTransform();

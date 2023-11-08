@@ -23,8 +23,8 @@ namespace Engine::Graphics
 
         GLuint *GetPointer();
 
-        inline GLuint Get(size_t index) const;
-        inline GLuint &Get(size_t index);
+        GLuint Get(size_t index) const;
+        GLuint &Get(size_t index);
         GLuint operator[](unsigned short int index) const;
         GLuint &operator[](unsigned short int index);
 

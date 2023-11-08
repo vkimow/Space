@@ -5,14 +5,14 @@
 namespace Main::Space
 {
     SpaceTimeMenuUI::SpaceTimeMenuUI(SpaceTimeMenu *const menu)
-        : MenuUI(menu, 220.0f,80.0f)
+        : MenuUI(menu, 320.0f,80.0f)
     {}
 
     void SpaceTimeMenuUI::UpdateInner()
     {
         SpaceTimeMenu *menu = GetMenu<SpaceTimeMenu>();
         ImGui::Text("Time Coefficient: %.1f", menu->GetTimeCoef());
-        std::vector<float> coefficients{0.1f, 0.5f, 1.0f, 2.0f, 5.0f};
+        std::vector<float> coefficients{1.0f, 2.0f, 5.0f, 10.0f, 25.0f, 50.f, 100.f};
         for (float coefficient : coefficients)
         {
             std::ostringstream floatSS;

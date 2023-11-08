@@ -28,6 +28,9 @@ namespace Main::Game
         void SetGameMode(EGameMode value);
         EGameMode GetGameModeType() const;
 
+    public:
+        CREATE_ACTION(EGameMode, OnGameModeChanged);
+
     private:
         Engine::Window *const window;
         Engine::Engine *const engine;
@@ -36,5 +39,6 @@ namespace Main::Game
         EGameMode gameModeType;
         IGameMode *gameMode;
         Engine::Tools::Structs::TypeMapUnordered<IGameMode> gameModes;
+
     };
 }

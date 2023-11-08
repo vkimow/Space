@@ -69,6 +69,11 @@ namespace Engine::Scripts
         UpdateUnitsTransform();
     }
 
+    void RenderScript::Clear()
+    {
+        units.clear();
+    }
+
     void RenderScript::AddRenderUnit(const Graphics::RenderUnit &unit)
     {
         auto unitCopy = unit;

@@ -26,10 +26,8 @@ namespace Engine
     private:
         void PollEvents();
 
-    private:
-        void SetActive(bool value);
-
     public:
+        void SetActive(bool value);
         Input::Scheme *const GetScheme() const;
         bool IsActive() const;
 

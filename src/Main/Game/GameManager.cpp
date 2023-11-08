@@ -15,9 +15,10 @@ namespace Main::Game
         auto gameModeMenu = menuContainer.Create<GameModeMenu>(this);
         gameModeMenu->SetActive(true);
 
-        auto space = new Space::SpaceMode(engine->GetUI(), engine->GetGraphics());
+        auto space = new Space::SpaceMode(engine->GetUI(), engine->GetGraphics(), engine->GetInput());
         auto edit = new Editor::EditorMode(engine->GetUI(), engine->GetGraphics());
-        scene = new Main::Game::MainScene("Main", window, engine, &space->GetSpaceManager());
+        scene = new Main::Game::MainScene("Main", window, engine, &space->GetSpaceManager(), this);
+        //scene = new Main::Game::TestScene("Main", window, engine, &space->GetSpaceManager());
         space->SetScene(scene);
         edit->SetScene(scene);
 
@@ -65,6 +66,7 @@ namespace Main::Game
 
         gameMode->Start();
         gameModeType = value;
+        OnGameModeChanged(value);
     }
 
     EGameMode GameManager::GetGameModeType() const

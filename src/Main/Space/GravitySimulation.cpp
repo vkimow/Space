@@ -94,7 +94,7 @@ namespace Main::Space
             celestialBody->ApplyAcceleration(acceleration);
         }
 
-        UpdateLightning();
+        //UpdateLightning();
     }
 
     void GravitySimulation::UpdateLightning()
@@ -127,7 +127,7 @@ namespace Main::Space
     void GravitySimulation::CalculatePaths()
     {
         std::vector<CelestialBodyMock> mocks = GetMocks(space->GetCelestialBodies());
-        size_t steps = 1000;
+        size_t steps = 300;
         paths.clear();
 
         for (auto it = mocks.begin(); it != mocks.end(); ++it)
@@ -136,7 +136,7 @@ namespace Main::Space
             paths[it->original][0] = glm::vec3(0.0f, 0.0f, 0.0f);
         }
 
-        const float timeStep = 0.01f;
+        const float timeStep = 10.f;
         for (size_t step = 1; step < steps; ++step)
         {
             for (auto it = mocks.begin(); it != mocks.end(); ++it)
@@ -164,7 +164,7 @@ namespace Main::Space
         if (pathsUsage.empty())
         {
             CalculatePaths();
-            UpdateLightning();
+            //UpdateLightning();
         }
 
         pathsUsage.insert(script);
