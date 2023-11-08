@@ -46,10 +46,10 @@ add_vkimow_library(
     NAME ${PROJECT_NAME}
     SOLUTION_FOLDER ${SPACE_CURRENT_SUBSOLUTION_RELATIVE_PATH}
     SOURCES ${SPACE_CURRENT_SOURCES} ${SPACE_CURRENT_PUBLIC_HEADERS}
-    PUBLIC_LINK_LIBS    assimp
-                        SDL2_image
-                        SDL2-static
-                        SDL2main
+    #PUBLIC_LINK_LIBS    assimp
+    #                    SDL2_image
+    #                    SDL2-static
+    #                    SDL2main
     PRIVATE_LINK_LIBS   glfw
                         glew_s
                         space::engine::tools

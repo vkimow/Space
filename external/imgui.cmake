@@ -36,7 +36,8 @@ set(IMGUI_SOURCES
 add_library(imgui STATIC)
 target_sources(imgui PRIVATE ${IMGUI_SOURCES})
 target_include_directories(imgui PUBLIC ${IMGUI_SOURCE_DIR} ${IMGUI_SOURCE_DIR}/backends)
-target_link_libraries(imgui PRIVATE glfw SDL2-static SDL2main)
+#target_link_libraries(imgui PRIVATE glfw SDL2-static SDL2main)
+target_link_libraries(imgui PRIVATE glfw)
 set_target_properties(imgui PROPERTIES FOLDER Externals/IMGUI)
 
 if (IMGUI_BUILD_EXAMPLES)

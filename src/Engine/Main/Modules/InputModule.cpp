@@ -6,11 +6,13 @@
 #include "Engine/Input/InputHeader.h"
 #include "Engine/Window/Window.h"
 #include "Engine/Main/Engine.h"
+#include "Engine/Tools/Log/Logger.h"
 
 namespace Engine
 {
     InputModule::InputModule(GLFWwindow *const window)
-        : scheme( new Input::Scheme(window))
+        : scheme(new Input::Scheme(window))
+        , isActive(true)
     {
         HandleInput(window);
     };
