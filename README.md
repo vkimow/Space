@@ -7,7 +7,7 @@
 - [Table Of Content](#table-of-content)
 - [Key Features](#key-features)
   - [Gravity Simulation](#gravity-simulation)
-  - [In-game editor](#in-game-editor)
+  - [In-Game editor](#in-game-editor)
   - [Real-Time Lighting](#real-time-lighting)
 - [Installation](#installation)
 - [Scene Modifying](#scene-modifying)
@@ -22,7 +22,7 @@ Real-life phisycs allow you to observe the univerese by yourself
 
 ![alt text](https://github.com/vkimow/Space/blob/master/images/gravity_1.gif?raw=true)
 
-### In-game editor
+### In-Game editor
 
 You don't have to edit some code in order to modify the star system. Just build and play!
 
