@@ -1,7 +1,7 @@
 ![alt text](https://github.com/vkimow/Space/blob/master/images/Title.png?raw=true)
-<center>
+<p style="text-align:center">
 <strong>Space Engine is a OpenGL Engine and a Space Simulator where you can design your own star system.</strong>
-</center>
+</p>
 
 ## Table Of Content
 
